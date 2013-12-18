@@ -1,0 +1,27 @@
+{
+    "name": "pragmarx/firewall",
+    "description": "",
+    "authors": [
+        {
+            "name": "Antonio Carlos Ribeiro",
+            "email": "acr@antoniocarlosribeiro.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.7",
+        "illuminate/support": "4.1.x",
+        "illuminate/cache": "4.1.x",
+        "illuminate/filesystem": "4.1.*"
+    },
+
+    "require-dev": {
+        "mockery/mockery": "0.8.0"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "PragmaRX\\Firewall": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
