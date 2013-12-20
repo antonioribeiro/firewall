@@ -10,7 +10,7 @@ class Report extends Base {
 	 *
 	 * @var string
 	 */
-	protected $name = 'firewall:report';
+	protected $name = 'firewall:list';
 
 	/**
 	 * The console command description.
