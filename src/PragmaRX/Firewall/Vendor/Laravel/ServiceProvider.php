@@ -164,7 +164,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 									$app['firewall.config'],
 									$app['firewall.dataRepository'],
 									$app['firewall.cache'],
-									$app['firewall.fileSystem']
+									$app['firewall.fileSystem'],
+									$app['request']
 								);
 		});
 	}
