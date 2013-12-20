@@ -9,9 +9,9 @@
     ],
     "require": {
         "php": ">=5.3.7",
-        "illuminate/support": "4.1.x",
-        "illuminate/cache": "4.1.x",
-        "illuminate/filesystem": "4.1.*"
+        "illuminate/support": "4.*",
+        "illuminate/cache": "4.*",
+        "illuminate/filesystem": "4.*"
     },
 
     "require-dev": {
