@@ -40,7 +40,7 @@ class Clear extends Base {
 		{
 			$this->error('This command won\'t run unless you use --force.');
 		}
-
+		else
 		if ($this->laravel->firewall->clear())
 		{
 			$this->info('List cleared.');
