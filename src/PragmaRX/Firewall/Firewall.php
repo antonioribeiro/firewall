@@ -35,6 +35,8 @@ use PragmaRX\Firewall\Repositories\DataRepository;
 
 class Firewall
 {
+	private $ip;
+
 	private $config;
 
 	private $cache;
@@ -67,6 +69,18 @@ class Firewall
 		$this->fileSystem = $fileSystem;
 
 		$this->request = $request;
+
+		$this->setIp(null);
+	}
+
+	public function setIp($ip)
+	{
+		$this->ip = $ip ?: ($this->ip ?: );
+	}
+
+	public function getIp()
+	{
+		return $this->ip;
 	}
 
 	public function report()
@@ -86,6 +100,8 @@ class Firewall
 
 	public function whichList($ip)
 	{
+		$ip = $ip ?: $this->getIp();
+
 		if( ! $ip = $this->dataRepository->firewall->find($ip))
 		{
 			return false;
@@ -96,19 +112,15 @@ class Firewall
 
 	public function isWhitelisted($ip = null)
 	{
-		$ip = $ip ?: $this->request->getClientIp();
-
 		return $this->whichList($ip) == 'whitelist';
 	}
 
 	public function isBlacklisted($ip  = null)
 	{
-		$ip = $ip ?: $this->request->getClientIp();
-
 		return $this->whichList($ip) == 'blacklist';
 	}
 
-	public function isValid($ip)
+	public function ipIsValid($ip)
 	{
 		try {
 			return inet_pton($ip) !== false;
@@ -123,7 +135,7 @@ class Firewall
 
 		$listed = $this->whichList($ip);
 
-		if (! $this->isValid($ip))
+		if (! $this->ipIsValid($ip))
 		{
 			$this->addMessage(sprintf('%s is not a valid IP address', $ip));
 
