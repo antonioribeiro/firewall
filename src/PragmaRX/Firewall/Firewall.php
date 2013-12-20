@@ -75,7 +75,7 @@ class Firewall
 
 	public function setIp($ip)
 	{
-		$this->ip = $ip ?: ($this->ip ?: );
+		$this->ip = $ip ?: ($this->ip ?: $this->request->getClientIp());
 	}
 
 	public function getIp()
