@@ -29,6 +29,8 @@ use PragmaRX\Firewall\Support\FileSystem;
 use PragmaRX\Firewall\Support\MessageSelector;
 use PragmaRX\Firewall\Support\CacheManager;
 
+use Illuminate\Http\Request;
+
 use PragmaRX\Firewall\Repositories\DataRepository;
 
 class Firewall
@@ -52,7 +54,8 @@ class Firewall
 									Config $config, 
 									DataRepository $dataRepository,
 									CacheManager $cache,
-									FileSystem $fileSystem
+									FileSystem $fileSystem,
+									Request $request
 								)
 	{
 		$this->config = $config;
@@ -62,6 +65,8 @@ class Firewall
 		$this->cache = $cache;
 
 		$this->fileSystem = $fileSystem;
+
+		$this->request = $request;
 	}
 
 	public function report()
@@ -89,13 +94,17 @@ class Firewall
 		return $ip->whitelisted ? 'whitelist' : 'blacklist';
 	}
 
-	public function isWhitelisted($ip)
+	public function isWhitelisted($ip = null)
 	{
+		$ip = $ip ?: $this->request->getClientIp();
+
 		return $this->whichList($ip) == 'whitelist';
 	}
 
-	public function isBlacklisted($ip)
+	public function isBlacklisted($ip  = null)
 	{
+		$ip = $ip ?: $this->request->getClientIp();
+
 		return $this->whichList($ip) == 'blacklist';
 	}
 
