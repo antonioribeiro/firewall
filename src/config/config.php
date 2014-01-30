@@ -26,7 +26,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Do you wish to block access automatically?
+    | Code and message for blocked responses
     |--------------------------------------------------------------------------
     |
     */
@@ -34,6 +34,13 @@ return array(
     'block_response_code' => 403,
 
     'block_response_message' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Do you wish to redirect non whitelisted accesses to an error page?
+    |--------------------------------------------------------------------------
+    |
+    */
 
     'redirect_non_whitelisted_to' => null,
 
