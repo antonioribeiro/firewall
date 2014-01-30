@@ -23,11 +23,12 @@ use Exception;
 use PragmaRX\Firewall\Support\Locale;
 use PragmaRX\Firewall\Support\SentenceBag;
 use PragmaRX\Firewall\Support\Sentence;
-use PragmaRX\Firewall\Support\Config;
 use PragmaRX\Firewall\Support\Mode;
-use PragmaRX\Firewall\Support\FileSystem;
 use PragmaRX\Firewall\Support\MessageSelector;
-use PragmaRX\Firewall\Support\CacheManager;
+
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\FileSystem;
 
 use Illuminate\Http\Request;
 

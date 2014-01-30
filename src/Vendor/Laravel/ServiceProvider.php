@@ -2,9 +2,10 @@
 
 use PragmaRX\Firewall\Firewall;
 
-use PragmaRX\Firewall\Support\Config;
-use PragmaRX\Firewall\Support\Filesystem;
-use PragmaRX\Firewall\Support\CacheManager;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Response;
 
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
@@ -16,34 +17,24 @@ use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Firewall\Repositories\Cache\Cache;
 use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
 
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
+use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
-class ServiceProvider extends IlluminateServiceProvider {
+class ServiceProvider extends PragmaRXServiceProvider {
 
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
+    protected $packageVendor = 'pragmarx';
+    protected $packageVendorCapitalized = 'PragmaRX';
+
+    protected $packageName = 'firewall';
+    protected $packageNameCapitalized = 'Firewall';
 
     /**
-     * Bootstrap the application events.
+     * This is the boot method for this ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function wakeUp()
     {
-        $this->package('pragmarx/firewall', 'pragmarx/firewall', __DIR__.'/../../../..');
 
-        if( $this->getConfig('create_firewall_alias') )
-        {
-            IlluminateAliasLoader::getInstance()->alias(
-                                                            $this->getConfig('firewall_alias'), 
-                                                            'PragmaRX\Firewall\Vendor\Laravel\Facades\Firewall'
-                                                        );
-        }
     }
 
     /**
@@ -53,9 +44,9 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function register()
     {
-        $this->registerFileSystem();
+        $this->preRegister();
 
-        $this->registerConfig();
+        $this->registerFileSystem();
 
         $this->registerCache();
 
@@ -85,7 +76,7 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function provides()
     {
-        return array();
+        return array('firewall');
     }
 
     /**
@@ -98,19 +89,6 @@ class ServiceProvider extends IlluminateServiceProvider {
         $this->app['firewall.fileSystem'] = $this->app->share(function($app)
         {
             return new Filesystem;
-        });
-    }
-
-    /**
-     * Register the Config driver used by Firewall
-     * 
-     * @return void
-     */
-    private function registerConfig()
-    {
-        $this->app['firewall.config'] = $this->app->share(function($app)
-        {
-            return new Config($app['firewall.fileSystem'], $app);
         });
     }
 
@@ -179,14 +157,34 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     private function registerFilters()
     {
-        dd($this->getConfig('allow_whitelisted_filter_name'));
-        
-        $this->app['router']->filter('firewall', function($app)
+        $this->app['router']->filter('fw-block', function($app)
         {
             if ($app['firewall']->isBlacklisted()) {
-                Log::info('IP blacklisted trying to access application: '.Firewall::getIp());
+                $app['log']->info('IP blacklisted trying to access application: '.$app['firewall']->getIp());
 
-                return Response::make(null, 403);
+                return Response::make(
+                                        $this->getConfig('block_response_message'), 
+                                        $this->getConfig('block_response_code')
+                                    );
+            }
+        });
+
+        $this->app['router']->filter('fw-allow', function($app)
+        {
+            if ( ! $this->app['firewall']->isWhitelisted()) {
+                if($to = $this->getConfig('redirect_non_whitelisted_to'))
+                {
+                    return $this->app['redirect']->to($to);
+                }
+                else
+                {
+                    $this->app['log']->info('IP not whitelisted trying to access application: '.$this->app['firewall']->getIp());
+
+                    return Response::make(
+                                            $this->getConfig('block_response_message'), 
+                                            $this->getConfig('block_response_code')
+                                        );
+                }
             }
         });
     }
@@ -257,13 +255,12 @@ class ServiceProvider extends IlluminateServiceProvider {
     }
 
     /**
-     * Helper function to ease the use of configurations
+     * Get the root directory for this ServiceProvider
      * 
-     * @param  string $key configuration key
-     * @return string      configuration value
+     * @return string
      */
-    public function getConfig($key)
+    public function getRootDirectory()
     {
-        return $this->app['config']["pragmarx/firewall::$key"];
-    }
+        return __DIR__.'/../..';
+    }    
 }

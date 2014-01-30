@@ -18,7 +18,7 @@
  * @link       http://pragmarx.com
  */
 
-use PragmaRX\Firewall\Support\CacheManager;
+use PragmaRX\Support\CacheManager;
 
 class Firewall implements FirewallInterface {
 

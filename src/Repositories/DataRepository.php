@@ -18,10 +18,10 @@
  * @link       http://pragmarx.com
  */
 
-use PragmaRX\Firewall\Support\Config;
-use PragmaRX\Firewall\Support\Filesystem;
-use PragmaRX\Firewall\Support\Finder;
-use PragmaRX\Firewall\Support\CacheManager;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\Finder;
+use PragmaRX\Support\CacheManager;
 
 use PragmaRX\Firewall\Repositories\Firewall\FirewallInterface;
 

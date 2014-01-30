@@ -35,15 +35,7 @@ return array(
 
     'block_response_message' => null,
 
-    'allow_everyone_except_blacklisted' => true,
-
-    'allow_whitelisted_filter_name' => 'firewall-allow-whitelisted',
-
-    'block_blacklisted_filter_name' => 'firewall-block-blacklisted',
-
-    'redirect_non_whitelisted_filter_name' => 'firewall-redirect-non-whitelisted',
-
-    'redirect_non_whitelisted_to' => 'login',
+    'redirect_non_whitelisted_to' => null,
 
     /*
     |--------------------------------------------------------------------------
