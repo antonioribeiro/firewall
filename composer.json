@@ -1,12 +1,20 @@
 {
     "name": "pragmarx/firewall",
-    "description": "",
+
+    "description": "A Laravel 4.1+ IP whitelisting and blacklisting",
+
+    "keywords": ["firewall", "whitelist", "blacklist", "laravel"],
+
+    "license": "MIT",
+
     "authors": [
         {
             "name": "Antonio Carlos Ribeiro",
-            "email": "acr@antoniocarlosribeiro.com"
+            "email": "acr@antoniocarlosribeiro.com",
+            "role": "Creator"
         }
     ],
+
     "require": {
         "php": ">=5.3.7",
         "illuminate/support": "4.*",
@@ -23,5 +31,17 @@
             "PragmaRX\\Firewall": "src/"
         }
     },
+
+    "extra": {
+            "component": "package",
+            "frameworks": ["Laravel 4"],
+            "versions": {
+                    "0.1.0": "master"
+            },
+            "branch-alias": {
+                    "dev-master": "0.1.0-dev"
+            }
+    },
+
     "minimum-stability": "dev"
 }
