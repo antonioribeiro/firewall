@@ -27,8 +27,8 @@
     },
 
     "autoload": {
-        "psr-0": {
-            "PragmaRX\\Firewall": "src/"
+        "psr-4": {
+            "PragmaRX\\Firewall\\": "src/"
         }
     },
 

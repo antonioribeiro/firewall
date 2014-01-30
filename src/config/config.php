@@ -20,43 +20,64 @@
 
 return array(
 
-	'create_firewall_alias' => true,
+    'create_firewall_alias' => true,
 
-	'firewall_alias' => 'Firewall',
+    'firewall_alias' => 'Firewall',
 
-	/*
-	|--------------------------------------------------------------------------
-	| Which PHP Framework is your application using?
-	|--------------------------------------------------------------------------
-	|
-	| 	Supported: "laravel", "none"
-	|	
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Do you wish to block access automatically?
+    |--------------------------------------------------------------------------
+    |
+    */
 
-	'framework' => 'laravel',
+    'block_response_code' => 403,
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Database Driver
-	|--------------------------------------------------------------------------
-	|
-	| This option controls the database driver that will be utilized.
-	|
-	|
-	*/
+    'block_response_message' => null,
 
-	'driver' => 'eloquent',
+    'allow_everyone_except_blacklisted' => true,
 
-	/*
-	|--------------------------------------------------------------------------
-	| Models
-	|--------------------------------------------------------------------------
-	|
-	| When using the "eloquent" driver, we need to know which Eloquent models 
-	| should be used.
-	|
-	*/
+    'allow_whitelisted_filter_name' => 'firewall-allow-whitelisted',
 
-	'firewall_model' => 'PragmaRX\Firewall\Vendor\Laravel\Models\Firewall',
+    'block_blacklisted_filter_name' => 'firewall-block-blacklisted',
+
+    'redirect_non_whitelisted_filter_name' => 'firewall-redirect-non-whitelisted',
+
+    'redirect_non_whitelisted_to' => 'login',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Which PHP Framework is your application using?
+    |--------------------------------------------------------------------------
+    |
+    |   Supported: "laravel", "none"
+    |   
+    */
+
+    'framework' => 'laravel',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Database Driver
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the database driver that will be utilized.
+    |
+    |
+    */
+
+    'driver' => 'eloquent',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Models
+    |--------------------------------------------------------------------------
+    |
+    | When using the "eloquent" driver, we need to know which Eloquent models 
+    | should be used.
+    |
+    */
+
+    'firewall_model' => 'PragmaRX\Firewall\Vendor\Laravel\Models\Firewall',
 
 );
