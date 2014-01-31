@@ -117,7 +117,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
             $firewallModel = $this->getConfig('firewall_model');
 
             return new DataRepository(
-                                        new FirewallRepository(new $firewallModel, $this->app['firewall.cache']),
+                                        new FirewallRepository(
+                                                                    new $firewallModel, 
+                                                                    $this->app['firewall.cache'],
+                                                                    $this->app['firewall.config']
+                                                            ),
 
                                         $this->app['firewall.config'],
 
@@ -157,36 +161,60 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     private function registerFilters()
     {
-        $this->app['router']->filter('fw-block', function($app)
+        $this->app['router']->filter('fw-block-bl', function($app)
         {
-            if ($app['firewall']->isBlacklisted()) {
-                $app['log']->info('IP blacklisted trying to access application: '.$app['firewall']->getIp());
+            if ($this->app['firewall']->isBlacklisted()) {
+                $this->log('[blocked] IP blacklisted: '.$app['firewall']->getIp());
 
-                return Response::make(
-                                        $this->getConfig('block_response_message'), 
-                                        $this->getConfig('block_response_code')
-                                    );
+                return $this->blockAccess();
             }
         });
 
-        $this->app['router']->filter('fw-allow', function($app)
+        $this->app['router']->filter('fw-allow-wl', function($app)
         {
             if ( ! $this->app['firewall']->isWhitelisted()) {
                 if($to = $this->getConfig('redirect_non_whitelisted_to'))
                 {
-                    return $this->app['redirect']->to($to);
+                    $action = 'redirected';
+                    $response = $this->app['redirect']->to($to);
                 }
                 else
                 {
-                    $this->app['log']->info('IP not whitelisted trying to access application: '.$this->app['firewall']->getIp());
-
-                    return Response::make(
-                                            $this->getConfig('block_response_message'), 
-                                            $this->getConfig('block_response_code')
-                                        );
+                    $action = 'blocked';
+                    $response = $this->blockAccess();
                 }
+
+                $this->log(sprintf('[%s] IP not whitelisted: %s', $action, $this->app['firewall']->getIp()));
+
+                return $response;
             }
         });
+    }
+
+    /**
+     * Return a proper response for blocked access
+     *
+     * @return Response
+     */ 
+    private function blockAccess()
+    {
+        return Response::make(
+                                $this->getConfig('block_response_message'), 
+                                $this->getConfig('block_response_code')
+                            );    
+    }
+
+    /**
+     * Register messages in log
+     *
+     * @return void
+     */ 
+    private function log($message)
+    {
+        if ($this->getConfig('enable_log'))
+        {
+            $this->app['log']->info("Firewall: $message");
+        }
     }
 
     /**

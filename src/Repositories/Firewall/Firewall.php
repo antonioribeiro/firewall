@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Firewall
- * @version    1.0.0
+ * @version    0.1.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
@@ -19,8 +19,15 @@
  */
 
 use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Config;
 
 class Firewall implements FirewallInterface {
+
+	private $model;
+
+	private $cache;
+
+	private $config;
 
 	/**
 	 * Create an instance of Message
@@ -28,11 +35,13 @@ class Firewall implements FirewallInterface {
 	 * @param object $model 
 	 * @param Cache  $cache 
 	 */
-	public function __construct($model, CacheManager $cache)
+	public function __construct($model, CacheManager $cache, Config $config)
 	{
 		$this->model = $model;
 
 		$this->cache = $cache;
+
+		$this->config = $config;
 	}
 
 	/**
@@ -112,7 +121,7 @@ class Firewall implements FirewallInterface {
 
 	public function cacheRemember($model)
 	{
-		$this->cache->put($this->cacheKey($model->ip_address), $model, 10);
+		$this->cache->put($this->cacheKey($model->ip_address), $model, $this->config->get('cache_expire_time',10));
 	}
 
 	public function all()
