@@ -131,6 +131,12 @@ class Firewall implements FirewallInterface {
 
 	public function clear()
 	{
-		return $this->model->truncate();
+		/**
+		 * Deletes one by one to also remove them from cache
+		 */
+		foreach($this->all() as $ip)
+		{
+			$this->delete($ip['ip_address']);
+		}
 	}
 }
