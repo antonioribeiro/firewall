@@ -201,5 +201,5 @@ class Firewall
 	{
 		return $this->dataRepository->firewall->clear();
 	}
-
+ 
 }

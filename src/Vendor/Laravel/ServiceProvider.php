@@ -52,8 +52,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
         $this->registerFirewall();
 
-        $this->registerFilters();
-
         $this->registerDataRepository();
 
         $this->registerWhitelistCommand();
@@ -61,6 +59,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
         $this->registerReportCommand();
         $this->registerRemoveCommand();
         $this->registerClearCommand();
+
+        $this->registerFilters();
 
         $this->commands('firewall.whitelist.command');
         $this->commands('firewall.blacklist.command');
@@ -153,7 +153,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                 );
         });
     }
-
+ 
     /**
      * Register blocking and unblocking filters
      * 
@@ -161,16 +161,26 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     private function registerFilters()
     {
-        $this->app['router']->filter('fw-block-bl', function($app)
+        $this->app['router']->filter('fw-block-bl', $this->getWhitelistFilter());
+
+        $this->app['router']->filter('fw-allow-wl', $this->getBlacklistFilter());
+    }
+
+    public function getWhitelistFilter()
+    {
+        return function($route) 
         {
             if ($this->app['firewall']->isBlacklisted()) {
-                $this->log('[blocked] IP blacklisted: '.$app['firewall']->getIp());
+                $this->log('[blocked] IP blacklisted: '.$this->app['firewall']->getIp());
 
                 return $this->blockAccess();
             }
-        });
+        };
+    }
 
-        $this->app['router']->filter('fw-allow-wl', function($app)
+    public function getBlacklistFilter()
+    {
+        return function($route)
         {
             if ( ! $this->app['firewall']->isWhitelisted()) {
                 if($to = $this->getConfig('redirect_non_whitelisted_to'))
@@ -188,7 +198,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
                 return $response;
             }
-        });
+        };        
     }
 
     /**
