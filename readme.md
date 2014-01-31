@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/pragmarx/firewall/v/stable.png)](https://packagist.org/packages/pragmarx/firewall) [![License](https://poser.pugx.org/pragmarx/firewall/license.png)](https://packagist.org/packages/pragmarx/firewall)
 
-#### A Laravel 4 package to block IP addresses from access your application
+#### A Laravel 4 package to help you block IP addresses from accessing your application or just some routes
 
 ### Usage
 
@@ -21,7 +21,7 @@ Route::group(['before' => 'fw-block-bl'], function()
 });
 ```
 
-Or you could have both, in this case your allow group could give access to 'in development' routes and redirect non-whitelisted IP addresses to another:
+Or you could use both. In the following example the allow group will give free access to the 'coming soon' page and block or just redirect non-whitelisted IP addresses to another, while still blocking access to the blacklisted ones.
 
 ```
 Route::group(['before' => 'fw-block-bl'], function()
@@ -38,7 +38,7 @@ Route::group(['before' => 'fw-block-bl'], function()
 });
 ```
 
-A non-whitelisted IP address can be blocked or redirected. To configure redirection you'll have to publish the  `config.php` file and configure:
+Non-whitelisted IP addresses can be blocked or redirected. To configure redirection you'll have to publish the  `config.php` file and configure:
 
 ```
 'redirect_non_whitelisted_to' => 'coming/soon',
