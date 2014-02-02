@@ -98,7 +98,6 @@ php artisan tail
 
 - Laravel 4.1+
 - Composer >= 2014-01-07 - This is a PSR-4 package
-- SSH-2 Server
 
 #### Installing
 
