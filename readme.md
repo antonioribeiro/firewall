@@ -28,7 +28,7 @@ Route::group(['before' => 'fw-block-bl'], function()
 {
     Route::get('coming/soon', function()
     {
-        return "yea!";
+        return "We are about to launch, please come back in a few days.";
     });
 
     Route::group(['before' => 'fw-allow-wl'], function()
