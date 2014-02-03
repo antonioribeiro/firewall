@@ -144,7 +144,7 @@ artisan config:publish pragmarx/firewall
 
 ### Author
 
-Antonio Carlos Ribeiro - <acr@antoniocarlosribeiro.com> - <http://twitter.com/iantonioribeiro>
+[Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro) 
 
 ### License
 
