@@ -1,4 +1,4 @@
-<?php namespace PragmaRX\Firewall\Vendor\Laravel\Facades;
+<?php namespace PragmaRX\Firewall\Vendor\Laravel;
 /**
  * Part of the Firewall package.
  *
