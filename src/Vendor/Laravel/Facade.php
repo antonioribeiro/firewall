@@ -18,9 +18,9 @@
  * @link       http://pragmarx.com
  */
 
-use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Facade as LaravelFacade;
 
-class Firewall extends Facade {
+class Facade extends LaravelFacade {
 
 	/**
 	 * Get the registered name of the component.
