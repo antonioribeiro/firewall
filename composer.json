@@ -20,7 +20,7 @@
         "illuminate/support": "4.*",
         "illuminate/cache": "4.*",
         "illuminate/filesystem": "4.*",
-        "pragmarx/support": "dev-master"
+        "pragmarx/support": "0.*"
     },
 
     "require-dev": {
