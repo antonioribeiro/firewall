@@ -161,12 +161,12 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     private function registerFilters()
     {
-        $this->app['router']->filter('fw-block-bl', $this->getWhitelistFilter());
+        $this->app['router']->filter('fw-block-bl', $this->getBlacklistFilter());
 
-        $this->app['router']->filter('fw-allow-wl', $this->getBlacklistFilter());
+        $this->app['router']->filter('fw-allow-wl', $this->getWhitelistFilter());
     }
 
-    public function getWhitelistFilter()
+    public function getBlacklistFilter()
     {
         return function($route) 
         {
@@ -178,7 +178,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
         };
     }
 
-    public function getBlacklistFilter()
+    public function getWhitelistFilter()
     {
         return function($route)
         {
