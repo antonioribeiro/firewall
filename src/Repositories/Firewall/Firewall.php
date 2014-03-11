@@ -75,10 +75,10 @@ class Firewall implements FirewallInterface {
 	{
 		$this->model->unguard();
 
-		$model = $this->model->create([
+		$model = $this->model->create(array(
 										'ip_address' => $ip,
 										'whitelisted' => $whitelist
-									]);
+									));
 
 		$this->cacheRemember($model);
 
