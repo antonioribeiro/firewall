@@ -114,20 +114,20 @@ class ServiceProvider extends PragmaRXServiceProvider {
     {
         $this->app['firewall.dataRepository'] = $this->app->share(function($app)
         {
-            $firewallModel = $this->getConfig('firewall_model');
+            $firewallModel = $app['firewall.config']->get('firewall_model');
 
             return new DataRepository(
                                         new FirewallRepository(
                                                                     new $firewallModel, 
-                                                                    $this->app['firewall.cache'],
-                                                                    $this->app['firewall.config']
+                                                                    $app['firewall.cache'],
+                                                                    $app['firewall.config']
                                                             ),
 
-                                        $this->app['firewall.config'],
+                                        $app['firewall.config'],
 
-                                        $this->app['firewall.cache'],
+                                        $app['firewall.cache'],
 
-                                        $this->app['firewall.fileSystem']
+                                        $app['firewall.fileSystem']
                                     );
         });
     }
@@ -161,44 +161,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     private function registerFilters()
     {
-        $this->app['router']->filter('fw-block-bl', $this->getBlacklistFilter());
+        $this->app['router']->filter('fw-block-bl', '\PragmaRX\Firewall\Filters\Blacklist');
 
-        $this->app['router']->filter('fw-allow-wl', $this->getWhitelistFilter());
-    }
-
-    public function getBlacklistFilter()
-    {
-        return function($route) 
-        {
-            if ($this->app['firewall']->isBlacklisted()) {
-                $this->log('[blocked] IP blacklisted: '.$this->app['firewall']->getIp());
-
-                return $this->blockAccess();
-            }
-        };
-    }
-
-    public function getWhitelistFilter()
-    {
-        return function($route)
-        {
-            if ( ! $this->app['firewall']->isWhitelisted()) {
-                if($to = $this->getConfig('redirect_non_whitelisted_to'))
-                {
-                    $action = 'redirected';
-                    $response = $this->app['redirect']->to($to);
-                }
-                else
-                {
-                    $action = 'blocked';
-                    $response = $this->blockAccess();
-                }
-
-                $this->log(sprintf('[%s] IP not whitelisted: %s', $action, $this->app['firewall']->getIp()));
-
-                return $response;
-            }
-        };        
+        $this->app['router']->filter('fw-allow-wl', '\PragmaRX\Firewall\Filters\Whitelist');
     }
 
     /**
@@ -212,19 +177,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                 $this->getConfig('block_response_message'), 
                                 $this->getConfig('block_response_code')
                             );    
-    }
-
-    /**
-     * Register messages in log
-     *
-     * @return void
-     */ 
-    private function log($message)
-    {
-        if ($this->getConfig('enable_log'))
-        {
-            $this->app['log']->info("Firewall: $message");
-        }
     }
 
     /**
