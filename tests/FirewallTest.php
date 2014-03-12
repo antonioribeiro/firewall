@@ -23,25 +23,17 @@ use Mockery as m;
 
 use PragmaRX\Firewall\Firewall;
 
-use PragmaRX\Firewall\Support\Config;
-use PragmaRX\Firewall\Support\Filesystem;
-use PragmaRX\Firewall\Support\CacheManager;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\CacheManager;
 
 use PragmaRX\Firewall\Repositories\DataRepository;
-
 use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
 
-// use PragmaRX\Firewall\Support\Sentence;
-// use PragmaRX\Firewall\Support\Locale;
-// use PragmaRX\Firewall\Support\SentenceBag;
-// use PragmaRX\Firewall\Support\Mode;
-// use PragmaRX\Firewall\Support\MessageSelector;
-
-// use PragmaRX\Firewall\Repositories\DataRepository;
-// use PragmaRX\Firewall\Repositories\Messages\Laravel\Message;
-// use PragmaRX\Firewall\Repositories\Cache\Cache;
-
 use Illuminate\Console\Application;
+use Illuminate\Config\FileLoader;
+use Illuminate\Config\Repository;
+use Illuminate\Http\Request;
 
 class FirewallTest extends PHPUnit_Framework_TestCase {
 
@@ -52,11 +44,23 @@ class FirewallTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function setUp()
 	{
-		$this->config = new Config(new Filesystem);
+		$this->namespace = 'PragmaRX\Firewall';
+
+		$this->rootDir = __DIR__.'/../src/config';
+
+		$this->fileSystem = new Filesystem;
+
+		$this->fileLoader = new FileLoader($this->fileSystem, __DIR__);
+
+		$this->repository = new Repository($this->fileLoader, 'test');
+
+		$this->repository->package($this->namespace, $this->rootDir, $this->namespace);
+
+		$this->config = new Config($this->repository, $this->namespace);
 
 		$firewallModel = $this->config->get('firewall_model');
 
-		$this->cache = m::mock('PragmaRX\Firewall\Support\CacheManager');
+		$this->cache = m::mock('PragmaRX\Support\CacheManager');
 
 		$this->validIpv4 = '1.1.1.1';
 		$this->invalidIpv4 = '1.1.1';
@@ -66,13 +70,15 @@ class FirewallTest extends PHPUnit_Framework_TestCase {
 
 		$this->fileSystem = new Filesystem;
 
+		$this->request = new Request;
+
 		$this->model = m::mock('StdClass');
 
 		$this->cursor = m::mock('StdClass');
 
 		$this->dataRepository = new DataRepository(
 
-										new FirewallRepository($this->model, $this->cache),
+										new FirewallRepository($this->model, $this->cache, $this->config),
 
 										$this->config,
 
@@ -86,19 +92,20 @@ class FirewallTest extends PHPUnit_Framework_TestCase {
 			$this->config,
 			$this->dataRepository,
 			$this->cache,
-			$this->fileSystem
+			$this->fileSystem,
+			$this->request
 		);
 	}
 
 	public function testValidIP()
 	{
 		// IPv4
-		$this->assertTrue($this->firewall->isValid($this->validIpv4));
-		$this->assertFalse($this->firewall->isValid($this->invalidIpv4));
+		$this->assertTrue($this->firewall->ipIsValid($this->validIpv4));
+		$this->assertFalse($this->firewall->ipIsValid($this->invalidIpv4));
 
 		// IPv6
-		$this->assertTrue($this->firewall->isValid($this->validIpv6));
-		$this->assertFalse($this->firewall->isValid($this->invalidIpv6));
+		$this->assertTrue($this->firewall->ipIsValid($this->validIpv6));
+		$this->assertFalse($this->firewall->ipIsValid($this->invalidIpv6));
 	}
 
 	public function testReport()
