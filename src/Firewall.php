@@ -201,5 +201,18 @@ class Firewall
 	{
 		return $this->dataRepository->firewall->clear();
 	}
- 
+
+    /**
+     * Register messages in log
+     *
+     * @return void
+     */ 
+    public function log($message)
+    {
+        if ($this->config->get('enable_log'))
+        {
+            app()->log->info("Firewall: $message");
+        }
+    }
+
 }
