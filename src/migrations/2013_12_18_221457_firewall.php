@@ -15,7 +15,7 @@ class Firewall extends Migration {
         {
             $table->increments('id');
 
-            $table->text('ip_address')->unique()->index();
+            $table->string('ip_address', 39)->unique()->index();
 
             $table->boolean('whitelisted')->default(false); /// default is blacklist
             
