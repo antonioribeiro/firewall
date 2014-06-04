@@ -29,6 +29,7 @@ use PragmaRX\Firewall\Support\MessageSelector;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\FileSystem;
+use PragmaRX\Support\Response;
 
 use Illuminate\Http\Request;
 
@@ -47,6 +48,8 @@ class Firewall
 	private $dataRepository;
 
 	private $messages = array();
+
+	private $request;
 
 	/**
 	 * Initialize Firewall object
@@ -215,4 +218,11 @@ class Firewall
         }
     }
 
+    public function blockAccess($content = null, $status = null)
+    {
+        return Response::make(
+	        $content ?: $this->config->get('block_response_message'), 
+	        $status ?: $this->config->get('block_response_code')
+        );
+    }
 }

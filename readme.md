@@ -86,6 +86,12 @@ if (Firewall::whichList($ip))  // returns false, 'whitelist' or 'blacklist'
 }
 ```
 
+Return a blocking access response:
+
+```
+return Firewall::blockAccess();
+```
+
 Suspicious events will be (if you wish) logged, so `tail` it:
 
 ```

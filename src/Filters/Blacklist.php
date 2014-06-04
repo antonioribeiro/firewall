@@ -27,7 +27,8 @@ class Blacklist {
     {
         $firewall = app()->make('firewall');
 
-        if ($firewall->isBlacklisted()) {
+        if ($firewall->isBlacklisted()) 
+        {
             $firewall->log('[blocked] IP blacklisted: '.$firewall->getIp());
 
             return $this->blockAccess();

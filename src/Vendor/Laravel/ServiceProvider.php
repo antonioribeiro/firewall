@@ -171,12 +171,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
      *
      * @return Response
      */ 
-    private function blockAccess()
+    private function blockAccess($content = null, $status = null)
     {
-        return Response::make(
-                                $this->getConfig('block_response_message'), 
-                                $this->getConfig('block_response_code')
-                            );    
+        return $this->app['firewall']->blockAccess($content, $status);
     }
 
     /**
