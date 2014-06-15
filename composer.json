@@ -17,14 +17,14 @@
 
     "require": {
         "php": ">=5.3.7",
-        "illuminate/support": "4.*",
-        "illuminate/cache": "4.*",
-        "illuminate/filesystem": "4.*",
-        "pragmarx/support": "0.*"
+        "illuminate/support": "~4.1",
+        "illuminate/cache": "~4.1",
+        "illuminate/filesystem": "~4.1",
+        "pragmarx/support": "~0.2"
     },
 
     "require-dev": {
-        "mockery/mockery": "0.8.0"
+        "mockery/mockery": "~0.8"
     },
 
     "autoload": {
