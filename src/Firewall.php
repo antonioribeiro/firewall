@@ -20,6 +20,7 @@
 
 use Exception;
 
+use PragmaRX\Firewall\Database\Migrator;
 use PragmaRX\Firewall\Support\Locale;
 use PragmaRX\Firewall\Support\SentenceBag;
 use PragmaRX\Firewall\Support\Sentence;
@@ -52,6 +53,11 @@ class Firewall
 	private $request;
 
 	/**
+	 * @var Migrator
+	 */
+	private $migrator;
+
+	/**
 	 * Initialize Firewall object
 	 * 
 	 * @param Locale $locale
@@ -61,7 +67,8 @@ class Firewall
 									DataRepository $dataRepository,
 									CacheManager $cache,
 									FileSystem $fileSystem,
-									Request $request
+									Request $request,
+									Migrator $migrator
 								)
 	{
 		$this->config = $config;
@@ -73,6 +80,8 @@ class Firewall
 		$this->fileSystem = $fileSystem;
 
 		$this->request = $request;
+
+		$this->migrator = $migrator;
 
 		$this->setIp(null);
 	}
@@ -225,4 +234,9 @@ class Firewall
 	        $status ?: $this->config->get('block_response_code')
         );
     }
+
+	public function getMigrator()
+	{
+		return $this->migrator;
+	}
 }

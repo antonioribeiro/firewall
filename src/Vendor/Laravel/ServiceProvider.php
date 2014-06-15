@@ -1,8 +1,8 @@
 <?php namespace PragmaRX\Firewall\Vendor\Laravel;
 
+use PragmaRX\Firewall\Database\Migrator;
 use PragmaRX\Firewall\Firewall;
 
-use PragmaRX\Support\Config;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Response;
@@ -12,9 +12,9 @@ use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\Tables as TablesCommand;
 
 use PragmaRX\Firewall\Repositories\DataRepository;
-use PragmaRX\Firewall\Repositories\Cache\Cache;
 use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
 
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -54,11 +54,14 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
         $this->registerDataRepository();
 
+	    $this->registerMigrator();
+
         $this->registerWhitelistCommand();
         $this->registerBlacklistCommand();
         $this->registerReportCommand();
         $this->registerRemoveCommand();
         $this->registerClearCommand();
+	    $this->registerTablesCommand();
 
         $this->registerFilters();
 
@@ -67,6 +70,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
         $this->commands('firewall.list.command');
         $this->commands('firewall.remove.command');
         $this->commands('firewall.clear.command');
+	    $this->commands('firewall.tables.command');
     }
 
     /**
@@ -149,7 +153,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                     $app['firewall.dataRepository'],
                                     $app['firewall.cache'],
                                     $app['firewall.fileSystem'],
-                                    $app['request']
+                                    $app['request'],
+                                    $app['firewall.migrator']
                                 );
         });
     }
@@ -249,5 +254,25 @@ class ServiceProvider extends PragmaRXServiceProvider {
     public function getRootDirectory()
     {
         return __DIR__.'/../..';
-    }    
+    }
+
+	private function registerTablesCommand()
+	{
+		$this->app['firewall.tables.command'] = $this->app->share(function()
+		{
+			return new TablesCommand;
+		});
+	}
+
+	private function registerMigrator()
+	{
+		$this->app['firewall.migrator'] = $this->app->share(
+			function($app)
+			{
+				$connection = $this->getConfig('connection');
+
+				return new Migrator($app['db'], $connection);
+			}
+		);
+	}
 }
