@@ -103,7 +103,6 @@ php artisan tail
 #### Requirements
 
 - Laravel 4.1+
-- Composer >= 2014-01-07 - This is a PSR-4 package
 
 #### Installing
 
@@ -125,10 +124,16 @@ Require the Firewall package:
 composer require pragmarx/firewall dev-master
 ```
 
-Once this operation completes, migrate:
+Create the migration:
 
 ```
-php artisan migrate --package=pragmarx/firewall
+php artisan tracker:tables
+```
+
+Migrate it
+
+```
+php artisan migrate
 ```
 
 Add the service provider to your app/config/app.php:
