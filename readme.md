@@ -127,7 +127,7 @@ composer require pragmarx/firewall dev-master
 Create the migration:
 
 ```
-php artisan tracker:tables
+php artisan firewall:tables
 ```
 
 Migrate it
