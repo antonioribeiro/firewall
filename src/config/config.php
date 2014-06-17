@@ -65,6 +65,24 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Search by range allow you to store ranges of addresses in
+    | your black and whitelist:
+    |
+    | 192.168.17.0/24 or
+    | 127.0.0.1/255.255.255.255 or
+    | 10.0.0.1-10.0.0.255 or
+    | 172.17.*.*
+    |
+    | Note that range searches may be slow and waste memory, this is why
+    | it is disabled by default.
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'enable_range_search' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Which PHP Framework is your application using?
     |--------------------------------------------------------------------------
     |

@@ -30,6 +30,7 @@ use PragmaRX\Firewall\Support\MessageSelector;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\FileSystem;
+use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\Response;
 
 use Illuminate\Http\Request;
@@ -59,8 +60,14 @@ class Firewall
 
 	/**
 	 * Initialize Firewall object
-	 * 
-	 * @param Locale $locale
+	 *
+	 * @param \PragmaRX\Support\Config $config
+	 * @param Repositories\DataRepository $dataRepository
+	 * @param \PragmaRX\Support\CacheManager $cache
+	 * @param \PragmaRX\Support\FileSystem $fileSystem
+	 * @param \Illuminate\Http\Request $request
+	 * @param Database\Migrator $migrator
+	 * @internal param \PragmaRX\Firewall\Support\Locale $locale
 	 */
 	public function __construct(
 									Config $config, 
@@ -98,7 +105,7 @@ class Firewall
 
 	public function report()
 	{
-		return $this->dataRepository->firewall->all();
+		return $this->dataRepository->firewall->all()->toArray();
 	}
 
 	public function whitelist($ip, $force = false)
@@ -111,16 +118,34 @@ class Firewall
 		return $this->addToList(false, $ip, $force);
 	}
 
-	public function whichList($ip)
+	public function whichList($ip_address)
 	{
-		$ip = $ip ?: $this->getIp();
+		$ip_address = $ip_address ?: $this->getIp();
 
-		if( ! $ip = $this->dataRepository->firewall->find($ip))
+		if( ! $ip_found = $this->dataRepository->firewall->find($ip_address))
 		{
-			return false;
+			if ( ! $this->config->get('enable_range_search'))
+			{
+				return;
+			}
+
+			foreach($this->dataRepository->firewall->all() as $range)
+			{
+				if (ipv4_in_range($ip_address, $range->ip_address))
+				{
+					$ip_found = $range;
+
+					break;
+				}
+			}
+
+			if ( ! $ip_found)
+			{
+				return;
+			}
 		}
 
-		return $ip->whitelisted ? 'whitelist' : 'blacklist';
+		return $ip_found->whitelisted ? 'whitelist' : 'blacklist';
 	}
 
 	public function isWhitelisted($ip = null)
@@ -135,9 +160,12 @@ class Firewall
 
 	public function ipIsValid($ip)
 	{
-		try {
-			return inet_pton($ip) !== false;
-		} catch (Exception $e) {
+		try
+		{
+			return IpAddress::ipV4Valid($ip);
+		}
+		catch (Exception $e)
+		{
 			return false;	
 		}
 	}

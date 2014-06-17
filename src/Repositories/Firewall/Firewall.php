@@ -126,7 +126,7 @@ class Firewall implements FirewallInterface {
 
 	public function all()
 	{
-		return $this->model->all()->toArray();
+		return $this->model->all();
 	}
 
 	public function clear()
