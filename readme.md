@@ -1,4 +1,4 @@
-# Firewall v0.1.0
+# Firewall
 
 [![Latest Stable Version](https://poser.pugx.org/pragmarx/firewall/v/stable.png)](https://packagist.org/packages/pragmarx/firewall) [![License](https://poser.pugx.org/pragmarx/firewall/license.png)](https://packagist.org/packages/pragmarx/firewall)
 
