@@ -135,7 +135,7 @@ sudo composer self-update
 Require the Firewall package:
 
 ```
-composer require pragmarx/firewall dev-master
+composer require "pragmarx/firewall":"0.2.*"
 ```
 
 Create the migration:
