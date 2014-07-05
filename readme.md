@@ -164,7 +164,6 @@ artisan config:publish pragmarx/firewall
 
 ### TODO
 
-- Add support to subnet IP ranges
 - Tests, tests, tests.
 
 ### Author
