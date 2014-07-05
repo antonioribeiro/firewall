@@ -27,6 +27,10 @@
         "mockery/mockery": "~0.8"
     },
 
+    "suggest": {
+        "geoip/geoip": "~1.14"
+    },
+
     "autoload": {
         "psr-4": {
             "PragmaRX\\Firewall\\": "src/"

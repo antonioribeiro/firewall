@@ -98,6 +98,20 @@ Suspicious events will be (if you wish) logged, so `tail` it:
 php artisan tail
 ```
 
+### Blocking Whole Countries
+
+You can block a country by, instead of an ip address, pass `country:<countr id>`  
+
+```
+php artisan firewall:blacklist country:uk
+```
+
+You will have to add this requirement to your `composer.json` file:
+
+```
+"geoip/geoip": "~1.14"
+```
+
 ### Installation
 
 #### Requirements

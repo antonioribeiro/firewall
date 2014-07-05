@@ -30,6 +30,7 @@ use PragmaRX\Firewall\Support\MessageSelector;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\FileSystem;
+use PragmaRX\Support\GeoIp;
 use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\Response;
 
@@ -58,6 +59,8 @@ class Firewall
 	 */
 	private $migrator;
 
+	private $geoIp;
+
 	/**
 	 * Initialize Firewall object
 	 *
@@ -75,7 +78,8 @@ class Firewall
 									CacheManager $cache,
 									FileSystem $fileSystem,
 									Request $request,
-									Migrator $migrator
+									Migrator $migrator,
+									GeoIp $geoIp
 								)
 	{
 		$this->config = $config;
@@ -89,6 +93,8 @@ class Firewall
 		$this->request = $request;
 
 		$this->migrator = $migrator;
+
+		$this->geoIp = $geoIp;
 
 		$this->setIp(null);
 	}
@@ -124,28 +130,21 @@ class Firewall
 
 		if( ! $ip_found = $this->dataRepository->firewall->find($ip_address))
 		{
-			if ( ! $this->config->get('enable_range_search'))
+			if( ! $ip_found = $this->getListingByCountry($ip_address))
 			{
-				return;
-			}
-
-			foreach($this->dataRepository->firewall->all() as $range)
-			{
-				if (ipv4_in_range($ip_address, $range->ip_address))
+				if ( ! $ip_found = $this->checkSecondaryLists($ip_address))
 				{
-					$ip_found = $range;
-
-					break;
+					return false;
 				}
-			}
-
-			if ( ! $ip_found)
-			{
-				return;
 			}
 		}
 
-		return $ip_found->whitelisted ? 'whitelist' : 'blacklist';
+		if($ip_found)
+		{
+			return $ip_found->whitelisted ? 'whitelist' : 'blacklist';
+		}
+
+		return false;
 	}
 
 	public function isWhitelisted($ip = null)
@@ -162,7 +161,7 @@ class Firewall
 	{
 		try
 		{
-			return IpAddress::ipV4Valid($ip);
+			return IpAddress::ipV4Valid($ip) || $this->validCountry($ip);
 		}
 		catch (Exception $e)
 		{
@@ -266,5 +265,69 @@ class Firewall
 	public function getMigrator()
 	{
 		return $this->migrator;
+	}
+
+	private function validCountry($command)
+	{
+		$command = strtolower($command);
+
+		if ($this->config->get('enable_country_search'))
+		{
+			if (starts_with($command, 'country:'))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function checkSecondaryLists($ip_address)
+	{
+		if ( ! $this->config->get('enable_range_search'))
+		{
+			return false;
+		}
+
+		foreach($this->dataRepository->firewall->all() as $range)
+		{
+			if (
+				IpAddress::ipV4Valid($range->ip_address) &&
+				ipv4_in_range($ip_address, $range->ip_address)
+			)
+			{
+				return $range;
+			}
+		}
+
+		return false;
+	}
+
+	private function getListingByCountry($ip_address)
+	{
+		if ( ! $this->config->get('enable_country_search'))
+		{
+			return false;
+		}
+
+		if ($country = $this->getCountryFromIp($ip_address))
+		{
+			if($ip_found = $this->dataRepository->firewall->find('country:'.$country))
+			{
+				return $ip_found;
+			}
+		}
+
+		return false;
+	}
+
+	private function getCountryFromIp($ip_address)
+	{
+		if ($geo = $this->geoIp->byAddr($ip_address))
+		{
+			return strtolower($geo['country_code']);
+		}
+
+		return false;
 	}
 }

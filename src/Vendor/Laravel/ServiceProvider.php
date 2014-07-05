@@ -5,6 +5,7 @@ use PragmaRX\Firewall\Firewall;
 
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\GeoIp;
 use PragmaRX\Support\Response;
 
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
@@ -154,7 +155,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                     $app['firewall.cache'],
                                     $app['firewall.fileSystem'],
                                     $app['request'],
-                                    $app['firewall.migrator']
+                                    $app['firewall.migrator'],
+                                    new GeoIp()
                                 );
         });
     }

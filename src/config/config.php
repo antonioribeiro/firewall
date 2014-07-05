@@ -68,10 +68,10 @@ return array(
     | Search by range allow you to store ranges of addresses in
     | your black and whitelist:
     |
-    | 192.168.17.0/24 or
-    | 127.0.0.1/255.255.255.255 or
-    | 10.0.0.1-10.0.0.255 or
-    | 172.17.*.*
+    |   192.168.17.0/24 or
+    |   127.0.0.1/255.255.255.255 or
+    |   10.0.0.1-10.0.0.255 or
+    |   172.17.*.*
     |
     | Note that range searches may be slow and waste memory, this is why
     | it is disabled by default.
@@ -80,6 +80,19 @@ return array(
     */
 
     'enable_range_search' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Search by country range allow you to store country ids in your
+    | your black and whitelist:
+    |
+    |   php artisan firewall:whitelist country:us
+    |   php artisan firewall:blacklist country:cn
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'enable_country_search' => false,
 
     /*
     |--------------------------------------------------------------------------
