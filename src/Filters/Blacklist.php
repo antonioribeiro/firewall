@@ -31,7 +31,7 @@ class Blacklist {
         {
             $firewall->log('[blocked] IP blacklisted: '.$firewall->getIp());
 
-            return $this->blockAccess();
+            return $firewall->blockAccess();
         }
     }
 
