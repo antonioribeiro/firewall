@@ -100,7 +100,7 @@ php artisan tail
 
 ### Blocking Whole Countries
 
-You can block a country by, instead of an ip address, pass `country:<countr id>`  
+You can block a country by, instead of an ip address, pass `country:<2-letter ISO code>`  
 
 ```
 php artisan firewall:blacklist country:uk
@@ -111,6 +111,8 @@ You will have to add this requirement to your `composer.json` file:
 ```
 "geoip/geoip": "~1.14"
 ```
+
+You can find all of the codes here: [isocodes](http://www.spoonfork.org/isocodes.html)
 
 ### Installation
 
