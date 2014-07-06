@@ -11,7 +11,6 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Firewall
- * @version    0.1.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
@@ -73,7 +72,7 @@ class Firewall
 	 * @internal param \PragmaRX\Firewall\Support\Locale $locale
 	 */
 	public function __construct(
-									Config $config, 
+									Config $config,
 									DataRepository $dataRepository,
 									CacheManager $cache,
 									FileSystem $fileSystem,
@@ -117,7 +116,7 @@ class Firewall
 	public function whitelist($ip, $force = false)
 	{
 		return $this->addToList(true, $ip, $force);
-	}	
+	}
 
 	public function blacklist($ip, $force = false)
 	{
@@ -165,7 +164,7 @@ class Firewall
 		}
 		catch (Exception $e)
 		{
-			return false;	
+			return false;
 		}
 	}
 
@@ -245,7 +244,7 @@ class Firewall
      * Register messages in log
      *
      * @return void
-     */ 
+     */
     public function log($message)
     {
         if ($this->config->get('enable_log'))
@@ -257,7 +256,7 @@ class Firewall
     public function blockAccess($content = null, $status = null)
     {
         return Response::make(
-	        $content ?: $this->config->get('block_response_message'), 
+	        $content ?: $this->config->get('block_response_message'),
 	        $status ?: $this->config->get('block_response_code')
         );
     }

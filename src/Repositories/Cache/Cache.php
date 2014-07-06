@@ -11,7 +11,6 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Firewall
- * @version    0.1.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
@@ -19,27 +18,27 @@
  */
 
 class Cache implements CacheInterface {
-	
+
 	private $memory = array();
 
 	/**
 	 * Get the cache value
-	 * @param  string $key 
+	 * @param  string $key
 	 * @return mixed
 	 */
 	public function get($key)
 	{
-		return isset($this->memory[$key]) 
-		             ? unserialize($this->memory[$key]) 
+		return isset($this->memory[$key])
+		             ? unserialize($this->memory[$key])
 		             : null;
 	}
 
 	/**
 	 * Insert or replace a value for a given key
-	 * 
-	 * @param  string  $key     
-	 * @param  mixed  $value   
-	 * @param  integer $minutes 
+	 *
+	 * @param  string  $key
+	 * @param  mixed  $value
+	 * @param  integer $minutes
 	 * @return mixed
 	 */
 	public function put($key, $value, $minutes = 0)
@@ -52,7 +51,7 @@ class Cache implements CacheInterface {
 	 */
 	public function increment($key, $value = 1)
 	{
-		throw new \Exception("Increment operations not supported by this driver.");	
+		throw new \Exception("Increment operations not supported by this driver.");
 	}
 
 	/**
@@ -60,14 +59,14 @@ class Cache implements CacheInterface {
 	 */
 	public function decrement($key, $value = 1)
 	{
-		throw new \Exception("Decrement operations not supported by this driver.");	
+		throw new \Exception("Decrement operations not supported by this driver.");
 	}
 
 	/**
 	 * Insert or replace a value for a key and remember is forever
-	 * 
-	 * @param  string $key   
-	 * @param  mixed $value 
+	 *
+	 * @param  string $key
+	 * @param  mixed $value
 	 * @return void
 	 */
 	public function forever($key, $value)
@@ -77,8 +76,8 @@ class Cache implements CacheInterface {
 
 	/**
 	 * Forget a key
-	 * 
-	 * @param  string $key 
+	 *
+	 * @param  string $key
 	 * @return void
 	 */
 	public function forget($key)
@@ -88,7 +87,7 @@ class Cache implements CacheInterface {
 
 	/**
 	 * Erase the whole cache
-	 * 
+	 *
 	 * @return void
 	 */
 	public function flush()
@@ -97,14 +96,14 @@ class Cache implements CacheInterface {
 	}
 
 	/**
-	 * Get the cache Prefix, 
+	 * Get the cache Prefix,
 	 *   returns an empty string for backward compatility with Interface
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getPrefix()
 	{
 		return '';
 	}
-	
+
 }
