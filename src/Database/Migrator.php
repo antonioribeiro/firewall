@@ -30,7 +30,7 @@ class Migrator extends Migration {
 
 	protected function migrateUp()
 	{
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'firewall',
 			function ($table)
 			{
