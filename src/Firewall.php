@@ -288,7 +288,7 @@ class Firewall
 			return false;
 		}
 
-		foreach($this->dataRepository->firewall->all() as $range)
+		foreach ($this->dataRepository->firewall->all() as $range)
 		{
 			if (
 				IpAddress::ipV4Valid($range->ip_address) &&

@@ -133,7 +133,7 @@ class Firewall implements FirewallInterface {
 		/**
 		 * Deletes one by one to also remove them from cache
 		 */
-		foreach($this->all() as $ip)
+		foreach ($this->all() as $ip)
 		{
 			$this->delete($ip['ip_address']);
 		}

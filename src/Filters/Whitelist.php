@@ -27,7 +27,7 @@ class Whitelist {
     	$firewall = app()->make('firewall');
 
         if ( ! $firewall->isWhitelisted()) {
-            if($to = app()->make('firewall.config')->get('redirect_non_whitelisted_to'))
+            if ($to = app()->make('firewall.config')->get('redirect_non_whitelisted_to'))
             {
                 $action = 'redirected';
                 $response = app()->make('redirect')->to($to);

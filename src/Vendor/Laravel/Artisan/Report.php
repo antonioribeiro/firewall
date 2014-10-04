@@ -47,7 +47,7 @@ class Report extends Base {
 
 		$list = array();
 
-		foreach($this->laravel->firewall->report() as $ip)
+		foreach ($this->laravel->firewall->report() as $ip)
 		{
 			$list[] = array(
 								$ip['ip_address'], 
