@@ -45,7 +45,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     public function register()
     {
-        parent::register();
+        $this->preRegister();
 
         $this->registerFileSystem();
 
@@ -55,7 +55,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
         $this->registerDataRepository();
 
-	    $this->registerMigrator();
+	$this->registerMigrator();
 
         $this->registerWhitelistCommand();
         $this->registerBlacklistCommand();
@@ -120,10 +120,12 @@ class ServiceProvider extends PragmaRXServiceProvider {
         $this->app['firewall.dataRepository'] = $this->app->share(function($app)
         {
             $firewallModel = $app['firewall.config']->get('firewall_model');
-
+            
+            $obj = new $firewallModel;
+            
             return new DataRepository(
                                         new FirewallRepository(
-                                                                    new $firewallModel, 
+                                                                    $obj->getFirewall(), 
                                                                     $app['firewall.cache'],
                                                                     $app['firewall.config']
                                                             ),

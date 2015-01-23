@@ -1,5 +1,4 @@
 <?php namespace PragmaRX\Firewall\Vendor\Laravel\Models;
-
 /**
  * Part of the Firewall package.
  *
@@ -12,18 +11,9 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Firewall
- * @author     Antonio Carlos Ribeiro @ PragmaRX
+ * @author     Maurizio Brioschi <maurizio.brioschi@ridesoft.org>
  * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
  */
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
-class Firewall extends Eloquent {
-        
-	protected $table = 'firewall';
-
-	protected $guarded = array();
-
+class FirewallFactory extends FirewallFactoryAbstract{
 }

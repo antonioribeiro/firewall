@@ -12,18 +12,17 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Firewall
- * @author     Antonio Carlos Ribeiro @ PragmaRX
+ * @author     Maurizio Brioschi <maurizio.brioschi@ridesoft.org>
  * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
  */
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Jenssegers\Mongodb\Model as Eloquent;
 
-class Firewall extends Eloquent {
+class FirewallMongoDB extends Eloquent {
         
 	protected $table = 'firewall';
 
 	protected $guarded = array();
 
 }
+
