@@ -137,11 +137,11 @@ sudo composer self-update
 Require the Firewall package:
 
 ```
-composer require "pragmarx/firewall":"0.2.*"
+composer require "pragmarx/firewall":"0.3.*"
 ```
 or put in your require composer.json
 ```
-"pragmarx/firewall":"0.2.*"
+"pragmarx/firewall":"0.3.*"
 ```
 
 Add the service provider to your app/config/app.php:
@@ -167,6 +167,9 @@ To publish the configuration file you'll have to:
 ```
 artisan config:publish pragmarx/firewall
 ```
+
+### FROM VERSION 0.2.0 to 0.3.0
+Compatible with MongoDB
 
 ### TODO
 
