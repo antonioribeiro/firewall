@@ -139,6 +139,16 @@ Require the Firewall package:
 ```
 composer require "pragmarx/firewall":"0.2.*"
 ```
+or put in your require composer.json
+```
+"pragmarx/firewall":"0.2.*"
+```
+
+Add the service provider to your app/config/app.php:
+
+```
+'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+```
 
 Create the migration:
 
@@ -150,12 +160,6 @@ Migrate it
 
 ```
 php artisan migrate
-```
-
-Add the service provider to your app/config/app.php:
-
-```
-'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
 ```
 
 To publish the configuration file you'll have to:
