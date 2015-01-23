@@ -150,13 +150,13 @@ Add the service provider to your app/config/app.php:
 'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
 ```
 
-Create the migration:
+Create the migration (Only if you don't use MongoDB or a Schema less database):
 
 ```
 php artisan firewall:tables
 ```
 
-Migrate it
+Migrate it (Only if you don't use MongoDB or a Schema less database)
 
 ```
 php artisan migrate
