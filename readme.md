@@ -4,7 +4,7 @@
 
 #### A Laravel 4 package to help you block IP addresses from accessing your application or just some routes
 
-#### Installing
+### Installing
 
 First, you need to be sure you have a Composer that supports PSR-4, so execute
 
