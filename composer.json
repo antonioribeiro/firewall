@@ -12,6 +12,11 @@
             "name": "Antonio Carlos Ribeiro",
             "email": "acr@antoniocarlosribeiro.com",
             "role": "Creator"
+        },
+         {
+            "name": "Maurizio Brioschi",
+            "email": "maurizio.brioschi@ridesoft.org",
+            "role": "Contributor for Mongo DB porting"
         }
     ],
 

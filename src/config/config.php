@@ -126,6 +126,6 @@ return array(
     |
     */
 
-    'firewall_model' => 'PragmaRX\Firewall\Vendor\Laravel\Models\Firewall',
+    'firewall_model' => 'PragmaRX\Firewall\Vendor\Laravel\Models\FirewallFactory',
 
 );
