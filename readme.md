@@ -4,6 +4,57 @@
 
 #### A Laravel 4 package to help you block IP addresses from accessing your application or just some routes
 
+#### Installing
+
+First, you need to be sure you have a Composer that supports PSR-4, so execute
+
+```
+composer self-update
+```
+
+or
+
+```
+sudo composer self-update
+```
+
+Require the Firewall package:
+
+```
+composer require "pragmarx/firewall":"0.3.*"
+```
+or put in your require composer.json
+```
+"pragmarx/firewall":"0.3.*"
+```
+
+Add the service provider to your app/config/app.php:
+
+```
+'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+```
+
+Create the migration (Only if you don't use MongoDB or a Schema less database):
+
+```
+php artisan firewall:tables
+```
+
+Migrate it (Only if you don't use MongoDB or a Schema less database)
+
+```
+php artisan migrate
+```
+
+To publish the configuration file you'll have to:
+
+```
+artisan config:publish pragmarx/firewall
+```
+
+### FROM VERSION 0.2.0 to 0.3.0
+Compatible with MongoDB
+
 ### Usage
 
 This package provides two route filters:
@@ -119,57 +170,6 @@ You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html
 #### Requirements
 
 - Laravel 4.1+
-
-#### Installing
-
-First, you need to be sure you have a Composer that supports PSR-4, so execute
-
-```
-composer self-update
-```
-
-or
-
-```
-sudo composer self-update
-```
-
-Require the Firewall package:
-
-```
-composer require "pragmarx/firewall":"0.3.*"
-```
-or put in your require composer.json
-```
-"pragmarx/firewall":"0.3.*"
-```
-
-Add the service provider to your app/config/app.php:
-
-```
-'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
-```
-
-Create the migration (Only if you don't use MongoDB or a Schema less database):
-
-```
-php artisan firewall:tables
-```
-
-Migrate it (Only if you don't use MongoDB or a Schema less database)
-
-```
-php artisan migrate
-```
-
-To publish the configuration file you'll have to:
-
-```
-artisan config:publish pragmarx/firewall
-```
-
-### FROM VERSION 0.2.0 to 0.3.0
-Compatible with MongoDB
 
 ### TODO
 
