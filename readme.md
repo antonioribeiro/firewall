@@ -122,22 +122,10 @@ You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html
 
 #### Installing
 
-First, you need to be sure you have a Composer that supports PSR-4, so execute
+Require the Firewall package using [Composer](https://getcomposer.org/doc/01-basic-usage.md):
 
 ```
-composer self-update
-```
-
-or
-
-```
-sudo composer self-update
-```
-
-Require the Firewall package:
-
-```
-composer require "pragmarx/firewall":"0.2.*"
+composer require pragmarx/firewall
 ```
 
 Create the migration:
