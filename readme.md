@@ -140,10 +140,16 @@ Migrate it
 php artisan migrate
 ```
 
-Add the service provider to your app/config/app.php:
+Add the Service Provider to your app/config/app.php:
 
 ```
 'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+```
+
+Add the Facade to your app/config/app.php:
+
+```
+'Firewall' => 'PragmaRX\Firewall\Vendor\Laravel\Facade',
 ```
 
 To publish the configuration file you'll have to:
