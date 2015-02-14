@@ -148,31 +148,26 @@ class Firewall implements FirewallInterface {
 
 	public function all()
 	{
-		if ($this->cache->has(static::IP_ADDRESS_LIST_CACHE_NAME))
+		$cacheTime = $this->config->get('ip_list_cache_expire_time');
+
+		if ($cacheTime && $this->cache->has(static::IP_ADDRESS_LIST_CACHE_NAME))
 		{
 			return $this->cache->get(static::IP_ADDRESS_LIST_CACHE_NAME);
 		}
 
-		if ($this->config->get('use_database'))
-		{
-			$database_ips = $this->model->all();
-		}
-		else
-		{
-			$database_ips = array();
-		}
-
-		$config_ips = $this->toModels($this->getNonDatabaseIps());
-
-		$list = array_merge($database_ips->toArray(), $config_ips);
-
-		$list = $this->toCollection($list);
-
-		$this->cache->put(
-			static::IP_ADDRESS_LIST_CACHE_NAME,
-			$list,
-			$this->config->get('ip_list_cache_expire_time',10)
+		$list = $this->mergeLists(
+			$this->getAllFromDatabase(),
+			$this->toModels($this->getNonDatabaseIps())
 		);
+
+		if ($cacheTime)
+		{
+			$this->cache->put(
+				static::IP_ADDRESS_LIST_CACHE_NAME,
+				$list,
+				$this->config->get('ip_list_cache_expire_time')
+			);
+		}
 
 		return $list;
 	}
@@ -312,6 +307,30 @@ class Firewall implements FirewallInterface {
 		}
 
 		return false;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getAllFromDatabase()
+	{
+		if ($this->config->get('use_database'))
+		{
+			$database_ips = $this->model->all();
+			return $database_ips;
+		}
+		else
+		{
+			$database_ips = array();
+			return $database_ips;
+		}
+	}
+
+	private function mergeLists($database_ips, $config_ips)
+	{
+		$list = array_merge($database_ips->toArray(), $config_ips);
+
+		return $this->toCollection($list);
 	}
 
 }
