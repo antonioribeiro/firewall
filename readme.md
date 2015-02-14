@@ -18,7 +18,7 @@ Those IP addresses can
 - Access 'allow whitelisted' filtered routes.
 - If a route is filtered by the 'allow whitelisted' filter and the IP is not whitelisted, the request will be redirected to an alternative url or route name.
 
-### Usage
+### Routes
 
 This package provides two route filters:
 
@@ -52,19 +52,52 @@ Route::group(['before' => 'fw-block-bl'], function()
 });
 ```
 
+### IPs lists
+
+IPs (white and black) lists can be stored in array, files and database. Initially database access to lists is disabled, so, to test your Firewall configuration you can publish the config file and edit the `blacklist` or `whitelist` arrays:
+
+```
+'blacklist' => array(
+    '127.0.0.1',
+    '192.168.17.0/24'
+    '127.0.0.1/255.255.255.255'
+    '10.0.0.1-10.0.0.255'
+    '172.17.*.*'
+    'country:br'
+    '/usr/bin/firewall/blacklisted.txt',
+),
+```
+
+The file (for instance `/usr/bin/firewall/blacklisted.txt`) must contain one IP, range or file name per line, and, yes, it will search for files recursivelly, so you can have a file of files if you need:
+
+```
+127.0.0.2
+10.0.0.0-10.0.0.100
+/tmp/blacklist.txt
+```
+
+### Redirecting non-whitelisted IP addresses
+
 Non-whitelisted IP addresses can be blocked or redirected. To configure redirection you'll have to publish the  `config.php` file and configure:
 
 ```
 'redirect_non_whitelisted_to' => 'coming/soon',
 ```
 
+### Artisan Commands
+
 To blacklist or whitelist IP addresses, use the artisan commands:
+
+```
+  firewall:list               List all IP address, white and blacklisted.
+```
+
+##### Exclusive for database usage
 
 ```
 firewall
   firewall:blacklist          Add an IP address to blacklist.
   firewall:clear              Remove all ip addresses from white and black lists.
-  firewall:list               List all IP address, white and blacklisted.
   firewall:remove             Remove an IP address from white or black list.
   firewall:whitelist          Add an IP address to whitelist.
 ```
@@ -82,6 +115,8 @@ This is a result from `firewall:list`:
 | 10.17.12.200 |           |     X     |
 +--------------+-----------+-----------+
 ```
+
+###Facade
 
 You can also use the `Firewall Facade` to manage the lists:
 
