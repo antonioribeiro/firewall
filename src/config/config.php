@@ -24,47 +24,37 @@ return array(
     'firewall_alias' => 'Firewall',
 
     /**
-     *--------------------------------------------------------------------------
-     * Whitelisted IP addresses array
-     *--------------------------------------------------------------------------
+     * Blacklisted IP  addresses, ranges, countries, files and/or files of files
      *
      */
 
-    'whitelisted_array' => array(),
-
-    /**
-     *--------------------------------------------------------------------------
-     * Blacklisted IP addresses array
-     *--------------------------------------------------------------------------
-     *
-     */
-
-    'blacklisted_array' => array(
-        '127.0.0.1',
+    'blacklist' => array(
+        // '127.0.0.1',
+        // '192.168.17.0/24'
+        // '127.0.0.1/255.255.255.255'
+        // '10.0.0.1-10.0.0.255'
+        // '172.17.*.*'
+        // 'country:br'
+        // storage_path().DIRECTORY_SEPARATOR.'blacklisted.txt',
     ),
 
     /**
-     *--------------------------------------------------------------------------
-     * Whitelisted IP addresses file
-     *--------------------------------------------------------------------------
+     * Whitelisted IP addresses, ranges, countries, files and/or files of files
      *
      */
 
-    'whitelisted_file' => storage_path().DIRECTORY_SEPARATOR.'whitelisted.txt',
+    'whitelist' => array(
+        // '127.0.0.2',
+        // '192.168.18.0/24'
+        // '127.0.0.2/255.255.255.255'
+        // '10.0.1.1-10.0.1.255'
+        // '172.16.*.*'
+        // 'country:ch'
+        // storage_path().DIRECTORY_SEPARATOR.'whitelisted.txt',
+    ),
 
     /**
-     *--------------------------------------------------------------------------
-     * Blacklisted IP addresses file
-     *--------------------------------------------------------------------------
-     *
-     */
-
-    'blacklisted_file' => storage_path().DIRECTORY_SEPARATOR.'blacklisted.txt',
-
-    /**
-    *--------------------------------------------------------------------------
     * Code and message for blocked responses
-    *--------------------------------------------------------------------------
     *
     */
 
@@ -73,11 +63,9 @@ return array(
     'block_response_message' => null,
 
     /**
-    *--------------------------------------------------------------------------
     * Do you wish to redirect non whitelisted accesses to an error page?
     *
     * You can use a route name (coming.soon) or url (/coming/soon);
-    *--------------------------------------------------------------------------
     *
     */
 
@@ -85,25 +73,20 @@ return array(
 
 
     /**
-    *--------------------------------------------------------------------------
     * How long should we keep IP addresses in cache?
-    *--------------------------------------------------------------------------
     *
     */
 
     'cache_expire_time' => 2, // minutes
 
     /**
-    *--------------------------------------------------------------------------
     * Send suspicious events to log?
-    *--------------------------------------------------------------------------
     *
     */
 
     'enable_log' => true,
 
     /**
-    *--------------------------------------------------------------------------
     * Search by range allow you to store ranges of addresses in
     * your black and whitelist:
     *
@@ -114,20 +97,17 @@ return array(
     *
     * Note that range searches may be slow and waste memory, this is why
     * it is disabled by default.
-    *--------------------------------------------------------------------------
     *
     */
 
     'enable_range_search' => true,
 
     /**
-    *--------------------------------------------------------------------------
     * Search by country range allow you to store country ids in your
     * your black and whitelist:
     *
     *   php artisan firewall:whitelist country:us
     *   php artisan firewall:blacklist country:cn
-    *--------------------------------------------------------------------------
     *
     */
 
@@ -140,9 +120,7 @@ return array(
     'use_database' => false,
 
     /**
-    *--------------------------------------------------------------------------
     * Models
-    *--------------------------------------------------------------------------
     *
     * When using the "eloquent" driver, we need to know which Eloquent models
     * should be used.
