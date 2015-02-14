@@ -25,6 +25,8 @@ use PragmaRX\Support\IpAddress;
 
 class Firewall implements FirewallInterface {
 
+	const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
+
 	/**
 	 * @var object
 	 */
@@ -146,6 +148,11 @@ class Firewall implements FirewallInterface {
 
 	public function all()
 	{
+		if ($this->cache->has(static::IP_ADDRESS_LIST_CACHE_NAME))
+		{
+			return $this->cache->get(static::IP_ADDRESS_LIST_CACHE_NAME);
+		}
+
 		if ($this->config->get('use_database'))
 		{
 			$database_ips = $this->model->all();
@@ -157,7 +164,17 @@ class Firewall implements FirewallInterface {
 
 		$config_ips = $this->toModels($this->getNonDatabaseIps());
 
-		return $this->toCollection(array_merge($database_ips->toArray(), $config_ips));
+		$list = array_merge($database_ips->toArray(), $config_ips);
+
+		$list = $this->toCollection($list);
+
+		$this->cache->put(
+			static::IP_ADDRESS_LIST_CACHE_NAME,
+			$list,
+			$this->config->get('ip_list_cache_expire_time',10)
+		);
+
+		return $list;
 	}
 
 	public function clear()

@@ -80,6 +80,15 @@ return array(
     'cache_expire_time' => 2, // minutes
 
     /**
+     *--------------------------------------------------------------------------
+     * How long should we keep lists of IP addresses in cache?
+     *--------------------------------------------------------------------------
+     *
+     */
+
+    'ip_list_cache_expire_time' => 1, // minutes
+
+    /**
     * Send suspicious events to log?
     *
     */
