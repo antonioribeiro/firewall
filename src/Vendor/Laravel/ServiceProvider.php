@@ -61,7 +61,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
         $this->registerTablesCommand();
 
-        if ($this->getConfig('enable_database'))
+        if ($this->getConfig('use_database'))
         {
             $this->registerWhitelistCommand();
             $this->registerBlacklistCommand();
