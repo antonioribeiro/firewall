@@ -4,6 +4,20 @@
 
 #### A Laravel 4 package to help you block IP addresses from accessing your application or just some routes
 
+### Concepts
+
+#### Blacklist
+
+All IP addresses in those lists will no be able to access routes filtered by the blacklist filter.
+
+#### Whitelist
+
+Those IP addresses can
+
+- Access blacklisted routes even if they are in a range of blacklisted IP addresses.
+- Access 'allow whitelisted' filtered routes.
+- If a route is filtered by the 'allow whitelisted' filter and the IP is not whitelisted, the request will be redirected to an alternative url or route name.
+
 ### Usage
 
 This package provides two route filters:
