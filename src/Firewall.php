@@ -127,9 +127,9 @@ class Firewall
 	{
 		$ip_address = $ip_address ?: $this->getIp();
 
-		if( ! $ip_found = $this->dataRepository->firewall->find($ip_address))
+		if ( ! $ip_found = $this->dataRepository->firewall->find($ip_address))
 		{
-			if( ! $ip_found = $this->getListingByCountry($ip_address))
+			if ( ! $ip_found = $this->getListingByCountry($ip_address))
 			{
 				if ( ! $ip_found = $this->checkSecondaryLists($ip_address))
 				{
@@ -138,7 +138,7 @@ class Firewall
 			}
 		}
 
-		if($ip_found)
+		if ($ip_found)
 		{
 			return $ip_found->whitelisted ? 'whitelist' : 'blacklist';
 		}
@@ -211,7 +211,7 @@ class Firewall
 	{
 		$listed = $this->whichList($ip);
 
-		if($listed)
+		if ($listed)
 		{
 			$this->dataRepository->firewall->delete($ip);
 
@@ -311,7 +311,7 @@ class Firewall
 
 		if ($country = $this->getCountryFromIp($ip_address))
 		{
-			if($ip_found = $this->dataRepository->firewall->find('country:'.$country))
+			if ($ip_found = $this->dataRepository->firewall->find('country:'.$country))
 			{
 				return $ip_found;
 			}

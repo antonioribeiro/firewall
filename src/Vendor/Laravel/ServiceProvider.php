@@ -57,21 +57,19 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	    $this->registerMigrator();
 
-        $this->registerWhitelistCommand();
-        $this->registerBlacklistCommand();
         $this->registerReportCommand();
-        $this->registerRemoveCommand();
-        $this->registerClearCommand();
-	    $this->registerTablesCommand();
+
+        $this->registerTablesCommand();
+
+        if ($this->getConfig('enable_database'))
+        {
+            $this->registerWhitelistCommand();
+            $this->registerBlacklistCommand();
+            $this->registerRemoveCommand();
+            $this->registerClearCommand();
+        }
 
         $this->registerFilters();
-
-        $this->commands('firewall.whitelist.command');
-        $this->commands('firewall.blacklist.command');
-        $this->commands('firewall.list.command');
-        $this->commands('firewall.remove.command');
-        $this->commands('firewall.clear.command');
-	    $this->commands('firewall.tables.command');
     }
 
     /**
@@ -125,7 +123,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                         new FirewallRepository(
                                                                     new $firewallModel, 
                                                                     $app['firewall.cache'],
-                                                                    $app['firewall.config']
+                                                                    $app['firewall.config'],
+                                                                    $app['firewall.fileSystem']
                                                             ),
 
                                         $app['firewall.config'],
@@ -194,6 +193,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
         {
             return new WhitelistCommand;
         });
+
+        $this->commands('firewall.whitelist.command');
     }
 
     /**
@@ -207,6 +208,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
         {
             return new BlacklistCommand;
         });
+
+        $this->commands('firewall.blacklist.command');
     }
 
     /**
@@ -220,6 +223,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
         {
             return new ReportCommand;
         });
+
+        $this->commands('firewall.list.command');
     }
 
     /**
@@ -233,6 +238,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
         {
             return new RemoveCommand;
         });
+
+        $this->commands('firewall.remove.command');
     }
 
     /**
@@ -246,6 +253,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
         {
             return new ClearCommand;
         });
+
+        $this->commands('firewall.clear.command');
     }
 
     /**
@@ -264,6 +273,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		{
 			return new TablesCommand;
 		});
+
+        $this->commands('firewall.tables.command');
 	}
 
 	private function registerMigrator()

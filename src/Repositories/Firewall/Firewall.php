@@ -17,30 +17,50 @@
  * @link       http://pragmarx.com
  */
 
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\CacheManager;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Database\Eloquent\Collection;
 
 class Firewall implements FirewallInterface {
 
+	/**
+	 * @var object
+	 */
 	private $model;
 
+	/**
+	 * @var Cache|CacheManager
+	 */
 	private $cache;
 
+	/**
+	 * @var Config
+	 */
 	private $config;
+
+	/**
+	 * @var Filesystem
+	 */
+	private $fileSystem;
 
 	/**
 	 * Create an instance of Message
 	 *
 	 * @param object $model
-	 * @param Cache  $cache
+	 * @param Cache|CacheManager $cache
+	 * @param Config $config
+	 * @param Filesystem $fileSystem
 	 */
-	public function __construct($model, CacheManager $cache, Config $config)
+	public function __construct($model, CacheManager $cache, Config $config, Filesystem $fileSystem)
 	{
 		$this->model = $model;
 
 		$this->cache = $cache;
 
 		$this->config = $config;
+
+		$this->fileSystem = $fileSystem;
 	}
 
 	/**
@@ -56,7 +76,7 @@ class Firewall implements FirewallInterface {
 			return $this->cacheGet($ip);
 		}
 
-		if ($model = $this->model->where('ip_address', $ip)->first())
+		if ($model = $this->databaseAndConfigFind($ip))
 		{
 			$this->cacheRemember($model);
 		}
@@ -86,7 +106,7 @@ class Firewall implements FirewallInterface {
 
 	public function delete($ipAddress)
 	{
-		if($ip = $this->find($ipAddress))
+		if ($ip = $this->find($ipAddress))
 		{
 			$ip->delete();
 
@@ -125,7 +145,18 @@ class Firewall implements FirewallInterface {
 
 	public function all()
 	{
-		return $this->model->all();
+		if ($this->config->get('use_database'))
+		{
+			$database_ips = $this->model->all();
+		}
+		else
+		{
+			$database_ips = array();
+		}
+
+		$config_ips = $this->toModels($this->getNonDatabaseIps());
+
+		return $this->toCollection(array_merge((array) $database_ips, $config_ips));
 	}
 
 	public function clear()
@@ -138,4 +169,89 @@ class Firewall implements FirewallInterface {
 			$this->delete($ip['ip_address']);
 		}
 	}
+
+	private function databaseAndConfigFind($ip)
+	{
+		if ($model = $this->nonDatabaseFind($ip))
+		{
+			return $model;
+		}
+
+		if ($this->config->get('use_database'))
+		{
+			return $this->model->where('ip_address', $ip)->first();
+		}
+
+		return null;
+	}
+
+	private function nonDatabaseFind($ip)
+	{
+		$ips = $this->getNonDatabaseIps();
+
+		if ($ip = array_search($ip, $ips))
+		{
+			return $this->makeModel($ip);
+		}
+
+		return null;
+	}
+
+	private function getNonDatabaseIps()
+	{
+		return array_merge_recursive(
+			array_map(function($ip) { $ip['whitelisted'] = true; return $ip; }, $this->toIpsArray($this->config->get('whitelisted_array'))),
+			array_map(function($ip) { $ip['whitelisted'] = true; return $ip; }, $this->readFile($this->config->get('whitelisted_file'))),
+
+			array_map(function($ip) { $ip['whitelisted'] = false; return $ip; }, $this->toIpsArray($this->config->get('blacklisted_array'))),
+			array_map(function($ip) { $ip['whitelisted'] = false; return $ip; }, $this->readFile($this->config->get('blacklisted_file')))
+		);
+	}
+
+	private function toModels($ipList)
+	{
+		$ips = array();
+
+		foreach ($ipList as $ip)
+		{
+			$ips[] = $this->makeModel($ip);
+		}
+
+		return $ips;
+	}
+
+	/**
+	 * @param $ip
+	 * @return mixed
+	 */
+	private function makeModel($ip)
+	{
+		return $this->model->newInstance($ip);
+	}
+
+	private function readFile($file)
+	{
+		if ($this->fileSystem->exists($file))
+		{
+			$lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+			return $this->toIpsArray($lines);
+		}
+
+		return array();
+	}
+
+	private function toCollection($array)
+	{
+		return new Collection($array);
+	}
+
+	private function toIpsArray($list)
+	{
+		return array_map(function($ip)
+		{
+			return array('ip_address' => $ip);
+		}, $list);
+	}
+
 }
