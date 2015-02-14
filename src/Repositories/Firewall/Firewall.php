@@ -21,6 +21,7 @@ use PragmaRX\Support\Config;
 use PragmaRX\Support\CacheManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Collection;
+use PragmaRX\Support\IpAddress;
 
 class Firewall implements FirewallInterface {
 
@@ -76,7 +77,7 @@ class Firewall implements FirewallInterface {
 			return $this->cacheGet($ip);
 		}
 
-		if ($model = $this->databaseAndConfigFind($ip))
+		if ($model = $this->findIp($ip))
 		{
 			$this->cacheRemember($model);
 		}
@@ -156,7 +157,7 @@ class Firewall implements FirewallInterface {
 
 		$config_ips = $this->toModels($this->getNonDatabaseIps());
 
-		return $this->toCollection(array_merge((array) $database_ips, $config_ips));
+		return $this->toCollection(array_merge($database_ips->toArray(), $config_ips));
 	}
 
 	public function clear()
@@ -170,7 +171,7 @@ class Firewall implements FirewallInterface {
 		}
 	}
 
-	private function databaseAndConfigFind($ip)
+	private function findIp($ip)
 	{
 		if ($model = $this->nonDatabaseFind($ip))
 		{
@@ -189,7 +190,7 @@ class Firewall implements FirewallInterface {
 	{
 		$ips = $this->getNonDatabaseIps();
 
-		if ($ip = array_search($ip, $ips))
+		if ($ip = $this->ipArraySearch($ip, $ips))
 		{
 			return $this->makeModel($ip);
 		}
@@ -200,11 +201,9 @@ class Firewall implements FirewallInterface {
 	private function getNonDatabaseIps()
 	{
 		return array_merge_recursive(
-			array_map(function($ip) { $ip['whitelisted'] = true; return $ip; }, $this->toIpsArray($this->config->get('whitelisted_array'))),
-			array_map(function($ip) { $ip['whitelisted'] = true; return $ip; }, $this->readFile($this->config->get('whitelisted_file'))),
+			array_map(function($ip) { $ip['whitelisted'] = true; return $ip; }, $this->formatIpArray($this->config->get('whitelist'))),
 
-			array_map(function($ip) { $ip['whitelisted'] = false; return $ip; }, $this->toIpsArray($this->config->get('blacklisted_array'))),
-			array_map(function($ip) { $ip['whitelisted'] = false; return $ip; }, $this->readFile($this->config->get('blacklisted_file')))
+			array_map(function($ip) { $ip['whitelisted'] = false; return $ip; }, $this->formatIpArray($this->config->get('blacklist')))
 		);
 	}
 
@@ -235,7 +234,7 @@ class Firewall implements FirewallInterface {
 		{
 			$lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-			return $this->toIpsArray($lines);
+			return $this->makeArrayOfIps($lines);
 		}
 
 		return array();
@@ -246,12 +245,56 @@ class Firewall implements FirewallInterface {
 		return new Collection($array);
 	}
 
-	private function toIpsArray($list)
+	private function formatIpArray($list)
 	{
 		return array_map(function($ip)
 		{
 			return array('ip_address' => $ip);
-		}, $list);
+		}, $this->makeArrayOfIps($list));
+	}
+
+	private function makeArrayOfIps($list)
+	{
+		$ips = array();
+
+		foreach($list as $item)
+		{
+			$ips = array_merge($ips, $this->getIpsFromAnything($item));
+		}
+
+		return $ips;
+	}
+
+	private function getIpsFromAnything($item)
+	{
+		if (starts_with($item, 'country:'))
+		{
+			return array($item);
+		}
+
+		if (IpAddress::ipV4Valid($item))
+		{
+			return array($item);
+		}
+
+		return $this->readFile($item);
+	}
+
+	private function ipArraySearch($ip, $ips)
+	{
+		foreach($ips as $key => $value)
+		{
+			if (
+				(isset($value['ip_address']) && $value['ip_address'] == $ip) ||
+				($key == $ip) ||
+				($value == $ip)
+			)
+			{
+				return $value;
+			}
+		}
+
+		return false;
 	}
 
 }
