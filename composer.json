@@ -17,9 +17,9 @@
 
     "require": {
         "php": ">=5.3.7",
-        "illuminate/support": "~4.1",
-        "illuminate/cache": "~4.1",
-        "illuminate/filesystem": "~4.1",
+        "illuminate/support": "~5",
+        "illuminate/cache": "~5",
+        "illuminate/filesystem": "~5",
         "pragmarx/support": "~0.3"
     },
 
