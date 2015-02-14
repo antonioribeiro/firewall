@@ -30,7 +30,15 @@ class Whitelist {
             if ($to = app()->make('firewall.config')->get('redirect_non_whitelisted_to'))
             {
                 $action = 'redirected';
-                $response = app()->make('redirect')->to($to);
+
+                if (app()->make('router')->getRoutes()->getByName($to))
+                {
+                    $response = app()->make('redirect')->route($to);
+                }
+                else
+                {
+                    $response = app()->make('redirect')->to($to);
+                }
             }
             else
             {
