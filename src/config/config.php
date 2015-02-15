@@ -71,13 +71,12 @@ return array(
 
     'redirect_non_whitelisted_to' => null,
 
-
     /**
     * How long should we keep IP addresses in cache?
     *
     */
 
-    'cache_expire_time' => 2, // minutes
+    'cache_expire_time' => 0, // minutes - disabled by default
 
     /**
      *--------------------------------------------------------------------------
@@ -86,7 +85,7 @@ return array(
      *
      */
 
-    'ip_list_cache_expire_time' => 1, // minutes
+    'ip_list_cache_expire_time' => 0, // minutes - disabled by default
 
     /**
     * Send suspicious events to log?
