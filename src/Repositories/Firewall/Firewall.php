@@ -25,6 +25,8 @@ use PragmaRX\Support\IpAddress;
 
 class Firewall implements FirewallInterface {
 
+	const CACHE_BASE_NAME = 'firewall.';
+
 	const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
 
 	/**
@@ -123,12 +125,17 @@ class Firewall implements FirewallInterface {
 
 	public function cacheKey($ip)
 	{
-		return "firewall.ip_address.$ip";
+		return static::CACHE_BASE_NAME."ip_address.$ip";
 	}
 
 	public function cacheHas($ip)
 	{
-		return $this->cache->has($this->cacheKey($ip));
+		if ($this->config->get('cache_expire_time'))
+		{
+			return $this->cache->has($this->cacheKey($ip));
+		}
+
+		return false;
 	}
 
 	public function cacheGet($ip)
@@ -143,7 +150,10 @@ class Firewall implements FirewallInterface {
 
 	public function cacheRemember($model)
 	{
-		$this->cache->put($this->cacheKey($model->ip_address), $model, $this->config->get('cache_expire_time',10));
+		if ($timeout = $this->config->get('cache_expire_time'))
+		{
+			$this->cache->put($this->cacheKey($model->ip_address), $model, $timeout);
+		}
 	}
 
 	public function all()
