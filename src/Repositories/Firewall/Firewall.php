@@ -323,7 +323,7 @@ class Firewall implements FirewallInterface {
 		}
 		else
 		{
-			$database_ips = array();
+			$database_ips = $this->toCollection(array());
 			return $database_ips;
 		}
 	}
