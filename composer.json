@@ -20,11 +20,7 @@
         "illuminate/support": "~5",
         "illuminate/cache": "~5",
         "illuminate/filesystem": "~5",
-        "pragmarx/support": "~0.3"
-    },
-
-    "require-dev": {
-        "mockery/mockery": "~0.8"
+        "pragmarx/support": "~0.5@dev"
     },
 
     "suggest": {
@@ -37,16 +33,7 @@
         }
     },
 
-    "extra": {
-            "component": "package",
-            "frameworks": ["Laravel 4"],
-            "versions": {
-                    "0.1.0": "master"
-            },
-            "branch-alias": {
-                    "dev-master": "0.1.0-dev"
-            }
-    },
-
-    "minimum-stability": "dev"
+    "branch-alias": {
+      "dev-master": "0.5.x-dev"
+    }
 }
