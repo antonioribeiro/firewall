@@ -267,6 +267,8 @@ class Firewall implements FirewallInterface {
 
 	private function makeArrayOfIps($list)
 	{
+		$list = $list ?: array();
+
 		$ips = array();
 
 		foreach($list as $item)
