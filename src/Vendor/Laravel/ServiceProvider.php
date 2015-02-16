@@ -1,6 +1,9 @@
-<?php namespace PragmaRX\Firewall\Vendor\Laravel;
+<?php
+
+namespace PragmaRX\Firewall\Vendor\Laravel;
 
 use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
 use PragmaRX\Firewall\Firewall;
 
 use PragmaRX\Support\Filesystem;
@@ -117,11 +120,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
     {
         $this->app['firewall.dataRepository'] = $this->app->share(function($app)
         {
-            $firewallModel = $this->getConfig('firewall_model');
-
             return new DataRepository(
                                         new FirewallRepository(
-                                                                    new $firewallModel, 
+                                                                    $this->getFirewallModel(),
                                                                     $app['firewall.cache'],
                                                                     $app['firewall.config'],
                                                                     $app['firewall.fileSystem']
@@ -294,6 +295,16 @@ class ServiceProvider extends PragmaRXServiceProvider {
         $back = DIRECTORY_SEPARATOR.'..';
 
         return __DIR__.$back.$back.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php';
+    }
+
+    private function getFirewallModel()
+    {
+        if ( ! $firewallModel = $this->getConfig('firewall_model'))
+        {
+            throw new ConfigurationOptionNotAvailable('Config option "firewall_model" is not available, please publish/check your configuration.');
+        }
+
+        return new $firewallModel;
     }
 
 }
