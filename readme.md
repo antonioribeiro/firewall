@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/pragmarx/firewall/v/stable.png)](https://packagist.org/packages/pragmarx/firewall) [![License](https://poser.pugx.org/pragmarx/firewall/license.png)](https://packagist.org/packages/pragmarx/firewall)
 
-#### A Laravel 4 package to help you block IP addresses from accessing your application or just some routes
+#### A Laravel package to help you block IP addresses from accessing your application or just some routes
 
 ### Concepts
 
@@ -165,9 +165,9 @@ You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html
 
 ### Installation
 
-#### Requirements
+#### Compatible with
 
-- Laravel 4.1+
+- Laravel 4+ and 5+
 
 #### Installing
 
@@ -175,18 +175,6 @@ Require the Firewall package using [Composer](https://getcomposer.org/doc/01-bas
 
 ```
 composer require pragmarx/firewall
-```
-
-Create the migration:
-
-```
-php artisan firewall:tables
-```
-
-Migrate it
-
-```
-php artisan migrate
 ```
 
 Add the Service Provider to your app/config/app.php:
@@ -201,10 +189,30 @@ Add the Facade to your app/config/app.php:
 'Firewall' => 'PragmaRX\Firewall\Vendor\Laravel\Facade',
 ```
 
+Create the migration:
+
+```
+php artisan firewall:tables
+```
+
+Migrate it
+
+```
+php artisan migrate
+```
+
 To publish the configuration file you'll have to:
+
+**Laravel 4**
 
 ```
 artisan config:publish pragmarx/firewall
+```
+
+**Laravel 5**
+
+```
+artisan vendor:publish
 ```
 
 ### TODO
