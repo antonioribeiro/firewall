@@ -26,20 +26,12 @@ use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 class ServiceProvider extends PragmaRXServiceProvider {
 
     protected $packageVendor = 'pragmarx';
+
     protected $packageVendorCapitalized = 'PragmaRX';
 
     protected $packageName = 'firewall';
+
     protected $packageNameCapitalized = 'Firewall';
-
-    /**
-     * This is the boot method for this ServiceProvider
-     *
-     * @return void
-     */
-    public function wakeUp()
-    {
-
-    }
 
     /**
      * Register the service provider.
