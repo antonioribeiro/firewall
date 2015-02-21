@@ -290,18 +290,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
     }
 
     /**
-     * Get the full path of the stub config file.
+     * Get the current package directory.
      *
      * @return string
      */
-    private function getFirewallModel()
+    public function getPackageDir()
     {
-        if ( ! $firewallModel = $this->getConfig('firewall_model'))
-        {
-            throw new ConfigurationOptionNotAvailable('Config option "firewall_model" is not available, please publish/check your configuration.');
-        }
-
-        return new $firewallModel;
+        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
     }
 
 }
