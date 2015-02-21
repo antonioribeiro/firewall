@@ -282,13 +282,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		);
 	}
 
-    public function getStubConfigPath()
-    {
-        $back = DIRECTORY_SEPARATOR.'..';
-
-        return __DIR__.$back.$back.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php';
-    }
-
     /**
      * Get the current package directory.
      *
@@ -297,6 +290,21 @@ class ServiceProvider extends PragmaRXServiceProvider {
     public function getPackageDir()
     {
         return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
+    }
+
+    /**
+     * Get the full path of the stub config file.
+     *
+     * @return string
+     */
+    private function getFirewallModel()
+    {
+        if ( ! $firewallModel = $this->getConfig('firewall_model'))
+        {
+            throw new ConfigurationOptionNotAvailable('Config option "firewall_model" is not available, please publish/check your configuration.');
+        }
+
+        return new $firewallModel;
     }
 
 }
