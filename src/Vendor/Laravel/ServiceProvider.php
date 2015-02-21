@@ -289,6 +289,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
         return __DIR__.$back.$back.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php';
     }
 
+    /**
+     * Get the full path of the stub config file.
+     *
+     * @return string
+     */
     private function getFirewallModel()
     {
         if ( ! $firewallModel = $this->getConfig('firewall_model'))
