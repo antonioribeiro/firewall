@@ -140,7 +140,7 @@ class Firewall
 
 		if ($ip_found)
 		{
-			return $ip_found->whitelisted ? 'whitelist' : 'blacklist';
+			return $ip_found['whitelisted'] ? 'whitelist' : 'blacklist';
 		}
 
 		return false;
