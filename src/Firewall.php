@@ -292,8 +292,8 @@ class Firewall
 		foreach ($this->dataRepository->firewall->all() as $range)
 		{
 			if (
-				IpAddress::ipV4Valid($range->ip_address) &&
-				ipv4_in_range($ip_address, $range->ip_address)
+				IpAddress::ipV4Valid($range['ip_address']) &&
+				ipv4_in_range($ip_address, $range['ip_address'])
 			)
 			{
 				return $range;
