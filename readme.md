@@ -225,7 +225,7 @@ artisan vendor:publish
 
 ### License
 
-Firewall is licensed under the MIT License - see the `LICENSE` file for details
+Firewall is licensed under the BSD 3-Clause License - see the `LICENSE` file for details
 
 ### Contributing
 
