@@ -256,6 +256,14 @@ class Firewall
 
     public function blockAccess($content = null, $status = null)
     {
+		if ($this->config->get('block_response_abort'))
+		{
+			return abort(
+				$this->config->get('block_response_code'),
+				$content ?: $this->config->get('block_response_message')
+			);
+		}
+
         return Response::make(
 	        $content ?: $this->config->get('block_response_message'),
 	        $status ?: $this->config->get('block_response_code')
