@@ -29,7 +29,7 @@ use PragmaRX\Firewall\Support\MessageSelector;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\FileSystem;
-use PragmaRX\Support\GeoIp;
+use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\Response;
 
@@ -173,16 +173,16 @@ class Firewall
 	{
 		$list = $whitelist ? 'whitelist' : 'blacklist';
 
-		$listed = $this->whichList($ip);
-
-		if (! $this->ipIsValid($ip))
+		if ( ! $this->ipIsValid($ip))
 		{
 			$this->addMessage(sprintf('%s is not a valid IP address', $ip));
 
 			return false;
 		}
-		else
-		if ($listed == $list)
+
+        $listed = $this->whichList($ip);
+
+        if ($listed == $list)
 		{
 			$this->addMessage(sprintf('%s is already %s', $ip, $list.'ed'));
 
@@ -310,20 +310,29 @@ class Firewall
 			return false;
 		}
 
-		if ($country = $this->getCountryFromIp($ip_address))
-		{
-			if ($ip_found = $this->dataRepository->firewall->find('country:'.$country))
-			{
-				return $ip_found;
-			}
-		}
+        if ($this->validCountry($ip_address))
+        {
+            $country = $ip_address;
+        }
+        else
+        {
+            if ($country = $this->getCountryFromIp($ip_address))
+            {
+                $country = 'country:'.$country;
+            }
+        }
+
+        if ($country && $ip_found = $this->dataRepository->firewall->find($country))
+        {
+            return $ip_found;
+        }
 
 		return false;
 	}
 
 	private function getCountryFromIp($ip_address)
 	{
-		if ($geo = $this->geoIp->byAddr($ip_address))
+		if ($geo = $this->geoIp->searchAddr($ip_address))
 		{
 			return strtolower($geo['country_code']);
 		}
