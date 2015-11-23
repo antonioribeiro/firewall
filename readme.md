@@ -158,7 +158,13 @@ php artisan firewall:blacklist country:br
 You will have to add this requirement to your `composer.json` file:
 
 ```
-"geoip/geoip": "1.*"
+"geoip/geoip": "~1.14"
+```
+
+or
+
+```
+"geoip2/geoip2": "~2.0"
 ```
 
 You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html)
@@ -180,13 +186,13 @@ composer require pragmarx/firewall
 Add the Service Provider to your app/config/app.php:
 
 ```
-'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+PragmaRX\Firewall\Vendor\Laravel\ServiceProvider::class,
 ```
 
 Add the Facade to your app/config/app.php:
 
 ```
-'Firewall' => 'PragmaRX\Firewall\Vendor\Laravel\Facade',
+'Firewall' => PragmaRX\Firewall\Vendor\Laravel\Facade::class,
 ```
 
 Create the migration:
