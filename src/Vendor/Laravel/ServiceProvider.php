@@ -8,7 +8,7 @@ use PragmaRX\Firewall\Firewall;
 
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\CacheManager;
-use PragmaRX\Support\GeoIp;
+use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\Response;
 
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
