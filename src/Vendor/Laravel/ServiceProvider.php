@@ -64,7 +64,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
             $this->registerClearCommand();
         }
 
-        $this->registerFilters();
+        $this->registerMiddleware();
     }
 
     /**
@@ -152,19 +152,22 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                 );
         });
     }
- 
     /**
-     * Register blocking and unblocking filters
-     * 
+     * Register blocking and unblocking Middleware
+     *
      * @return void
      */
-    private function registerFilters()
+    private function registerMiddleware()
     {
-        $this->app['router']->filter('fw-block-bl', '\PragmaRX\Firewall\Filters\Blacklist');
-
-        $this->app['router']->filter('fw-allow-wl', '\PragmaRX\Firewall\Filters\Whitelist');
+        $this->app['firewall.middleware.blacklist'] = $this->app->share(function($app)
+        {
+            return new FirewallBlacklist;
+        });
+        $this->app['firewall.middleware.whitelist'] = $this->app->share(function($app)
+        {
+            return new FirewallWhitelist;
+        });
     }
-
     /**
      * Return a proper response for blocked access
      *
