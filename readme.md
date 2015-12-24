@@ -212,13 +212,13 @@ To publish the configuration file you'll have to:
 **Laravel 4**
 
 ```
-artisan config:publish pragmarx/firewall
+php artisan config:publish pragmarx/firewall
 ```
 
 **Laravel 5**
 
 ```
-artisan vendor:publish
+php artisan vendor:publish
 ```
 
 ### TODO
