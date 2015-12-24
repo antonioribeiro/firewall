@@ -20,7 +20,7 @@ Those IP addresses can
 
 ### Routes
 
-This package provides two route filters:
+This package provides two middleware groups to use in your routes:
 
 `'fw-block-bl'`: to block all blacklisted IP addresses to access filtered routes
 
@@ -29,7 +29,7 @@ This package provides two route filters:
 So, for instance, you could have a blocking group and put all your routes inside it:
 
 ```
-Route::group(['before' => 'fw-block-bl'], function()
+Route::group(['middleware' => 'fw-block-bl'], function () 
 {
     Route::get('/', 'HomeController@index');
 });
@@ -38,14 +38,14 @@ Route::group(['before' => 'fw-block-bl'], function()
 Or you could use both. In the following example the allow group will give free access to the 'coming soon' page and block or just redirect non-whitelisted IP addresses to another, while still blocking access to the blacklisted ones.
 
 ```
-Route::group(['before' => 'fw-block-bl'], function()
+Route::group(['middleware' => 'fw-block-bl'], function () 
 {
     Route::get('coming/soon', function()
     {
         return "We are about to launch, please come back in a few days.";
     });
 
-    Route::group(['before' => 'fw-allow-wl'], function()
+    Route::group(['middleware' => 'fw-allow-wl'], function () 
     {
         Route::get('/', 'HomeController@index');
     });
@@ -194,6 +194,23 @@ Add the Facade to your app/config/app.php:
 ```
 'Firewall' => PragmaRX\Firewall\Vendor\Laravel\Facade::class,
 ```
+
+Add the Middleware groups `fw-block-bl` and `fw-allow-wl` to your app/Http/Kernel.php
+
+```
+protected $middlewareGroups = [
+        ...
+        
+        'fw-block-bl' => [
+            \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+        ],
+        'fw-allow-wl' => [
+            \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
+        ],        
+];
+```
+**Note:** You can add other middleware you have already created to the new groups by simply 
+adding it to the `fw-allow-wl` or `fw-block-bl` middleware group.
 
 Create the migration:
 
