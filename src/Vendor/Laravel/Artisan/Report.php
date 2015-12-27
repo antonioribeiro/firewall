@@ -1,86 +1,82 @@
-<?php namespace PragmaRX\Firewall\Vendor\Laravel\Artisan;
+<?php
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+namespace PragmaRX\Firewall\Vendor\Laravel\Artisan;
 
-class Report extends Base {
+class Report extends Base
+{
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'firewall:list';
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'firewall:list';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'List all IP address, white and blacklisted.';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'List all IP address, white and blacklisted.';
+    /**
+     * The table helper set.
+     *
+     * @var \Symfony\Component\Console\Helper\TableHelper
+     */
+    protected $table;
 
-	/**
-	 * The table helper set.
-	 *
-	 * @var \Symfony\Component\Console\Helper\TableHelper
-	 */
-	protected $table;
+    /**
+     * Create a new command instance.
+     *
+     */
+    public function __construct() {
+        parent::__construct();
+    }
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function fire() {
+        $this->table = $this->getHelperSet()->get('table');
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function fire()
-	{
-		$this->table = $this->getHelperSet()->get('table');
+        $list = [];
 
-		$list = array();
+        foreach ($this->laravel->firewall->report() as $ip) {
+            $list[] = [
+                $ip['ip_address'],
+                $ip['whitelisted'] == false
+                    ? ''
+                    : '    X    ',
+                $ip['whitelisted'] == false
+                    ? '    X    '
+                    : '',
+            ];
+        }
 
-		foreach ($this->laravel->firewall->report() as $ip)
-		{
-			$list[] = array(
-								$ip['ip_address'], 
-								$ip['whitelisted'] == false ? '' : '    X    ', 
-								$ip['whitelisted'] == false ? '    X    ' : ''
-							);
-		}
+        $this->table->setHeaders(['IP Address', 'Whitelist', 'Blacklist'])->setRows($list);
 
-		$this->table->setHeaders(array('IP Address', 'Whitelist', 'Blacklist'))->setRows($list);
-                                                          
-		$this->table->render($this->getOutput());		
-	}
+        $this->table->render($this->getOutput());
+    }
 
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return array(
-		);
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments() {
+        return [
+        ];
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array(
-		);
-	}
-
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions() {
+        return [
+        ];
+    }
 }

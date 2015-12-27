@@ -1,351 +1,298 @@
-<?php namespace PragmaRX\Firewall;
-/**
- * Part of the Firewall package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Firewall
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
+<?php
+
+namespace PragmaRX\Firewall;
 
 use Exception;
-
-use PragmaRX\Firewall\Database\Migrator;
-use PragmaRX\Firewall\Support\Locale;
-use PragmaRX\Firewall\Support\SentenceBag;
-use PragmaRX\Firewall\Support\Sentence;
-use PragmaRX\Firewall\Support\Mode;
-use PragmaRX\Firewall\Support\MessageSelector;
-
-use PragmaRX\Support\CacheManager;
+use Illuminate\Http\Request;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\Response;
+use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\FileSystem;
 use PragmaRX\Support\GeoIp\GeoIp;
-use PragmaRX\Support\IpAddress;
-use PragmaRX\Support\Response;
-
-use Illuminate\Http\Request;
-
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Firewall\Support\Mode;
+use PragmaRX\Firewall\Support\Locale;
+use PragmaRX\Firewall\Support\Sentence;
+use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Support\SentenceBag;
+use PragmaRX\Firewall\Support\MessageSelector;
 use PragmaRX\Firewall\Repositories\DataRepository;
 
 class Firewall
 {
-	private $ip;
+    private $ip;
 
-	private $config;
+    private $config;
 
-	private $cache;
+    private $cache;
 
-	private $fileSystem;
+    private $fileSystem;
 
-	private $dataRepository;
+    private $dataRepository;
 
-	private $messages = array();
+    private $messages = [];
 
-	private $request;
+    private $request;
 
-	/**
-	 * @var Migrator
-	 */
-	private $migrator;
+    /**
+     * @var Migrator
+     */
+    private $migrator;
 
-	private $geoIp;
+    private $geoIp;
 
-	/**
-	 * Initialize Firewall object
-	 *
-	 * @param \PragmaRX\Support\Config $config
-	 * @param Repositories\DataRepository $dataRepository
-	 * @param \PragmaRX\Support\CacheManager $cache
-	 * @param \PragmaRX\Support\FileSystem $fileSystem
-	 * @param \Illuminate\Http\Request $request
-	 * @param Database\Migrator $migrator
-	 * @internal param \PragmaRX\Firewall\Support\Locale $locale
-	 */
-	public function __construct(
-									Config $config,
-									DataRepository $dataRepository,
-									CacheManager $cache,
-									FileSystem $fileSystem,
-									Request $request,
-									Migrator $migrator,
-									GeoIp $geoIp
-								)
-	{
-		$this->config = $config;
+    /**
+     * Initialize Firewall object
+     *
+     * @param \PragmaRX\Support\Config $config
+     * @param Repositories\DataRepository $dataRepository
+     * @param \PragmaRX\Support\CacheManager $cache
+     * @param \PragmaRX\Support\FileSystem $fileSystem
+     * @param \Illuminate\Http\Request $request
+     * @param Database\Migrator $migrator
+     * @internal param \PragmaRX\Firewall\Support\Locale $locale
+     */
+    public function __construct(
+        Config $config,
+        DataRepository $dataRepository,
+        CacheManager $cache,
+        FileSystem $fileSystem,
+        Request $request,
+        Migrator $migrator,
+        GeoIp $geoIp
+    ) {
+        $this->config = $config;
 
-		$this->dataRepository = $dataRepository;
+        $this->dataRepository = $dataRepository;
 
-		$this->cache = $cache;
+        $this->cache = $cache;
 
-		$this->fileSystem = $fileSystem;
+        $this->fileSystem = $fileSystem;
 
-		$this->request = $request;
+        $this->request = $request;
 
-		$this->migrator = $migrator;
+        $this->migrator = $migrator;
 
-		$this->geoIp = $geoIp;
+        $this->geoIp = $geoIp;
 
-		$this->setIp(null);
-	}
+        $this->setIp(null);
+    }
 
-	public function setIp($ip)
-	{
-		$this->ip = $ip ?: ($this->ip ?: $this->request->getClientIp());
-	}
+    public function addMessage($message) {
+        $this->messages[] = $message;
+    }
 
-	public function getIp()
-	{
-		return $this->ip;
-	}
+    public function addToList($whitelist, $ip, $force) {
+        $list = $whitelist
+            ? 'whitelist'
+            : 'blacklist';
 
-	public function report()
-	{
-		return $this->dataRepository->firewall->all()->toArray();
-	}
+        if (!$this->ipIsValid($ip)) {
+            $this->addMessage(sprintf('%s is not a valid IP address', $ip));
 
-	public function whitelist($ip, $force = false)
-	{
-		return $this->addToList(true, $ip, $force);
-	}
-
-	public function blacklist($ip, $force = false)
-	{
-		return $this->addToList(false, $ip, $force);
-	}
-
-	public function whichList($ip_address)
-	{
-		$ip_address = $ip_address ?: $this->getIp();
-
-		if ( ! $ip_found = $this->dataRepository->firewall->find($ip_address))
-		{
-			if ( ! $ip_found = $this->getListingByCountry($ip_address))
-			{
-				if ( ! $ip_found = $this->checkSecondaryLists($ip_address))
-				{
-					return false;
-				}
-			}
-		}
-
-		if ($ip_found)
-		{
-			return $ip_found['whitelisted'] ? 'whitelist' : 'blacklist';
-		}
-
-		return false;
-	}
-
-	public function isWhitelisted($ip = null)
-	{
-		return $this->whichList($ip) == 'whitelist';
-	}
-
-	public function isBlacklisted($ip  = null)
-	{
-		$list = $this->whichList($ip);
-		return ! $list == 'whitelist' &&
-				$list == 'blacklist';
-	}
-
-	public function ipIsValid($ip)
-	{
-		try
-		{
-			return IpAddress::ipV4Valid($ip) || $this->validCountry($ip);
-		}
-		catch (Exception $e)
-		{
-			return false;
-		}
-	}
-
-	public function addToList($whitelist, $ip, $force)
-	{
-		$list = $whitelist ? 'whitelist' : 'blacklist';
-
-		if ( ! $this->ipIsValid($ip))
-		{
-			$this->addMessage(sprintf('%s is not a valid IP address', $ip));
-
-			return false;
-		}
+            return false;
+        }
 
         $listed = $this->whichList($ip);
 
-        if ($listed == $list)
-		{
-			$this->addMessage(sprintf('%s is already %s', $ip, $list.'ed'));
+        if ($listed == $list) {
+            $this->addMessage(sprintf('%s is already %s', $ip, $list . 'ed'));
 
-			return false;
-		}
-		else
-		if ( ! $listed || $force)
-		{
-			if ($listed)
-			{
-				$this->remove($ip);
-			}
+            return false;
+        }
+        else {
+            if (!$listed || $force) {
+                if ($listed) {
+                    $this->remove($ip);
+                }
 
-			$this->dataRepository->firewall->addToList($whitelist, $ip);
+                $this->dataRepository->firewall->addToList($whitelist, $ip);
 
-			$this->addMessage(sprintf('%s is now %s', $ip, $list.'ed'));
+                $this->addMessage(sprintf('%s is now %s', $ip, $list . 'ed'));
 
-			return true;
-		}
+                return true;
+            }
+        }
 
-		$this->addMessage(sprintf('%s is currently %sed', $ip, $listed));
+        $this->addMessage(sprintf('%s is currently %sed', $ip, $listed));
 
-		return false;
-	}
+        return false;
+    }
 
-	public function remove($ip)
-	{
-		$listed = $this->whichList($ip);
+    public function blacklist($ip, $force = false) {
+        return $this->addToList(false, $ip, $force);
+    }
 
-		if ($listed)
-		{
-			$this->dataRepository->firewall->delete($ip);
+    public function blockAccess($content = null, $status = null) {
+        if ($this->config->get('block_response_abort')) {
+            return abort(
+                $this->config->get('block_response_code'),
+                $content
+                    ?: $this->config->get('block_response_message')
+            );
+        }
 
-			$this->addMessage(sprintf('%s removed from %s', $ip, $listed));
+        return Response::make(
+            $content
+                ?: $this->config->get('block_response_message'),
+            $status
+                ?: $this->config->get('block_response_code')
+        );
+    }
 
-			return true;
-		}
+    private function checkSecondaryLists($ip_address) {
+        if (!$this->config->get('enable_range_search')) {
+            return false;
+        }
 
-		$this->addMessage(sprintf('%s is not listed', $ip));
+        foreach ($this->dataRepository->firewall->all() as $range) {
+            if (
+                IpAddress::ipV4Valid($range['ip_address']) &&
+                ipv4_in_range($ip_address, $range['ip_address'])
+            ) {
+                return $range;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function addMessage($message)
-	{
-		$this->messages[] = $message;
-	}
+    public function clear() {
+        return $this->dataRepository->firewall->clear();
+    }
 
-	public function getMessages()
-	{
-		return $this->messages;
-	}
+    private function getCountryFromIp($ip_address) {
+        if ($geo = $this->geoIp->searchAddr($ip_address)) {
+            return strtolower($geo['country_code']);
+        }
 
-	public function clear()
-	{
-		return $this->dataRepository->firewall->clear();
-	}
+        return false;
+    }
+
+    public function getIp() {
+        return $this->ip;
+    }
+
+    private function getListingByCountry($ip_address) {
+        if (!$this->config->get('enable_country_search')) {
+            return false;
+        }
+
+        if ($this->validCountry($ip_address)) {
+            $country = $ip_address;
+        }
+        else {
+            if ($country = $this->getCountryFromIp($ip_address)) {
+                $country = 'country:' . $country;
+            }
+        }
+
+        if ($country && $ip_found = $this->dataRepository->firewall->find($country)) {
+            return $ip_found;
+        }
+
+        return false;
+    }
+
+    public function getMessages() {
+        return $this->messages;
+    }
+
+    public function getMigrator() {
+        return $this->migrator;
+    }
+
+    public function ipIsValid($ip) {
+        try {
+            return IpAddress::ipV4Valid($ip) || $this->validCountry($ip);
+        }
+        catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function isBlacklisted($ip = null) {
+        $list = $this->whichList($ip);
+
+        return !$list == 'whitelist' &&
+        $list == 'blacklist';
+    }
+
+    public function isWhitelisted($ip = null) {
+        return $this->whichList($ip) == 'whitelist';
+    }
 
     /**
      * Register messages in log
      *
      * @return void
      */
-    public function log($message)
-    {
-        if ($this->config->get('enable_log'))
-        {
+    public function log($message) {
+        if ($this->config->get('enable_log')) {
             app()->log->info("Firewall: $message");
         }
     }
 
-    public function blockAccess($content = null, $status = null)
-    {
-		if ($this->config->get('block_response_abort'))
-		{
-			return abort(
-				$this->config->get('block_response_code'),
-				$content ?: $this->config->get('block_response_message')
-			);
-		}
+    public function remove($ip) {
+        $listed = $this->whichList($ip);
 
-        return Response::make(
-	        $content ?: $this->config->get('block_response_message'),
-	        $status ?: $this->config->get('block_response_code')
-        );
+        if ($listed) {
+            $this->dataRepository->firewall->delete($ip);
+
+            $this->addMessage(sprintf('%s removed from %s', $ip, $listed));
+
+            return true;
+        }
+
+        $this->addMessage(sprintf('%s is not listed', $ip));
+
+        return false;
     }
 
-	public function getMigrator()
-	{
-		return $this->migrator;
-	}
+    public function report() {
+        return $this->dataRepository->firewall->all()->toArray();
+    }
 
-	private function validCountry($command)
-	{
-		$command = strtolower($command);
+    public function setIp($ip) {
+        $this->ip = $ip
+            ?: ($this->ip
+                ?: $this->request->getClientIp());
+    }
 
-		if ($this->config->get('enable_country_search'))
-		{
-			if (starts_with($command, 'country:'))
-			{
-				return true;
-			}
-		}
+    private function validCountry($command) {
+        $command = strtolower($command);
 
-		return false;
-	}
-
-	private function checkSecondaryLists($ip_address)
-	{
-		if ( ! $this->config->get('enable_range_search'))
-		{
-			return false;
-		}
-
-		foreach ($this->dataRepository->firewall->all() as $range)
-		{
-			if (
-				IpAddress::ipV4Valid($range['ip_address']) &&
-				ipv4_in_range($ip_address, $range['ip_address'])
-			)
-			{
-				return $range;
-			}
-		}
-
-		return false;
-	}
-
-	private function getListingByCountry($ip_address)
-	{
-		if ( ! $this->config->get('enable_country_search'))
-		{
-			return false;
-		}
-
-        if ($this->validCountry($ip_address))
-        {
-            $country = $ip_address;
-        }
-        else
-        {
-            if ($country = $this->getCountryFromIp($ip_address))
-            {
-                $country = 'country:'.$country;
+        if ($this->config->get('enable_country_search')) {
+            if (starts_with($command, 'country:')) {
+                return true;
             }
         }
 
-        if ($country && $ip_found = $this->dataRepository->firewall->find($country))
-        {
-            return $ip_found;
+        return false;
+    }
+
+    public function whichList($ip_address) {
+        $ip_address = $ip_address
+            ?: $this->getIp();
+
+        if (!$ip_found = $this->dataRepository->firewall->find($ip_address)) {
+            if (!$ip_found = $this->getListingByCountry($ip_address)) {
+                if (!$ip_found = $this->checkSecondaryLists($ip_address)) {
+                    return false;
+                }
+            }
         }
 
-		return false;
-	}
+        if ($ip_found) {
+            return $ip_found['whitelisted']
+                ? 'whitelist'
+                : 'blacklist';
+        }
 
-	private function getCountryFromIp($ip_address)
-	{
-		if ($geo = $this->geoIp->searchAddr($ip_address))
-		{
-			return strtolower($geo['country_code']);
-		}
+        return false;
+    }
 
-		return false;
-	}
+    public function whitelist($ip, $force = false) {
+        return $this->addToList(true, $ip, $force);
+    }
 }
