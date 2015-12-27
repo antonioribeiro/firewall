@@ -13,6 +13,7 @@ class FirewallBlacklist
     {
         $this->blacklist = $blacklist;
     }
+
     /**
      * Filter Request through blacklist.
      *

@@ -4,8 +4,12 @@ namespace PragmaRX\Firewall\Vendor\Laravel;
 
 use PragmaRX\Firewall\Database\Migrator;
 use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
+use PragmaRX\Firewall\Filters\Blacklist;
+use PragmaRX\Firewall\Filters\Whitelist;
 use PragmaRX\Firewall\Firewall;
 
+use PragmaRX\Firewall\Middleware\FirewallBlacklist;
+use PragmaRX\Firewall\Middleware\FirewallWhitelist;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\GeoIp\GeoIp;
@@ -161,11 +165,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
     {
         $this->app['firewall.middleware.blacklist'] = $this->app->share(function($app)
         {
-            return new FirewallBlacklist;
+            return new FirewallBlacklist(new Blacklist());
         });
         $this->app['firewall.middleware.whitelist'] = $this->app->share(function($app)
         {
-            return new FirewallWhitelist;
+            return new FirewallWhitelist(new Whitelist());
         });
     }
     /**
