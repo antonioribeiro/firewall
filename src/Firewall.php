@@ -20,25 +20,66 @@ use PragmaRX\Firewall\Repositories\DataRepository;
 
 class Firewall
 {
+    /**
+     * The IP adress.
+     * @var
+     */
     private $ip;
 
+    /**
+     * The config object.
+     *
+     * @var Config
+     */
     private $config;
 
+    /**
+     * The cache manager objetc.
+     *
+     * @var CacheManager
+     */
     private $cache;
 
+    /**
+     * The file system object.
+     *
+     * @var FileSystem
+     */
     private $fileSystem;
 
+    /**
+     * The data repository object.
+     *
+     * @var DataRepository
+     */
     private $dataRepository;
 
+    /**
+     * Saved messages.
+     *
+     * @var array
+     */
     private $messages = [];
 
+    /**
+     * The request.
+     *
+     * @var Request
+     */
     private $request;
 
     /**
+     * The database migrator object.
+     *
      * @var Migrator
      */
     private $migrator;
 
+    /**
+     * The geop ip object.
+     *
+     * @var GeoIp
+     */
     private $geoIp;
 
     /**
@@ -78,10 +119,23 @@ class Firewall
         $this->setIp(null);
     }
 
+    /**
+     * Add a message to the messages list.
+     *
+     * @param $message
+     */
     public function addMessage($message) {
         $this->messages[] = $message;
     }
 
+    /**
+     * Add an IP to black or whitelist.
+     *
+     * @param $whitelist
+     * @param $ip
+     * @param $force
+     * @return bool
+     */
     public function addToList($whitelist, $ip, $force) {
         $list = $whitelist
             ? 'whitelist'
@@ -119,10 +173,24 @@ class Firewall
         return false;
     }
 
+    /**
+     * Blacklist an IP adress.
+     *
+     * @param $ip
+     * @param bool $force
+     * @return bool
+     */
     public function blacklist($ip, $force = false) {
         return $this->addToList(false, $ip, $force);
     }
 
+    /**
+     * Create a blocked access response.
+     *
+     * @param null $content
+     * @param null $status
+     * @return \Illuminate\Http\Response|void
+     */
     public function blockAccess($content = null, $status = null) {
         if ($this->config->get('block_response_abort')) {
             return abort(
@@ -140,6 +208,12 @@ class Firewall
         );
     }
 
+    /**
+     * Check if an IP address is in a secondary (black/white) list.
+     *
+     * @param $ip_address
+     * @return bool
+     */
     private function checkSecondaryLists($ip_address) {
         if (!$this->config->get('enable_range_search')) {
             return false;
@@ -157,10 +231,21 @@ class Firewall
         return false;
     }
 
+    /**
+     * Clear firewall table.
+     *
+     * @return mixed
+     */
     public function clear() {
         return $this->dataRepository->firewall->clear();
     }
 
+    /**
+     * Get country code from an IP address.
+     *
+     * @param $ip_address
+     * @return bool|string
+     */
     private function getCountryFromIp($ip_address) {
         if ($geo = $this->geoIp->searchAddr($ip_address)) {
             return strtolower($geo['country_code']);
@@ -169,10 +254,21 @@ class Firewall
         return false;
     }
 
+    /**
+     * Get the IP address.
+     *
+     * @return mixed
+     */
     public function getIp() {
         return $this->ip;
     }
 
+    /**
+     * Get list of IP addresses by country.
+     *
+     * @param $ip_address
+     * @return bool|null|object
+     */
     private function getListingByCountry($ip_address) {
         if (!$this->config->get('enable_country_search')) {
             return false;
@@ -194,14 +290,30 @@ class Firewall
         return false;
     }
 
+    /**
+     * Get the messages.
+     *
+     * @return array
+     */
     public function getMessages() {
         return $this->messages;
     }
 
+    /**
+     * Get the migrator object.
+     *
+     * @return Migrator
+     */
     public function getMigrator() {
         return $this->migrator;
     }
 
+    /**
+     * Check if IP address is valid.
+     *
+     * @param $ip
+     * @return bool
+     */
     public function ipIsValid($ip) {
         try {
             return IpAddress::ipV4Valid($ip) || $this->validCountry($ip);
@@ -211,6 +323,12 @@ class Firewall
         }
     }
 
+    /**
+     * Check if IP is blacklisted.
+     *
+     * @param null $ip
+     * @return bool
+     */
     public function isBlacklisted($ip = null) {
         $list = $this->whichList($ip);
 
@@ -218,6 +336,12 @@ class Firewall
         $list == 'blacklist';
     }
 
+    /**
+     * Check if IP address is whitelisted.
+     *
+     * @param null $ip
+     * @return bool
+     */
     public function isWhitelisted($ip = null) {
         return $this->whichList($ip) == 'whitelist';
     }
@@ -233,6 +357,12 @@ class Firewall
         }
     }
 
+    /**
+     * Remove IP from all lists.
+     *
+     * @param $ip
+     * @return bool
+     */
     public function remove($ip) {
         $listed = $this->whichList($ip);
 
@@ -249,16 +379,32 @@ class Firewall
         return false;
     }
 
+    /**
+     * Get the list of all IP addresses stored.
+     *
+     * @return mixed
+     */
     public function report() {
         return $this->dataRepository->firewall->all()->toArray();
     }
 
+    /**
+     * Set the current IP address.
+     *
+     * @param $ip
+     */
     public function setIp($ip) {
         $this->ip = $ip
             ?: ($this->ip
                 ?: $this->request->getClientIp());
     }
 
+    /**
+     * Check if a string is a valid country info.
+     *
+     * @param $command
+     * @return bool
+     */
     private function validCountry($command) {
         $command = strtolower($command);
 
@@ -271,6 +417,12 @@ class Firewall
         return false;
     }
 
+    /**
+     * Tell in which list (black/white) an IP address is.
+     *
+     * @param $ip_address
+     * @return bool|string
+     */
     public function whichList($ip_address) {
         $ip_address = $ip_address
             ?: $this->getIp();
@@ -292,6 +444,13 @@ class Firewall
         return false;
     }
 
+    /**
+     * Whitelist an IP address.
+     *
+     * @param $ip
+     * @param bool $force
+     * @return bool
+     */
     public function whitelist($ip, $force = false) {
         return $this->addToList(true, $ip, $force);
     }
