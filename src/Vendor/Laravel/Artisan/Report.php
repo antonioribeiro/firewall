@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel\Artisan;
 
+use Symfony\Component\Console\Helper\Table;
+
 class Report extends Base
 {
     /**
@@ -39,7 +41,7 @@ class Report extends Base
      * @return mixed
      */
     public function fire() {
-        $this->table = $this->getHelperSet()->get('table');
+        $this->table = new Table($this->output);
 
         $list = [];
 
@@ -57,7 +59,7 @@ class Report extends Base
 
         $this->table->setHeaders(['IP Address', 'Whitelist', 'Blacklist'])->setRows($list);
 
-        $this->table->render($this->getOutput());
+        $this->table->render());
     }
 
     /**
