@@ -59,7 +59,7 @@ class Report extends Base
 
         $this->table->setHeaders(['IP Address', 'Whitelist', 'Blacklist'])->setRows($list);
 
-        $this->table->render());
+        $this->table->render();
     }
 
     /**
