@@ -2,8 +2,12 @@
 
 namespace PragmaRX\Firewall\Filters;
 
+use PragmaRX\Firewall\Support\Redirectable;
+
 class Whitelist
 {
+    use Redirectable;
+
     public function filter() {
         $firewall = app()->make('firewall');
 
@@ -11,12 +15,7 @@ class Whitelist
             if ($to = app()->make('firewall.config')->get('redirect_non_whitelisted_to')) {
                 $action = 'redirected';
 
-                if (app()->make('router')->getRoutes()->getByName($to)) {
-                    $response = app()->make('redirect')->route($to);
-                }
-                else {
-                    $response = app()->make('redirect')->to($to);
-                }
+                $response = $this->redirectTo($to);
             }
             else {
                 $action = 'blocked';

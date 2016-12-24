@@ -4,6 +4,7 @@ namespace PragmaRX\Firewall;
 
 use Exception;
 use Illuminate\Http\Request;
+use PragmaRX\Firewall\Support\Redirectable;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\Response;
 use PragmaRX\Support\IpAddress;
@@ -20,6 +21,8 @@ use PragmaRX\Firewall\Repositories\DataRepository;
 
 class Firewall
 {
+    use Redirectable;
+
     /**
      * The IP adress.
      * @var
@@ -173,6 +176,18 @@ class Firewall
         return false;
     }
 
+    public function addToSessionList($whitelist, $ip)
+    {
+        $this->dataRepository->firewall->addToSessionList($whitelist, $ip);
+    }
+
+    /**
+     * Get all IP addresses.
+     */
+    public function all() {
+        return $this->dataRepository->firewall->all();
+    }
+
     /**
      * Blacklist an IP adress.
      *
@@ -185,6 +200,16 @@ class Firewall
     }
 
     /**
+     * Blacklist an IP adress in the current Session.
+     *
+     * @param $ip
+     * @return bool
+     */
+    public function blacklistOnSession($ip) {
+        return $this->addToSessionList(false, $ip);
+    }
+
+    /**
      * Create a blocked access response.
      *
      * @param null $content
@@ -192,6 +217,10 @@ class Firewall
      * @return \Illuminate\Http\Response|void
      */
     public function blockAccess($content = null, $status = null) {
+        if ($page = $this->config->get('block_response_page')) {
+            return $this->redirectTo($page);
+        }
+
         if ($this->config->get('block_response_abort')) {
             return abort(
                 $this->config->get('block_response_code'),
@@ -332,8 +361,8 @@ class Firewall
     public function isBlacklisted($ip = null) {
         $list = $this->whichList($ip);
 
-        return $list !== 'whitelist' &&
-        $list === 'blacklist';
+        return  $list !== 'whitelist' &&
+                $list === 'blacklist';
     }
 
     /**
@@ -377,6 +406,22 @@ class Firewall
         $this->addMessage(sprintf('%s is not listed', $ip));
 
         return false;
+    }
+
+    /**
+     * Remove IP from all lists.
+     *
+     * @param $ip
+     * @return bool
+     */
+    public function removeFromSession($ip)
+    {
+        return $this->removeFromSessionList($ip);
+    }
+
+    private function removeFromSessionList($ip)
+    {
+        $this->dataRepository->firewall->removeFromSessionList($ip);
     }
 
     /**
@@ -453,5 +498,15 @@ class Firewall
      */
     public function whitelist($ip, $force = false) {
         return $this->addToList(true, $ip, $force);
+    }
+
+    /**
+     * Whitelist an IP adress in the current Session.
+     *
+     * @param $ip
+     * @return bool
+     */
+    public function whitelistOnSession($ip) {
+        return $this->addToSessionList(true, $ip);
     }
 }

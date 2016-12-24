@@ -1,30 +1,16 @@
-<?php namespace PragmaRX\Firewall\Repositories\Firewall;
-/**
- * Part of the Firewall package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Firewall
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
+<?php
 
+namespace PragmaRX\Firewall\Repositories\Firewall;
+
+use ReflectionClass;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\CacheManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Collection;
-use PragmaRX\Support\IpAddress;
 
-class Firewall implements FirewallInterface {
-
+class Firewall implements FirewallInterface
+{
 	const CACHE_BASE_NAME = 'firewall.';
 
 	const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
@@ -68,8 +54,41 @@ class Firewall implements FirewallInterface {
 		$this->fileSystem = $fileSystem;
 	}
 
-	/**
-	 * Find a Ip in the data source
+    /**
+     * @param $model
+     */
+    private function addToSession($model)
+    {
+        $current = $this->getSessionIps();
+
+        $current = $current->push($model)->unique('ip_address');
+
+        $this->getSession()->put('pragmarx.firewall', $current);
+
+        return $model;
+    }
+
+    /**
+     * @param $whitelist
+     * @param $ip
+     * @return object
+     */
+    private function createModel($whitelist, $ip)
+    {
+        $class = new ReflectionClass(get_class($this->model));
+
+        $model = $class->newInstanceArgs([
+                                             [
+                                                 'ip_address'  => $ip,
+                                                 'whitelisted' => $whitelist
+                                             ]
+                                         ]);
+
+        return $model;
+    }
+
+    /**
+     * Find a Ip in the data source
 	 *
 	 * @param  string $ip
 	 * @return object|null
@@ -108,6 +127,19 @@ class Firewall implements FirewallInterface {
 
 		return $model;
 	}
+
+    /**
+     * Find a Ip in the data source
+     *
+     * @param  string $ip
+     * @return object|null
+     */
+    public function addToSessionList($whitelist, $ip)
+    {
+        $this->removeFromSession($model = $this->createModel($whitelist, $ip));
+
+        return $this->addToSession($model);
+    }
 
 	public function delete($ipAddress)
 	{
@@ -167,7 +199,8 @@ class Firewall implements FirewallInterface {
 
 		$list = $this->mergeLists(
 			$this->getAllFromDatabase(),
-			$this->toModels($this->getNonDatabaseIps())
+			$this->toModels($this->getNonDatabaseIps()),
+            $this->getSessionIps()
 		);
 
 		if ($cacheTime)
@@ -208,7 +241,20 @@ class Firewall implements FirewallInterface {
 		return null;
 	}
 
-	private function nonDatabaseFind($ip)
+    /**
+     * @return \Illuminate\Foundation\Application|mixed
+     */
+    private function getSession()
+    {
+        return app($this->config->get('session_binding'));
+    }
+
+    private function getSessionIps()
+    {
+        return collect($this->getSession()->get('pragmarx.firewall', []));
+    }
+
+    private function nonDatabaseFind($ip)
 	{
 		$ips = $this->getNonDatabaseIps();
 
@@ -216,6 +262,13 @@ class Firewall implements FirewallInterface {
 		{
 			return $this->makeModel($ip);
 		}
+
+        $ips = $this->getSessionIps()->toArray();
+
+        if ($ip = $this->ipArraySearch($ip, $ips))
+        {
+            return $this->makeModel($ip);
+        }
 
 		return null;
 	}
@@ -229,7 +282,29 @@ class Firewall implements FirewallInterface {
 		);
 	}
 
-	private function toModels($ipList)
+    private function removeFromSession($model)
+    {
+        $current = $this->getSessionIps();
+
+        $current = $current->filter(function ($model) use ($model) {
+            return $model->ip_address !== $model->ip_address;
+        });
+
+        $this->getSession()->put('pragmarx.firewall', $current);
+    }
+
+    /**
+     * Find a Ip in the data source
+     *
+     * @param  string $ip
+     * @return object|null
+     */
+    public function removeFromSessionList($ip)
+    {
+        $this->removeFromSession($this->createModel(false, $ip));
+    }
+
+    private function toModels($ipList)
 	{
 		$ips = array();
 
@@ -338,11 +413,10 @@ class Firewall implements FirewallInterface {
 		}
 	}
 
-	private function mergeLists($database_ips, $config_ips)
+	private function mergeLists($database_ips, $config_ips, $session_ips = [])
 	{
-		$list = array_merge($database_ips->toArray(), $config_ips);
-
-		return $this->toCollection($list);
+	    return collect($database_ips)
+                ->merge(collect($config_ips))
+                ->merge(collect($session_ips));
 	}
-
 }

@@ -2,10 +2,6 @@
 
 return [
 
-    'create_firewall_alias' => true,
-
-    'firewall_alias' => 'Firewall',
-
     /**
      * Blacklisted IP  addresses, ranges, countries, files and/or files of files
      *
@@ -122,4 +118,14 @@ return [
 
     'firewall_model' => 'PragmaRX\Firewall\Vendor\Laravel\Models\Firewall',
 
+
+    /**
+     * Session object binding in the IoC Container
+     *
+     * When blacklisting IPs for the current session, Firewall
+     * will need to instantiate the session object.
+     *
+     */
+
+    'session_binding' => 'session',
 ];
