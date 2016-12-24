@@ -361,8 +361,8 @@ class Firewall
     public function isBlacklisted($ip = null) {
         $list = $this->whichList($ip);
 
-        return  $list !== 'whitelist' &&
-                $list === 'blacklist';
+        return !($list == 'whitelist') &&
+                $list == 'blacklist';
     }
 
     /**
