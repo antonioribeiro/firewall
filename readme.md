@@ -18,6 +18,10 @@ Those IP addresses can
 - Access 'allow whitelisted' filtered routes.
 - If a route is filtered by the 'allow whitelisted' filter and the IP is not whitelisted, the request will be redirected to an alternative url or route name.
 
+#### Playground & Bootstrap App 
+
+Click [here](http://pragmarx.com/firewall) to see it working and in case you need a help figuring out things, try [this repository](https://github.com/antonioribeiro/pragmarx.com). 
+
 ### Routes
 
 This package provides two middleware groups to use in your routes:
@@ -168,6 +172,14 @@ or
 ```
 
 You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html)
+
+### Session Blocking
+
+You can block users from accessing some pages only for the current session, by using those methods:
+
+    Firewall::whitelistOnSession($ip);
+    Firewall::blacklistOnSession($ip);
+    Firewall::removeFromSession($ip);
 
 ### Installation
 
