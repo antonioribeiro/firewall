@@ -385,7 +385,7 @@ class Firewall implements FirewallInterface
 		{
 			if (
 				(isset($value['ip_address']) && $value['ip_address'] == $ip) ||
-				($key == $ip) ||
+				(strval($key) == $ip) ||
 				($value == $ip)
 			)
 			{
