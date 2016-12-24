@@ -22,6 +22,10 @@ Those IP addresses can
 
 Click [here](http://pragmarx.com/firewall) to see it working and in case you need a help figuring out things, try [this repository](https://github.com/antonioribeiro/pragmarx.com). 
 
+Playground's screenshot:
+
+![playground](docs/playground.png)
+
 ### Routes
 
 This package provides two middleware groups to use in your routes:
