@@ -220,10 +220,17 @@ class Firewall implements FirewallInterface
 		/**
 		 * Deletes one by one to also remove them from cache
 		 */
-		foreach ($this->all() as $ip)
-		{
-			$this->delete($ip['ip_address']);
-		}
+        $deleted = 0;
+
+        foreach ($this->all() as $ip)
+        {
+            if ($this->delete($ip['ip_address']))
+            {
+                $deleted++;
+            }
+        }
+
+        return $deleted;
 	}
 
 	private function findIp($ip)
