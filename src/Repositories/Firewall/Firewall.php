@@ -289,12 +289,12 @@ class Firewall implements FirewallInterface
 		);
 	}
 
-    private function removeFromSession($model)
+    private function removeFromSession($ip)
     {
         $current = $this->getSessionIps();
 
-        $current = $current->filter(function ($model) use ($model) {
-            return $model->ip_address !== $model->ip_address;
+        $current = $current->filter(function ($model) use ($ip) {
+            return $model->ip_address !== $ip->ip_address;
         });
 
         $this->getSession()->put('pragmarx.firewall', $current);
