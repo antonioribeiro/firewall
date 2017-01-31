@@ -120,7 +120,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerBlacklistCommand() {
-        $this->app['firewall.blacklist.command'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.blacklist.command', function ($app) {
             return new BlacklistCommand;
         });
 
@@ -133,7 +133,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerCache() {
-        $this->app['firewall.cache'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.cache', function ($app) {
             return new CacheManager($app);
         });
     }
@@ -144,7 +144,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerClearCommand() {
-        $this->app['firewall.clear.command'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.clear.command', function ($app) {
             return new ClearCommand;
         });
 
@@ -157,7 +157,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerDataRepository() {
-        $this->app['firewall.dataRepository'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.dataRepository', function ($app) {
             return new DataRepository(
                 new FirewallRepository(
                     $this->getFirewallModel(),
@@ -181,7 +181,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerFileSystem() {
-        $this->app['firewall.fileSystem'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.fileSystem', function ($app) {
             return new Filesystem;
         });
     }
@@ -193,7 +193,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerFirewall() {
-        $this->app['firewall'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall', function ($app) {
             $app['firewall.loaded'] = true;
 
             return new Firewall(
@@ -214,17 +214,17 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerMiddleware() {
-        $this->app['firewall.middleware.blacklist'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.middleware.blacklist', function ($app) {
             return new FirewallBlacklist(new Blacklist());
         });
-        $this->app['firewall.middleware.whitelist'] = $this->app->share(function ($app) {
+
+        $this->app->singleton('firewall.middleware.whitelist', function ($app) {
             return new FirewallWhitelist(new Whitelist());
         });
     }
 
     private function registerMigrator() {
-        $this->app['firewall.migrator'] = $this->app->share(
-            function ($app) {
+        $this->app->singleton('firewall.migrator', function ($app) {
                 $connection = $this->getConfig('connection');
 
                 return new Migrator($app['db'], $connection);
@@ -238,7 +238,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerRemoveCommand() {
-        $this->app['firewall.remove.command'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.remove.command', function ($app) {
             return new RemoveCommand;
         });
 
@@ -251,7 +251,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerReportCommand() {
-        $this->app['firewall.list.command'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.list.command', function ($app) {
             return new ReportCommand;
         });
 
@@ -259,7 +259,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     }
 
     private function registerTablesCommand() {
-        $this->app['firewall.tables.command'] = $this->app->share(function () {
+        $this->app->singleton('firewall.tables.command', function ($app) {
             return new TablesCommand;
         });
 
@@ -272,7 +272,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @return void
      */
     private function registerWhitelistCommand() {
-        $this->app['firewall.whitelist.command'] = $this->app->share(function ($app) {
+        $this->app->singleton('firewall.whitelist.command', function ($app) {
             return new WhitelistCommand;
         });
 
