@@ -124,7 +124,7 @@ This is a result from `firewall:list`:
 +--------------+-----------+-----------+
 ```
 
-###Facade
+### Facade
 
 You can also use the `Firewall Facade` to manage the lists:
 
