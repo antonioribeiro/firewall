@@ -201,13 +201,17 @@ Require the Firewall package using [Composer](https://getcomposer.org/doc/01-bas
 composer require pragmarx/firewall
 ```
 
-Add the Service Provider to your app/config/app.php:
+* Laravel 5.5 and up
+
+    You don't have to do anything else, this package uses Package Auto-Discovery's feature, and should be available as soon as you install it via Composer.
+
+* Laravel 5.4 and below
+
+    Add the Service Provider and the Facade to your app/config/app.php:
 
 ```php
 PragmaRX\Firewall\Vendor\Laravel\ServiceProvider::class,
 ```
-
-Add the Facade to your app/config/app.php:
 
 ```php
 'Firewall' => PragmaRX\Firewall\Vendor\Laravel\Facade::class,
