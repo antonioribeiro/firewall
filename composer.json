@@ -38,13 +38,13 @@
         "branch-alias": {
             "dev-master": "0.5.x-dev"
         },
-		"laravel": {
-			"providers": [
-				"PragmaRX\\Firewall\\Vendor\\Laravel\\ServiceProvider"
-			],
-			"aliases": {
-				"Firewall": "PragmaRX\\Firewall\\Vendor\\Laravel\\Facade"
-			}
-		}
+        "laravel": {
+            "providers": [
+                "PragmaRX\\Firewall\\Vendor\\Laravel\\ServiceProvider"
+            ],
+            "aliases": {
+                "Firewall": "PragmaRX\\Firewall\\Vendor\\Laravel\\Facade"
+            }
+        }
     }
 }
