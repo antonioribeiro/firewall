@@ -199,6 +199,8 @@ Require the Firewall package using [Composer](https://getcomposer.org/doc/01-bas
 composer require pragmarx/firewall
 ```
 
+> For Laravel 5.5 you don't have to edit anything in `config/app.php` because it uses Package Auto-Discovery.
+
 Add the Service Provider to your app/config/app.php:
 
 ```
