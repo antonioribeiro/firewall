@@ -36,7 +36,7 @@ This package provides two middleware groups to use in your routes:
 
 So, for instance, you could have a blocking group and put all your routes inside it:
 
-```
+```php
 Route::group(['middleware' => 'fw-block-bl'], function () 
 {
     Route::get('/', 'HomeController@index');
@@ -45,7 +45,7 @@ Route::group(['middleware' => 'fw-block-bl'], function ()
 
 Or you could use both. In the following example the allow group will give free access to the 'coming soon' page and block or just redirect non-whitelisted IP addresses to another, while still blocking access to the blacklisted ones.
 
-```
+```php
 Route::group(['middleware' => 'fw-block-bl'], function () 
 {
     Route::get('coming/soon', function()
@@ -64,7 +64,7 @@ Route::group(['middleware' => 'fw-block-bl'], function ()
 
 IPs (white and black) lists can be stored in array, files and database. Initially database access to lists is disabled, so, to test your Firewall configuration you can publish the config file and edit the `blacklist` or `whitelist` arrays:
 
-```
+```php
 'blacklist' => array(
     '127.0.0.1',
     '192.168.17.0/24'
@@ -88,7 +88,7 @@ The file (for instance `/usr/bin/firewall/blacklisted.txt`) must contain one IP,
 
 Non-whitelisted IP addresses can be blocked or redirected. To configure redirection you'll have to publish the  `config.php` file and configure:
 
-```
+```php
 'redirect_non_whitelisted_to' => 'coming/soon',
 ```
 
@@ -124,11 +124,11 @@ This is a result from `firewall:list`:
 +--------------+-----------+-----------+
 ```
 
-###Facade
+### Facade
 
 You can also use the `Firewall Facade` to manage the lists:
 
-```
+```php
 $ip = '10.17.12.1';
 
 $whitelisted = Firewall::isWhitelisted($ip);
@@ -145,7 +145,7 @@ if (Firewall::whichList($ip))  // returns false, 'whitelist' or 'blacklist'
 
 Return a blocking access response:
 
-```
+```php
 return Firewall::blockAccess();
 ```
 
@@ -181,9 +181,11 @@ You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html
 
 You can block users from accessing some pages only for the current session, by using those methods:
 
-    Firewall::whitelistOnSession($ip);
-    Firewall::blacklistOnSession($ip);
-    Firewall::removeFromSession($ip);
+```php
+Firewall::whitelistOnSession($ip);
+Firewall::blacklistOnSession($ip);
+Firewall::removeFromSession($ip);
+```
 
 ### Installation
 
@@ -199,23 +201,21 @@ Require the Firewall package using [Composer](https://getcomposer.org/doc/01-bas
 composer require pragmarx/firewall
 ```
 
-> For Laravel 5.5 you don't have to edit anything in `config/app.php` because it uses Package Auto-Discovery.
-
 Add the Service Provider to your app/config/app.php:
 
-```
+```php
 PragmaRX\Firewall\Vendor\Laravel\ServiceProvider::class,
 ```
 
 Add the Facade to your app/config/app.php:
 
-```
+```php
 'Firewall' => PragmaRX\Firewall\Vendor\Laravel\Facade::class,
 ```
 
 Add the Middleware groups `fw-block-bl` and `fw-allow-wl` to your app/Http/Kernel.php
 
-```
+```php
 protected $middlewareGroups = [
         ...
         
