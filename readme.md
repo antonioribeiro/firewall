@@ -257,7 +257,7 @@ php artisan config:publish pragmarx/firewall
 **Laravel 5**
 
 ```
-php artisan vendor:publish
+php artisan vendor:publish --provider="PragmaRX\Firewall\Vendor\Laravel\ServiceProvider"
 ```
 
 ### TODO
