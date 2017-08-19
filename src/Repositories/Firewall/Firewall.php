@@ -55,6 +55,42 @@ class Firewall implements FirewallInterface
 	}
 
     /**
+     * Add ip or range to array list.
+     *
+     * @param $whitelist
+     * @param $ip
+     */
+    private function addToArrayList($whitelist, $ip)
+    {
+        $data = $this->config->set($list = $whitelist ? 'whitelist' : 'blacklist', $ip);
+
+        $data[] = $ip;
+
+        $this->config->set($list, $data);
+    }
+
+    /**
+     * Add ip or range to database.
+     *
+     * @param $whitelist
+     * @param $ip
+     * @return mixed
+     */
+    private function addToDatabaseList($whitelist, $ip)
+    {
+        $this->model->unguard();
+
+        $model = $this->model->create(array(
+            'ip_address' => $ip,
+            'whitelisted' => $whitelist
+        ));
+
+        $this->cacheRemember($model);
+
+        return $model;
+    }
+
+    /**
      * @param $model
      */
     private function addToSession($model)
@@ -116,16 +152,11 @@ class Firewall implements FirewallInterface
 	 */
 	public function addToList($whitelist, $ip)
 	{
-		$this->model->unguard();
+	    if ($this->config->get('use_database')) {
+	        return $this->addToDatabaseList($whitelist, $ip);
+        }
 
-		$model = $this->model->create(array(
-										'ip_address' => $ip,
-										'whitelisted' => $whitelist
-									));
-
-		$this->cacheRemember($model);
-
-		return $model;
+        return $this->addToArrayList($whitelist, $ip);
 	}
 
     /**

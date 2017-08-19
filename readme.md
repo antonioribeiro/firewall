@@ -129,15 +129,15 @@ This is a result from `firewall:list`:
 You can also use the `Firewall Facade` to manage the lists:
 
 ```php
-$ip = '10.17.12.1';
+$whitelisted = Firewall::isWhitelisted('10.17.12.1');
+$blacklisted = Firewall::isBlacklisted('10.0.0.3');
 
-$whitelisted = Firewall::isWhitelisted($ip);
-$blacklisted = Firewall::isBlacklisted($ip);
+Firewall::whitelist('192.168.1.1');
+Firewall::blacklist('10.17.12.1', true); /// true = force in case IP is whitelisted
+Firewall::blacklist('127.0.0.0-127.0.0.255');
+Firewall::blacklist('200.212.331.0/28');
 
-Firewall::whitelist($ip);
-Firewall::blacklist($ip, true); /// true = force in case IP is whitelisted
-
-if (Firewall::whichList($ip))  // returns false, 'whitelist' or 'blacklist'
+if (Firewall::whichList($ip) !== false)  // returns false, 'whitelist' or 'blacklist'
 {
     Firewall::remove($ip);
 }
@@ -231,6 +231,19 @@ protected $middlewareGroups = [
         ],        
 ];
 ```
+
+Or to your `$routeMiddleware`
+
+```php
+protected $routeMiddleware = [
+    'auth' => \App\Http\Middleware\Authenticate::class,
+    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+    'fw-block-bl' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+    'fw-allow-wl' => \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
+];
+```
+
 **Note:** You can add other middleware you have already created to the new groups by simply 
 adding it to the `fw-allow-wl` or `fw-block-bl` middleware group.
 
