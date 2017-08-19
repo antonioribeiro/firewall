@@ -110,7 +110,7 @@ firewall
   firewall:whitelist          Add an IP address to whitelist.
 ```
 
-This is a result from `firewall:list`:
+Those are results from `firewall:list`:
 
 ```
 +--------------+-----------+-----------+
@@ -122,6 +122,14 @@ This is a result from `firewall:list`:
 | 10.17.12.102 |     X     |           |
 | 10.17.12.200 |           |     X     |
 +--------------+-----------+-----------+
+```
+
+```
++-----------------------+-----------+-----------+
+| IP Address            | Whitelist | Blacklist |
++-----------------------+-----------+-----------+
+| 127.0.0.0-127.0.0.255 |           |     X     |
++-----------------------+-----------+-----------+
 ```
 
 ### Facade
