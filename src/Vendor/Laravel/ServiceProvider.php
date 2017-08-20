@@ -135,7 +135,6 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     /**
      * Register the attack blocker.
-     *
      */
     private function registerAttackBlocker()
     {

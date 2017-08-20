@@ -4,8 +4,8 @@ namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
 use PragmaRX\Firewall\Firewall;
-use PragmaRX\Support\Config;
 use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Config;
 
 class AttackBlocker
 {
@@ -40,14 +40,14 @@ class AttackBlocker
     /**
      * The max request count.
      *
-     * @var integer
+     * @var int
      */
     private $maxRequestCount;
 
     /**
      * The max request count.
      *
-     * @var integer
+     * @var int
      */
     private $maxSeconds;
 
@@ -61,7 +61,7 @@ class AttackBlocker
     /**
      * AttackBlocker constructor.
      *
-     * @param Config $config
+     * @param Config       $config
      * @param CacheManager $cache
      */
     public function __construct(Config $config, CacheManager $cache)
@@ -91,6 +91,7 @@ class AttackBlocker
      * Check for expiration.
      *
      * @param $record
+     *
      * @return mixed
      */
     private function checkExpiration($record)
@@ -134,14 +135,12 @@ class AttackBlocker
 
     /**
      * Get max request count from config.
-     *
      */
     private function getMaxRequestCount()
     {
-        return ! is_null($this->maxRequestCount)
+        return !is_null($this->maxRequestCount)
             ? $this->maxRequestCount
-            : ($this->maxRequestCount = $this->config->get('attack_blocker.allowed_frequency.requests'))
-        ;
+            : ($this->maxRequestCount = $this->config->get('attack_blocker.allowed_frequency.requests'));
     }
 
     /**
@@ -151,14 +150,12 @@ class AttackBlocker
      */
     private function getMaxSeconds()
     {
-        return ! is_null($this->maxSeconds)
+        return !is_null($this->maxSeconds)
             ? $this->maxSeconds
-            : ($this->maxSeconds = $this->config->get('attack_blocker.allowed_frequency.seconds'))
-        ;
+            : ($this->maxSeconds = $this->config->get('attack_blocker.allowed_frequency.seconds'));
     }
 
     /**
-     *
      * @return mixed
      */
     private function getResponseConfig()
@@ -170,6 +167,7 @@ class AttackBlocker
      * Increment request count.
      *
      * @param $record
+     *
      * @return mixed
      */
     private function increment($record)
@@ -183,6 +181,7 @@ class AttackBlocker
      * Check if this is an attack.
      *
      * @param $record
+     *
      * @return mixed
      */
     private function isAttack($record)
@@ -198,11 +197,12 @@ class AttackBlocker
      * Check for attacks.
      *
      * @param $ipAddress
+     *
      * @return mixed
      */
     public function isBeingAttacked($ipAddress)
     {
-        if (! $this->isEnabled()) {
+        if (!$this->isEnabled()) {
             return false;
         }
 
@@ -221,7 +221,6 @@ class AttackBlocker
 
     /**
      * Get enabled state.
-     *
      */
     private function isEnabled()
     {
@@ -232,6 +231,7 @@ class AttackBlocker
      * Load a record.
      *
      * @param $ipAddress
+     *
      * @return array|\Illuminate\Contracts\Cache\Repository
      */
     private function loadRecord($ipAddress)
@@ -257,16 +257,16 @@ class AttackBlocker
      * Make the cache key.
      *
      * @param $ipAddress
+     *
      * @return string
      */
     private function makeKey($ipAddress)
     {
         return
             $this->key =
-                $this->config->get('attack_blocker.cache_key_prefix') .
-                '-' .
-                ($this->ipAddress = $ipAddress)
-        ;
+                $this->config->get('attack_blocker.cache_key_prefix').
+                '-'.
+                ($this->ipAddress = $ipAddress);
     }
 
     /**
@@ -275,6 +275,7 @@ class AttackBlocker
      * @param null $ipAddress
      * @param null $requestCount
      * @param null $firstRequestAt
+     *
      * @return array
      */
     private function makeRecord($ipAddress = null, $requestCount = null, $firstRequestAt = null)
@@ -290,7 +291,6 @@ class AttackBlocker
 
     private function notify($record)
     {
-
     }
 
     /**
@@ -319,6 +319,7 @@ class AttackBlocker
      * Store record on cache.
      *
      * @param $record
+     *
      * @return mixed
      */
     private function store($record)
