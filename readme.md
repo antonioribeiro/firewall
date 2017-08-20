@@ -144,6 +144,7 @@ Firewall::whitelist('192.168.1.1');
 Firewall::blacklist('10.17.12.1', true); /// true = force in case IP is whitelisted
 Firewall::blacklist('127.0.0.0-127.0.0.255');
 Firewall::blacklist('200.212.331.0/28');
+Firewall::blacklist('country:br');
 
 if (Firewall::whichList($ip) !== false)  // returns false, 'whitelist' or 'blacklist'
 {
