@@ -33,15 +33,21 @@ return [
     ],
 
     /*
-     * Code and message for blocked responses
+     * Response action for blocked responses
      *
      */
 
-    'block_response_code' => 403,
+    'response' => [
+        'code' => 403,
 
-    'block_response_message' => null,
+        'message' => null,
 
-    'block_response_abort' => false, // return abort() instead of Response::make() - disabled by default
+        'view' => null,
+
+        'redirect_to' => null,
+
+        'abort' => false, // return abort() instead of Response::make() - disabled by default
+    ],
 
     /*
      * Do you wish to redirect non whitelisted accesses to an error page?
@@ -138,4 +144,50 @@ return [
      */
 
     'geoip_database_path' => storage_path('geoip'),
+
+    /**
+     * Block suspicious attacks
+     */
+
+    'attack_blocker' => [
+
+        'enabled' => true,
+
+        'cache_key_prefix' => 'firewall-attack-blocker',
+
+        'allowed_frequency' => [
+
+            'requests' => 3,
+
+            'seconds' => 1 * 60, // 1 minute
+
+        ],
+
+        'action' => [
+
+            'blacklist_unknown_ips' => true,
+
+            'blacklist_whitelisted_ips' => false,
+
+        ],
+
+        'notifications' => [
+
+            'enabled' => false,
+
+        ],
+
+        'response' => [
+            'code' => 403,
+
+            'message' => null,
+
+            'view' => 'too-many-requests',
+
+            'redirect_to' => null,
+
+            'abort' => false, // return abort() instead of Response::make() - disabled by default
+        ]
+
+    ],
 ];
