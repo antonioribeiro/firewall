@@ -23,7 +23,8 @@ use PragmaRX\Support\CacheManager;
 
 use PragmaRX\Firewall\Repositories\Firewall\FirewallInterface;
 
-class DataRepository implements DataRepositoryInterface {
+class DataRepository implements DataRepositoryInterface
+{
 
 	public $firewall;
 
