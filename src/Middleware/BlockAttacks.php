@@ -9,11 +9,13 @@ class BlockAttacks
     /**
      * Block attacks.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         if ($response = app('firewall')->isBeingAttacked()) {
             return $response;
         }

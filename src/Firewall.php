@@ -4,18 +4,17 @@ namespace PragmaRX\Firewall;
 
 use Exception;
 use Illuminate\Http\Request;
+use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Repositories\DataRepository;
+use PragmaRX\Firewall\Support\AttackBlocker;
+use PragmaRX\Firewall\Support\Redirectable;
+use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\Response;
-use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\FileSystem;
 use PragmaRX\Support\GeoIp\GeoIp;
-use PragmaRX\Support\CacheManager;
-use PragmaRX\Firewall\Support\Mode;
-use PragmaRX\Firewall\Database\Migrator;
-use PragmaRX\Firewall\Support\Redirectable;
-use PragmaRX\Firewall\Support\AttackBlocker;
-use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
+use PragmaRX\Support\IpAddress;
+use PragmaRX\Support\Response;
 
 class Firewall
 {
@@ -94,14 +93,14 @@ class Firewall
     /**
      * Initialize Firewall object.
      *
-     * @param Config $config
+     * @param Config         $config
      * @param DataRepository $dataRepository
-     * @param CacheManager $cache
-     * @param FileSystem $fileSystem
-     * @param Request $request
-     * @param Migrator $migrator
-     * @param GeoIp $geoIp
-     * @param AttackBlocker $blocker
+     * @param CacheManager   $cache
+     * @param FileSystem     $fileSystem
+     * @param Request        $request
+     * @param Migrator       $migrator
+     * @param GeoIp          $geoIp
+     * @param AttackBlocker  $blocker
      */
     public function __construct(
         Config $config,
@@ -228,14 +227,15 @@ class Firewall
 
     /**
      * Create a blocked access response.
+     *
      * @return \Illuminate\Http\Response|void
+     *
      * @internal param null $content
      * @internal param null $status
-     *
      */
     public function blockAccess()
     {
-        return (new Responder)->respond(
+        return (new Responder())->respond(
             $this->config->get('response')
         );
     }
