@@ -1,4 +1,7 @@
-<?php namespace PragmaRX\Firewall\Repositories\Cache;
+<?php
+
+namespace PragmaRX\Firewall\Repositories\Cache;
+
 /**
  * Part of the Firewall package.
  *
@@ -10,100 +13,103 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Firewall
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
+ *
  * @link       http://pragmarx.com
  */
+class Cache implements CacheInterface
+{
+    private $memory = [];
 
-class Cache implements CacheInterface {
+    /**
+     * Get the cache value.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return isset($this->memory[$key])
+                     ? unserialize($this->memory[$key])
+                     : null;
+    }
 
-	private $memory = array();
+    /**
+     * Insert or replace a value for a given key.
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
+     *
+     * @return mixed
+     */
+    public function put($key, $value, $minutes = 0)
+    {
+        return $this->memory[$key] = serialize($value);
+    }
 
-	/**
-	 * Get the cache value
-	 * @param  string $key
-	 * @return mixed
-	 */
-	public function get($key)
-	{
-		return isset($this->memory[$key])
-		             ? unserialize($this->memory[$key])
-		             : null;
-	}
+    /**
+     * Increment is not supported.
+     */
+    public function increment($key, $value = 1)
+    {
+        throw new \Exception('Increment operations not supported by this driver.');
+    }
 
-	/**
-	 * Insert or replace a value for a given key
-	 *
-	 * @param  string  $key
-	 * @param  mixed  $value
-	 * @param  integer $minutes
-	 * @return mixed
-	 */
-	public function put($key, $value, $minutes = 0)
-	{
-		return $this->memory[$key] = serialize($value);
-	}
+    /**
+     * Decrement is not supported.
+     */
+    public function decrement($key, $value = 1)
+    {
+        throw new \Exception('Decrement operations not supported by this driver.');
+    }
 
-	/**
-	 * Increment is not supported
-	 */
-	public function increment($key, $value = 1)
-	{
-		throw new \Exception("Increment operations not supported by this driver.");
-	}
+    /**
+     * Insert or replace a value for a key and remember is forever.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function forever($key, $value)
+    {
+        $this->put($key, $value);
+    }
 
-	/**
-	 * Decrement is not supported
-	 */
-	public function decrement($key, $value = 1)
-	{
-		throw new \Exception("Decrement operations not supported by this driver.");
-	}
+    /**
+     * Forget a key.
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    public function forget($key)
+    {
+        unset($this->memory[$key]);
+    }
 
-	/**
-	 * Insert or replace a value for a key and remember is forever
-	 *
-	 * @param  string $key
-	 * @param  mixed $value
-	 * @return void
-	 */
-	public function forever($key, $value)
-	{
-		$this->put($key, $value);
-	}
+    /**
+     * Erase the whole cache.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        $this->memory = [];
+    }
 
-	/**
-	 * Forget a key
-	 *
-	 * @param  string $key
-	 * @return void
-	 */
-	public function forget($key)
-	{
-		unset($this->memory[$key]);
-	}
-
-	/**
-	 * Erase the whole cache
-	 *
-	 * @return void
-	 */
-	public function flush()
-	{
-		$this->memory = array();
-	}
-
-	/**
-	 * Get the cache Prefix,
-	 *   returns an empty string for backward compatility with Interface
-	 *
-	 * @return string
-	 */
-	public function getPrefix()
-	{
-		return '';
-	}
-
+    /**
+     * Get the cache Prefix,
+     *   returns an empty string for backward compatility with Interface.
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return '';
+    }
 }

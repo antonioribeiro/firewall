@@ -10,11 +10,13 @@ class Migrator extends Migration
         'firewall',
     ];
 
-    protected function migrateDown() {
+    protected function migrateDown()
+    {
         $this->dropAllTables();
     }
 
-    protected function migrateUp() {
+    protected function migrateUp()
+    {
         $this->builder->create(
             'firewall',
             function ($table) {

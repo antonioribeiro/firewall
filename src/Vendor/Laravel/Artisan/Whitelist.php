@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel\Artisan;
 
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class Whitelist extends Base
 {
@@ -23,9 +23,9 @@ class Whitelist extends Base
 
     /**
      * Create a new command instance.
-     *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -34,7 +34,8 @@ class Whitelist extends Base
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
         $type = $this->laravel->firewall->whitelist($this->argument('ip'), $this->option('force'))
             ? 'info'
             : 'error';
@@ -47,7 +48,8 @@ class Whitelist extends Base
      *
      * @return array
      */
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
             ['ip', InputArgument::REQUIRED, 'The IP address to be added.'],
         ];
@@ -58,7 +60,8 @@ class Whitelist extends Base
      *
      * @return array
      */
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ['force', null, InputOption::VALUE_NONE, 'Remove IP before adding it to the list.'],
         ];

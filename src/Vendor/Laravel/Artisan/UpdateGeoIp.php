@@ -20,9 +20,9 @@ class UpdateGeoIp extends Base
 
     /**
      * Create a new command instance.
-     *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -31,7 +31,8 @@ class UpdateGeoIp extends Base
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
         $type = $this->laravel->firewall->updateGeoIp()
             ? 'info'
             : 'error';

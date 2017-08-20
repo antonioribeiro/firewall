@@ -8,7 +8,8 @@ class Whitelist
 {
     use Redirectable;
 
-    public function filter() {
+    public function filter()
+    {
         $firewall = app()->make('firewall');
 
         if (!$firewall->isWhitelisted()) {
@@ -16,8 +17,7 @@ class Whitelist
                 $action = 'redirected';
 
                 $response = $this->redirectTo($to);
-            }
-            else {
+            } else {
                 $action = 'blocked';
                 $response = $firewall->blockAccess();
             }

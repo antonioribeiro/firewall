@@ -11,7 +11,8 @@ class Facade extends LaravelFacade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() {
+    protected static function getFacadeAccessor()
+    {
         return 'firewall';
     }
 }
