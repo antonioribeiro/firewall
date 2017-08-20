@@ -184,6 +184,18 @@ or
 "geoip2/geoip2": "~2.0"
 ```
 
+You need to enable country search on your firewall.php config file: 
+
+```php
+'enable_country_search' => true,
+```
+
+And you can schedule this command to update your cities GeoIp database regularly: 
+
+```
+php artisan firewall:updategeoip
+```
+
 You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html)
 
 ### Session Blocking
