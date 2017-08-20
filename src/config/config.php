@@ -145,7 +145,7 @@ return [
 
     'geoip_database_path' => storage_path('geoip'),
 
-    /**
+    /*
      * Block suspicious attacks
      */
 
@@ -187,7 +187,7 @@ return [
             'redirect_to' => null,
 
             'abort' => false, // return abort() instead of Response::make() - disabled by default
-        ]
+        ],
 
     ],
 ];
