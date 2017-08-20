@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2017-08-20
+### Added
+- GeoIp2 database file updater artisan command
+
 ## [1.0.9] - 2017-08-13
 ### Added
 - Laravel 5.5 autodiscovery
