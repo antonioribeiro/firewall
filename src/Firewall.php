@@ -4,16 +4,18 @@ namespace PragmaRX\Firewall;
 
 use Exception;
 use Illuminate\Http\Request;
-use PragmaRX\Firewall\Database\Migrator;
-use PragmaRX\Firewall\Repositories\DataRepository;
-use PragmaRX\Firewall\Support\Redirectable;
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\Response;
+use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\FileSystem;
 use PragmaRX\Support\GeoIp\GeoIp;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Firewall\Support\Mode;
+use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Support\Redirectable;
+use PragmaRX\Firewall\Support\AttackBlocker;
+use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
-use PragmaRX\Support\IpAddress;
-use PragmaRX\Support\Response;
 
 class Firewall
 {
@@ -83,16 +85,23 @@ class Firewall
     private $geoIp;
 
     /**
+     * The attack blocker.
+     *
+     * @var AttackBlocker
+     */
+    private $attackBlocker;
+
+    /**
      * Initialize Firewall object.
      *
-     * @param \PragmaRX\Support\Config       $config
-     * @param Repositories\DataRepository    $dataRepository
-     * @param \PragmaRX\Support\CacheManager $cache
-     * @param \PragmaRX\Support\FileSystem   $fileSystem
-     * @param \Illuminate\Http\Request       $request
-     * @param Database\Migrator              $migrator
-     *
-     * @internal param \PragmaRX\Firewall\Support\Locale $locale
+     * @param Config $config
+     * @param DataRepository $dataRepository
+     * @param CacheManager $cache
+     * @param FileSystem $fileSystem
+     * @param Request $request
+     * @param Migrator $migrator
+     * @param GeoIp $geoIp
+     * @param AttackBlocker $blocker
      */
     public function __construct(
         Config $config,
@@ -101,7 +110,8 @@ class Firewall
         FileSystem $fileSystem,
         Request $request,
         Migrator $migrator,
-        GeoIp $geoIp
+        GeoIp $geoIp,
+        AttackBlocker $attackBlocker
     ) {
         $this->config = $config;
 
@@ -116,6 +126,8 @@ class Firewall
         $this->migrator = $migrator;
 
         $this->geoIp = $geoIp;
+
+        $this->attackBlocker = $attackBlocker;
 
         $this->setIp(null);
     }
@@ -216,31 +228,15 @@ class Firewall
 
     /**
      * Create a blocked access response.
-     *
-     * @param null $content
-     * @param null $status
-     *
      * @return \Illuminate\Http\Response|void
+     * @internal param null $content
+     * @internal param null $status
+     *
      */
-    public function blockAccess($content = null, $status = null)
+    public function blockAccess()
     {
-        if ($page = $this->config->get('block_response_page')) {
-            return $this->redirectTo($page);
-        }
-
-        if ($this->config->get('block_response_abort')) {
-            return abort(
-                $this->config->get('block_response_code'),
-                $content
-                    ?: $this->config->get('block_response_message')
-            );
-        }
-
-        return Response::make(
-            $content
-                ?: $this->config->get('block_response_message'),
-            $status
-                ?: $this->config->get('block_response_code')
+        return (new Responder)->respond(
+            $this->config->get('response')
         );
     }
 
@@ -404,7 +400,7 @@ class Firewall
     public function log($message)
     {
         if ($this->config->get('enable_log')) {
-            app()->log->info("Firewall: $message");
+            app()->log->info("FIREWALL: $message");
         }
     }
 
@@ -557,5 +553,15 @@ class Firewall
         $this->messages = $updater->getMessages();
 
         return $success;
+    }
+
+    /**
+     * Check if the application is receiving some sort of attack.
+     *
+     * @return bool
+     */
+    public function isBeingAttacked()
+    {
+        return $this->attackBlocker->isBeingAttacked($this->ip);
     }
 }

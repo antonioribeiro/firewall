@@ -12,6 +12,7 @@ use PragmaRX\Firewall\Middleware\FirewallWhitelist;
 use PragmaRX\Firewall\Repositories\Countries;
 use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
+use PragmaRX\Firewall\Support\AttackBlocker;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
@@ -35,14 +36,16 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected $packageNameCapitalized = 'Firewall';
 
+    private $firewall;
+
     /**
      * Return a proper response for blocked access.
      *
      * @return Response
      */
-    public function blockAccess($content = null, $status = null)
+    public function blockAccess()
     {
-        return $this->app['firewall']->blockAccess($content, $status);
+        return $this->app['firewall']->blockAccess();
     }
 
     /**
@@ -112,6 +115,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerGeoIp();
 
+        $this->registerAttackBlocker();
+
         $this->registerReportCommand();
 
         $this->registerTablesCommand();
@@ -126,6 +131,20 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->registerUpdateGeoIpCommand();
 
         $this->registerMiddleware();
+    }
+
+    /**
+     * Register the attack blocker.
+     *
+     */
+    private function registerAttackBlocker()
+    {
+        $this->app->singleton('firewall.attackBlocker', function ($app) {
+            return new AttackBlocker(
+                $app['firewall.config'],
+                $app['firewall.cache']
+            );
+        });
     }
 
     /**
@@ -218,15 +237,20 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->app->singleton('firewall', function ($app) {
             $app['firewall.loaded'] = true;
 
-            return new Firewall(
+            $this->firewall = new Firewall(
                 $app['firewall.config'],
                 $app['firewall.dataRepository'],
                 $app['firewall.cache'],
                 $app['firewall.fileSystem'],
                 $app['request'],
                 $app['firewall.migrator'],
-                $app['firewall.geoip']
+                $app['firewall.geoip'],
+                $attackBlocker = $app['firewall.attackBlocker']
             );
+
+            $attackBlocker->setFirewall($this->firewall);
+
+            return $this->firewall;
         });
     }
 
