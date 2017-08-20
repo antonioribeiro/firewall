@@ -238,30 +238,28 @@ PragmaRX\Firewall\Vendor\Laravel\ServiceProvider::class,
 'Firewall' => PragmaRX\Firewall\Vendor\Laravel\Facade::class,
 ```
 
-Add the Middleware groups `fw-block-bl` and `fw-allow-wl` to your app/Http/Kernel.php
-
-```php
-protected $middlewareGroups = [
-        ...
-        
-        'fw-block-bl' => [
-            \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
-        ],
-        'fw-allow-wl' => [
-            \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
-        ],        
-];
-```
-
-Or to your `$routeMiddleware`
+Add middlewares to your app/Http/Kernel.php
 
 ```php
 protected $routeMiddleware = [
-    'auth' => \App\Http\Middleware\Authenticate::class,
-    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    'fw-block-bl' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+    ...
     'fw-allow-wl' => \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
+    'fw-block-bl' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+    'fw-block-attacks' => \PragmaRX\Firewall\Middleware\BlockAttacks::class,
+];
+```
+
+or 
+
+```php
+protected $middlewareGroups = [
+    ...
+    
+    'firewall' => [
+        \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
+        \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+        \PragmaRX\Firewall\Middleware\BlockAttacks::class,
+    ],
 ];
 ```
 
