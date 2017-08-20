@@ -151,7 +151,7 @@ return [
 
     'attack_blocker' => [
 
-        'enabled' => true,
+        'enabled' => false,
 
         'cache_key_prefix' => 'firewall-attack-blocker',
 
