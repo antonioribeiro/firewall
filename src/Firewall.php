@@ -447,14 +447,14 @@ class Firewall
     /**
      * Check if a string is a valid country info.
      *
-     * @param $command
+     * @param $country
      * @return bool
      */
-    private function validCountry($command) {
-        $command = strtolower($command);
+    private function validCountry($country) {
+        $country = strtolower($country);
 
         if ($this->config->get('enable_country_search')) {
-            if (starts_with($command, 'country:')) {
+            if (starts_with($country, 'country:') && $this->dataRepository->countries->isValid($country)) {
                 return true;
             }
         }

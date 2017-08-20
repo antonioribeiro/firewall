@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel;
 
+use PragmaRX\Firewall\Repositories\Countries;
 use PragmaRX\Support\Response;
 use PragmaRX\Firewall\Firewall;
 use PragmaRX\Support\Filesystem;
@@ -170,7 +171,9 @@ class ServiceProvider extends PragmaRXServiceProvider
 
                 $app['firewall.cache'],
 
-                $app['firewall.fileSystem']
+                $app['firewall.fileSystem'],
+
+                new Countries()
             );
         });
     }

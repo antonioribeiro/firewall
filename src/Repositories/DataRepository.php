@@ -19,7 +19,6 @@
 
 use PragmaRX\Support\Config;
 use PragmaRX\Support\Filesystem;
-use PragmaRX\Support\Finder;
 use PragmaRX\Support\CacheManager;
 
 use PragmaRX\Firewall\Repositories\Firewall\FirewallInterface;
@@ -28,25 +27,31 @@ class DataRepository implements DataRepositoryInterface {
 
 	public $firewall;
 
-	private $config;
+	public $config;
 
-	private $cache;
+	public $cache;
 
-	private $fileSystem;
+	public $fileSystem;
 
-	/**
-	 * Create instance of DataRepository
-	 * @param MessageInterface          $message
-	 * @param TranslationInterface      $translation
-	 * @param LocaleRepositoryInterface $localeRepository
-	 * @param Config                    $config
-	 * @param Filesystem                $fileSystem
-	 */
+    public $countries;
+
+    /**
+     * Create instance of DataRepository
+     * @param FirewallInterface $firewall
+     * @param Config $config
+     * @param CacheManager $cache
+     * @param Filesystem $fileSystem
+     * @param Countries $countries
+     * @internal param MessageInterface $message
+     * @internal param TranslationInterface $translation
+     * @internal param LocaleRepositoryInterface $localeRepository
+     */
 	public function __construct(
 									FirewallInterface $firewall,
 									Config $config,
 									CacheManager $cache,
-									Filesystem $fileSystem
+									Filesystem $fileSystem,
+                                    Countries $countries
 								)
 	{
 		$this->firewall = $firewall;
@@ -56,6 +61,8 @@ class DataRepository implements DataRepositoryInterface {
 		$this->fileSystem = $fileSystem;
 
 		$this->cache = $cache;
-	}
+
+        $this->countries = $countries;
+    }
 
 }
