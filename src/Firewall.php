@@ -4,21 +4,16 @@ namespace PragmaRX\Firewall;
 
 use Exception;
 use Illuminate\Http\Request;
+use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Firewall\Support\Redirectable;
+use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
-use PragmaRX\Support\Response;
-use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\FileSystem;
 use PragmaRX\Support\GeoIp\GeoIp;
-use PragmaRX\Support\CacheManager;
-use PragmaRX\Firewall\Support\Mode;
-use PragmaRX\Firewall\Support\Locale;
-use PragmaRX\Firewall\Support\Sentence;
-use PragmaRX\Firewall\Database\Migrator;
-use PragmaRX\Firewall\Support\SentenceBag;
-use PragmaRX\Firewall\Support\MessageSelector;
-use PragmaRX\Firewall\Repositories\DataRepository;
+use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
+use PragmaRX\Support\IpAddress;
+use PragmaRX\Support\Response;
 
 class Firewall
 {
@@ -26,6 +21,7 @@ class Firewall
 
     /**
      * The IP adress.
+     *
      * @var
      */
     private $ip;
@@ -87,14 +83,15 @@ class Firewall
     private $geoIp;
 
     /**
-     * Initialize Firewall object
+     * Initialize Firewall object.
      *
-     * @param \PragmaRX\Support\Config $config
-     * @param Repositories\DataRepository $dataRepository
+     * @param \PragmaRX\Support\Config       $config
+     * @param Repositories\DataRepository    $dataRepository
      * @param \PragmaRX\Support\CacheManager $cache
-     * @param \PragmaRX\Support\FileSystem $fileSystem
-     * @param \Illuminate\Http\Request $request
-     * @param Database\Migrator $migrator
+     * @param \PragmaRX\Support\FileSystem   $fileSystem
+     * @param \Illuminate\Http\Request       $request
+     * @param Database\Migrator              $migrator
+     *
      * @internal param \PragmaRX\Firewall\Support\Locale $locale
      */
     public function __construct(
@@ -128,7 +125,8 @@ class Firewall
      *
      * @param $message
      */
-    public function addMessage($message) {
+    public function addMessage($message)
+    {
         $this->messages[] = $message;
     }
 
@@ -138,9 +136,11 @@ class Firewall
      * @param $whitelist
      * @param $ip
      * @param $force
+     *
      * @return bool
      */
-    public function addToList($whitelist, $ip, $force) {
+    public function addToList($whitelist, $ip, $force)
+    {
         $list = $whitelist
             ? 'whitelist'
             : 'blacklist';
@@ -154,11 +154,10 @@ class Firewall
         $listed = $this->whichList($ip);
 
         if ($listed == $list) {
-            $this->addMessage(sprintf('%s is already %s', $ip, $list . 'ed'));
+            $this->addMessage(sprintf('%s is already %s', $ip, $list.'ed'));
 
             return false;
-        }
-        else {
+        } else {
             if (!$listed || $force) {
                 if ($listed) {
                     $this->remove($ip);
@@ -166,7 +165,7 @@ class Firewall
 
                 $this->dataRepository->firewall->addToList($whitelist, $ip);
 
-                $this->addMessage(sprintf('%s is now %s', $ip, $list . 'ed'));
+                $this->addMessage(sprintf('%s is now %s', $ip, $list.'ed'));
 
                 return true;
             }
@@ -185,7 +184,8 @@ class Firewall
     /**
      * Get all IP addresses.
      */
-    public function all() {
+    public function all()
+    {
         return $this->dataRepository->firewall->all();
     }
 
@@ -194,9 +194,11 @@ class Firewall
      *
      * @param $ip
      * @param bool $force
+     *
      * @return bool
      */
-    public function blacklist($ip, $force = false) {
+    public function blacklist($ip, $force = false)
+    {
         return $this->addToList(false, $ip, $force);
     }
 
@@ -204,9 +206,11 @@ class Firewall
      * Blacklist an IP adress in the current Session.
      *
      * @param $ip
+     *
      * @return bool
      */
-    public function blacklistOnSession($ip) {
+    public function blacklistOnSession($ip)
+    {
         return $this->addToSessionList(false, $ip);
     }
 
@@ -215,9 +219,11 @@ class Firewall
      *
      * @param null $content
      * @param null $status
+     *
      * @return \Illuminate\Http\Response|void
      */
-    public function blockAccess($content = null, $status = null) {
+    public function blockAccess($content = null, $status = null)
+    {
         if ($page = $this->config->get('block_response_page')) {
             return $this->redirectTo($page);
         }
@@ -242,9 +248,11 @@ class Firewall
      * Check if an IP address is in a secondary (black/white) list.
      *
      * @param $ip_address
+     *
      * @return bool
      */
-    private function checkSecondaryLists($ip_address) {
+    private function checkSecondaryLists($ip_address)
+    {
         if (!$this->config->get('enable_range_search')) {
             return false;
         }
@@ -266,7 +274,8 @@ class Firewall
      *
      * @return mixed
      */
-    public function clear() {
+    public function clear()
+    {
         return $this->dataRepository->firewall->clear();
     }
 
@@ -274,9 +283,11 @@ class Firewall
      * Get country code from an IP address.
      *
      * @param $ip_address
+     *
      * @return bool|string
      */
-    private function getCountryFromIp($ip_address) {
+    private function getCountryFromIp($ip_address)
+    {
         if ($geo = $this->geoIp->searchAddr($ip_address)) {
             return strtolower($geo['country_code']);
         }
@@ -289,7 +300,8 @@ class Firewall
      *
      * @return mixed
      */
-    public function getIp() {
+    public function getIp()
+    {
         return $this->ip;
     }
 
@@ -297,19 +309,20 @@ class Firewall
      * Get list of IP addresses by country.
      *
      * @param $ip_address
+     *
      * @return bool|null|object
      */
-    private function getListingByCountry($ip_address) {
+    private function getListingByCountry($ip_address)
+    {
         if (!$this->config->get('enable_country_search')) {
             return false;
         }
 
         if ($this->validCountry($ip_address)) {
             $country = $ip_address;
-        }
-        else {
+        } else {
             if ($country = $this->getCountryFromIp($ip_address)) {
-                $country = 'country:' . $country;
+                $country = 'country:'.$country;
             }
         }
 
@@ -325,7 +338,8 @@ class Firewall
      *
      * @return array
      */
-    public function getMessages() {
+    public function getMessages()
+    {
         return $this->messages;
     }
 
@@ -334,7 +348,8 @@ class Firewall
      *
      * @return Migrator
      */
-    public function getMigrator() {
+    public function getMigrator()
+    {
         return $this->migrator;
     }
 
@@ -342,13 +357,14 @@ class Firewall
      * Check if IP address is valid.
      *
      * @param $ip
+     *
      * @return bool
      */
-    public function ipIsValid($ip) {
+    public function ipIsValid($ip)
+    {
         try {
             return IpAddress::ipV4Valid($ip) || $this->validCountry($ip);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -357,9 +373,11 @@ class Firewall
      * Check if IP is blacklisted.
      *
      * @param null $ip
+     *
      * @return bool
      */
-    public function isBlacklisted($ip = null) {
+    public function isBlacklisted($ip = null)
+    {
         $list = $this->whichList($ip);
 
         return !($list == 'whitelist') &&
@@ -370,18 +388,21 @@ class Firewall
      * Check if IP address is whitelisted.
      *
      * @param null $ip
+     *
      * @return bool
      */
-    public function isWhitelisted($ip = null) {
+    public function isWhitelisted($ip = null)
+    {
         return $this->whichList($ip) == 'whitelist';
     }
 
     /**
-     * Register messages in log
+     * Register messages in log.
      *
      * @return void
      */
-    public function log($message) {
+    public function log($message)
+    {
         if ($this->config->get('enable_log')) {
             app()->log->info("Firewall: $message");
         }
@@ -391,9 +412,11 @@ class Firewall
      * Remove IP from all lists.
      *
      * @param $ip
+     *
      * @return bool
      */
-    public function remove($ip) {
+    public function remove($ip)
+    {
         $listed = $this->whichList($ip);
 
         if ($listed) {
@@ -413,6 +436,7 @@ class Firewall
      * Remove IP from all lists.
      *
      * @param $ip
+     *
      * @return bool
      */
     public function removeFromSession($ip)
@@ -430,7 +454,8 @@ class Firewall
      *
      * @return mixed
      */
-    public function report() {
+    public function report()
+    {
         return $this->dataRepository->firewall->all()->toArray();
     }
 
@@ -439,7 +464,8 @@ class Firewall
      *
      * @param $ip
      */
-    public function setIp($ip) {
+    public function setIp($ip)
+    {
         $this->ip = $ip
             ?: ($this->ip
                 ?: $this->request->getClientIp());
@@ -449,9 +475,11 @@ class Firewall
      * Check if a string is a valid country info.
      *
      * @param $country
+     *
      * @return bool
      */
-    private function validCountry($country) {
+    private function validCountry($country)
+    {
         $country = strtolower($country);
 
         if ($this->config->get('enable_country_search')) {
@@ -467,9 +495,11 @@ class Firewall
      * Tell in which list (black/white) an IP address is.
      *
      * @param $ip_address
+     *
      * @return bool|string
      */
-    public function whichList($ip_address) {
+    public function whichList($ip_address)
+    {
         $ip_address = $ip_address
             ?: $this->getIp();
 
@@ -495,9 +525,11 @@ class Firewall
      *
      * @param $ip
      * @param bool $force
+     *
      * @return bool
      */
-    public function whitelist($ip, $force = false) {
+    public function whitelist($ip, $force = false)
+    {
         return $this->addToList(true, $ip, $force);
     }
 
@@ -505,9 +537,11 @@ class Firewall
      * Whitelist an IP adress in the current Session.
      *
      * @param $ip
+     *
      * @return bool
      */
-    public function whitelistOnSession($ip) {
+    public function whitelistOnSession($ip)
+    {
         return $this->addToSessionList(true, $ip);
     }
 
@@ -518,7 +552,7 @@ class Firewall
      */
     public function updateGeoIp()
     {
-        $success = ($updater = new GeoIpUpdater)->updateGeoIpFiles($this->config->get('geoip_database_path'));
+        $success = ($updater = new GeoIpUpdater())->updateGeoIpFiles($this->config->get('geoip_database_path'));
 
         $this->messages = $updater->getMessages();
 

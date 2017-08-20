@@ -1,5 +1,8 @@
-<?php namespace PragmaRX\Firewall\Repositories;
-/**
+<?php
+
+namespace PragmaRX\Firewall\Repositories;
+
+/*
  * Part of the Firewall package.
  *
  * NOTICE OF LICENSE
@@ -17,53 +20,51 @@
  * @link       http://pragmarx.com
  */
 
+use PragmaRX\Firewall\Repositories\Firewall\FirewallInterface;
+use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\Filesystem;
-use PragmaRX\Support\CacheManager;
-
-use PragmaRX\Firewall\Repositories\Firewall\FirewallInterface;
 
 class DataRepository implements DataRepositoryInterface
 {
+    public $firewall;
 
-	public $firewall;
+    public $config;
 
-	public $config;
+    public $cache;
 
-	public $cache;
-
-	public $fileSystem;
+    public $fileSystem;
 
     public $countries;
 
     /**
-     * Create instance of DataRepository
+     * Create instance of DataRepository.
+     *
      * @param FirewallInterface $firewall
-     * @param Config $config
-     * @param CacheManager $cache
-     * @param Filesystem $fileSystem
-     * @param Countries $countries
+     * @param Config            $config
+     * @param CacheManager      $cache
+     * @param Filesystem        $fileSystem
+     * @param Countries         $countries
+     *
      * @internal param MessageInterface $message
      * @internal param TranslationInterface $translation
      * @internal param LocaleRepositoryInterface $localeRepository
      */
-	public function __construct(
-									FirewallInterface $firewall,
-									Config $config,
-									CacheManager $cache,
-									Filesystem $fileSystem,
+    public function __construct(
+                                    FirewallInterface $firewall,
+                                    Config $config,
+                                    CacheManager $cache,
+                                    Filesystem $fileSystem,
                                     Countries $countries
-								)
-	{
-		$this->firewall = $firewall;
+                                ) {
+        $this->firewall = $firewall;
 
-		$this->config = $config;
+        $this->config = $config;
 
-		$this->fileSystem = $fileSystem;
+        $this->fileSystem = $fileSystem;
 
-		$this->cache = $cache;
+        $this->cache = $cache;
 
         $this->countries = $countries;
     }
-
 }

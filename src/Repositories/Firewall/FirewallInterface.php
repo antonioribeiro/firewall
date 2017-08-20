@@ -1,5 +1,8 @@
-<?php namespace PragmaRX\Firewall\Repositories\Firewall;
-/**
+<?php
+
+namespace PragmaRX\Firewall\Repositories\Firewall;
+
+/*
  * Part of the Firewall package.
  *
  * NOTICE OF LICENSE
@@ -19,14 +22,14 @@
 
 use PragmaRX\Firewall\Support\IP;
 
-interface FirewallInterface {
-
-	/**
-	 * Find a IP in the data source
-	 *
-	 * @param  IP $ip
-	 * @return object|null
-	 */
-	public function find($ip);
-
+interface FirewallInterface
+{
+    /**
+     * Find a IP in the data source.
+     *
+     * @param IP $ip
+     *
+     * @return object|null
+     */
+    public function find($ip);
 }

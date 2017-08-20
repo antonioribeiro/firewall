@@ -22,9 +22,9 @@ class Remove extends Base
 
     /**
      * Create a new command instance.
-     *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -33,7 +33,8 @@ class Remove extends Base
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
         $type = $this->laravel->firewall->remove($this->argument('ip'))
             ? 'info'
             : 'error';
@@ -46,7 +47,8 @@ class Remove extends Base
      *
      * @return array
      */
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
             ['ip', InputArgument::REQUIRED, 'The IP address to be added.'],
         ];
@@ -57,7 +59,8 @@ class Remove extends Base
      *
      * @return array
      */
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
         ];
     }

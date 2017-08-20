@@ -1,4 +1,7 @@
-<?php namespace PragmaRX\Firewall\Repositories;
+<?php
+
+namespace PragmaRX\Firewall\Repositories;
+
 /**
  * Part of the Firewall package.
  *
@@ -10,11 +13,12 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Firewall
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
+ *
  * @link       http://pragmarx.com
  */
-
-interface DataRepositoryInterface {}
+interface DataRepositoryInterface
+{
+}

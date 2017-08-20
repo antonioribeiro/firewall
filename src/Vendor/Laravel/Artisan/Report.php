@@ -29,9 +29,9 @@ class Report extends Base
 
     /**
      * Create a new command instance.
-     *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -40,7 +40,8 @@ class Report extends Base
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
         $this->table = new Table($this->output);
 
         $list = [];
@@ -67,7 +68,8 @@ class Report extends Base
      *
      * @return array
      */
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
         ];
     }
@@ -77,7 +79,8 @@ class Report extends Base
      *
      * @return array
      */
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
         ];
     }
