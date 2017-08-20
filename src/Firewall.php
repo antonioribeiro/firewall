@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use PragmaRX\Firewall\Support\Redirectable;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
 use PragmaRX\Support\Response;
 use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\FileSystem;
@@ -508,5 +509,19 @@ class Firewall
      */
     public function whitelistOnSession($ip) {
         return $this->addToSessionList(true, $ip);
+    }
+
+    /**
+     * Update the GeoIp2 database.
+     *
+     * @return bool
+     */
+    public function updateGeoIp()
+    {
+        $success = ($updater = new GeoIpUpdater)->updateGeoIpFiles($this->config->get('geoip_database_path'));
+
+        $this->messages = $updater->getMessages();
+
+        return $success;
     }
 }

@@ -128,4 +128,15 @@ return [
      */
 
     'session_binding' => 'session',
+
+    /**
+     * GeoIp2 database path.
+     *
+     * To get a fresh version of this file, use the command
+     *
+     *      php artisan firewall:updategeoip
+     *
+     */
+
+    'geoip_database_path' => storage_path('geoip'),
 ];

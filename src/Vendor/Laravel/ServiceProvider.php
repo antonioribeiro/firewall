@@ -22,6 +22,7 @@ use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Tables as TablesCommand;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
 use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
 
 class ServiceProvider extends PragmaRXServiceProvider
@@ -101,6 +102,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerMigrator();
 
+        $this->registerGeoIp();
+
         $this->registerReportCommand();
 
         $this->registerTablesCommand();
@@ -111,6 +114,8 @@ class ServiceProvider extends PragmaRXServiceProvider
             $this->registerRemoveCommand();
             $this->registerClearCommand();
         }
+
+        $this->registerUpdateGeoIpCommand();
 
         $this->registerMiddleware();
     }
@@ -206,7 +211,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $app['firewall.fileSystem'],
                 $app['request'],
                 $app['firewall.migrator'],
-                new GeoIp()
+                $app['firewall.geoip']
             );
         });
     }
@@ -233,6 +238,12 @@ class ServiceProvider extends PragmaRXServiceProvider
                 return new Migrator($app['db'], $connection);
             }
         );
+    }
+
+    private function registerGeoIp() {
+        $this->app->singleton('firewall.geoip', function () {
+            return new GeoIp($this->getConfig('geoip_database_path'));
+        });
     }
 
     /**
@@ -267,6 +278,18 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
 
         $this->commands('firewall.tables.command');
+    }
+
+    /**
+     * Register the updategeoip command.
+     */
+    private function registerUpdateGeoIpCommand()
+    {
+        $this->app->singleton('firewall.updategeoip.command', function ($app) {
+            return new UpdateGeoIpCommand;
+        });
+
+        $this->commands('firewall.updategeoip.command');
     }
 
     /**
