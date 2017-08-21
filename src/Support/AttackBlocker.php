@@ -82,7 +82,6 @@ class AttackBlocker
 
     /**
      * Blacklist the IP address.
-     *
      */
     protected function blacklist()
     {
@@ -305,7 +304,7 @@ class AttackBlocker
 
             'server' => request()->server(),
 
-            'geoIp' => $this->firewall->geoIp->searchAddr('8.8.8.8')
+            'geoIp' => $this->firewall->geoIp->searchAddr('8.8.8.8'),
         ];
     }
 
@@ -327,7 +326,6 @@ class AttackBlocker
 
     /**
      * Renew first request timestamp, to keep the offender blocked.
-     *
      */
     protected function renew()
     {
@@ -348,6 +346,7 @@ class AttackBlocker
      * Store record on cache.
      *
      * @param array $items
+     *
      * @return mixed
      */
     protected function save($items = [])
@@ -361,7 +360,6 @@ class AttackBlocker
 
     /**
      * Take the necessary action to keep the offender blocked.
-     *
      */
     protected function takeAction()
     {

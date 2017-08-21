@@ -23,6 +23,7 @@ abstract class BaseChannel implements Contract
 
     /**
      * @param $item
+     *
      * @return string
      */
     protected function getMessage($item)
