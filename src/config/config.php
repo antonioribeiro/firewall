@@ -218,7 +218,7 @@ return [
 
             'slack' => [
                 'enabled' => true,
-                'sender' => PragmaRX\Firewall\Notifications\Channels\Slack::class,
+                'sender'  => PragmaRX\Firewall\Notifications\Channels\Slack::class,
             ],
         ],
 

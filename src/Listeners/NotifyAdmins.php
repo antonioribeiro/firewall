@@ -26,6 +26,7 @@ class NotifyAdmins
      * Handle the event.
      *
      * @param AttackDetected $event
+     *
      * @return void
      */
     public function handle(AttackDetected $event)

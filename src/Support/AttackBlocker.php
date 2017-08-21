@@ -3,11 +3,10 @@
 namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
-use PragmaRX\Firewall\Events\AttackDetected;
+use PragmaRX\Support\Config;
 use PragmaRX\Firewall\Firewall;
 use PragmaRX\Support\CacheManager;
-use PragmaRX\Support\Config;
-use PragmaRX\Support\GeoIp\GeoIp;
+use PragmaRX\Firewall\Events\AttackDetected;
 
 class AttackBlocker
 {
@@ -82,7 +81,6 @@ class AttackBlocker
 
     /**
      * Blacklist the IP address.
-     *
      */
     protected function blacklist()
     {
@@ -305,7 +303,7 @@ class AttackBlocker
 
             'server' => request()->server(),
 
-            'geoIp' => $this->firewall->geoIp->searchAddr('179.35.100.188')
+            'geoIp' => $this->firewall->geoIp->searchAddr($ipAddress)
         ];
     }
 
@@ -327,7 +325,6 @@ class AttackBlocker
 
     /**
      * Renew first request timestamp, to keep the offender blocked.
-     *
      */
     protected function renew()
     {
@@ -348,6 +345,7 @@ class AttackBlocker
      * Store record on cache.
      *
      * @param array $items
+     *
      * @return mixed
      */
     protected function save($items = [])
@@ -361,7 +359,6 @@ class AttackBlocker
 
     /**
      * Take the necessary action to keep the offender blocked.
-     *
      */
     protected function takeAction()
     {
