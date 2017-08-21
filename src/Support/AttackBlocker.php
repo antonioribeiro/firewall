@@ -93,6 +93,7 @@ class AttackBlocker
      * Blacklist the IP address.
      *
      * @param $record
+     *
      * @return bool
      */
     protected function blacklist($record)
@@ -109,9 +110,8 @@ class AttackBlocker
             $record['isBlacklisted'] = true;
 
             $ipAddress = $record['type'] == 'country'
-                        ? 'country:' . $record['country_code']
-                        : $record['ipAddress']
-            ;
+                        ? 'country:'.$record['country_code']
+                        : $record['ipAddress'];
 
             $this->firewall->blacklist($ipAddress, $blackWhitelisted);
 
@@ -149,6 +149,7 @@ class AttackBlocker
      * Get a timestamp for the time the cache should expire.
      *
      * @param $type
+     *
      * @return float|int
      */
     protected function getExpirationTimestamp($type)
@@ -168,6 +169,7 @@ class AttackBlocker
 
     /**
      * @param $ipAddress
+     *
      * @return array|null|void
      */
     protected function getGeo($ipAddress)
@@ -187,7 +189,6 @@ class AttackBlocker
 
     /**
      * Get max request count from config.
-     *
      */
     protected function getMaxRequestCountForType($type = 'ip')
     {
@@ -200,6 +201,7 @@ class AttackBlocker
      * Get max seconds from config.
      *
      * @param $type
+     *
      * @return mixed
      */
     protected function getMaxSecondsForType($type)
@@ -271,7 +273,6 @@ class AttackBlocker
 
     /**
      * Get enabled state.
-     *
      */
     protected function isEnabled()
     {
@@ -280,7 +281,6 @@ class AttackBlocker
 
     /**
      * Load configuration.
-     *
      */
     private function loadConfig()
     {
@@ -309,7 +309,6 @@ class AttackBlocker
 
     /**
      * Load all record items.
-     *
      */
     protected function loadRecordItems()
     {
@@ -335,9 +334,6 @@ class AttackBlocker
         $this->log("Attacker detected - IP: {$record['ipAddress']} - Request count: {$record['requestCount']}");
     }
 
-    /**
-     *
-     */
     protected function makeAttackResponse()
     {
         return (new Responder())->respond($this->getResponseConfig(), $this->record);
@@ -347,13 +343,14 @@ class AttackBlocker
      * Make a hashed key.
      *
      * @param $field
+     *
      * @return string
      */
     public function makeHashedKey($field)
     {
         return hash(
             'sha256',
-            $this->config->get('attack_blocker.cache_key_prefix') . '-' . $field
+            $this->config->get('attack_blocker.cache_key_prefix').'-'.$field
         );
     }
 
@@ -379,7 +376,7 @@ class AttackBlocker
 
             unset($this->enabledItems['country']);
 
-            return null;
+            return;
         }
 
         return $this->makeHashedKey($this->ipAddress = $ipAddress);
@@ -390,6 +387,7 @@ class AttackBlocker
      *
      * @param $key
      * @param $type
+     *
      * @return array
      */
     protected function makeRecord($key, $type)
@@ -467,6 +465,7 @@ class AttackBlocker
      *
      * @param $type
      * @param array $items
+     *
      * @return array
      */
     protected function save($type, $items = [])
