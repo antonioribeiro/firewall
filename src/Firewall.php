@@ -3,18 +3,18 @@
 namespace PragmaRX\Firewall;
 
 use Exception;
-use Illuminate\Http\Request;
-use PragmaRX\Firewall\Database\Migrator;
-use PragmaRX\Firewall\Repositories\DataRepository;
-use PragmaRX\Firewall\Support\AttackBlocker;
-use PragmaRX\Firewall\Support\Redirectable;
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
+use Illuminate\Http\Request;
+use PragmaRX\Support\IpAddress;
 use PragmaRX\Support\FileSystem;
 use PragmaRX\Support\GeoIp\GeoIp;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Support\Responder;
+use PragmaRX\Firewall\Support\Redirectable;
+use PragmaRX\Firewall\Support\AttackBlocker;
+use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
-use PragmaRX\Support\IpAddress;
-use PragmaRX\Support\Response;
 
 class Firewall
 {
@@ -81,7 +81,7 @@ class Firewall
      *
      * @var GeoIp
      */
-    private $geoIp;
+    public $geoIp;
 
     /**
      * The attack blocker.

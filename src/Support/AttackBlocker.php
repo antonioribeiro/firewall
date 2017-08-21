@@ -3,9 +3,11 @@
 namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
+use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Firewall;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\GeoIp\GeoIp;
 
 class AttackBlocker
 {
@@ -14,49 +16,56 @@ class AttackBlocker
      *
      * @var Config
      */
-    private $config;
+    protected $config;
+
+    /**
+     * The request record.
+     *
+     * @var Config
+     */
+    protected $record;
 
     /**
      * The cache.
      *
      * @var CacheManager
      */
-    private $cache;
+    protected $cache;
 
     /**
      * The ip address.
      *
      * @var string
      */
-    private $ipAddress;
+    protected $ipAddress;
 
     /**
      * The cache key.
      *
      * @var string
      */
-    private $key;
+    protected $key;
 
     /**
      * The max request count.
      *
      * @var int
      */
-    private $maxRequestCount;
+    protected $maxRequestCount;
 
     /**
      * The max request count.
      *
      * @var int
      */
-    private $maxSeconds;
+    protected $maxSeconds;
 
     /**
      * The firewall instance.
      *
      * @var Firewall
      */
-    private $firewall;
+    protected $firewall;
 
     /**
      * AttackBlocker constructor.
@@ -74,30 +83,33 @@ class AttackBlocker
     /**
      * Blacklist the IP address.
      *
-     * @param $record
      */
-    private function blacklist($record)
+    protected function blacklist()
     {
-        $blacklistUnkown = $this->config->get('attack_blocker.action.blacklist_unknown_ips');
+        if ($this->record['isBlacklisted']) {
+            return false;
+        }
+
+        $blacklistUnknown = $this->config->get('attack_blocker.action.blacklist_unknown_ips');
 
         $blackWhitelisted = $this->config->get('attack_blocker.action.blacklist_whitelisted_ips');
 
-        if ($blacklistUnkown || $blackWhitelisted) {
-            $this->firewall->blacklist($record['ipAddress'], $blackWhitelisted);
+        if ($blacklistUnknown || $blackWhitelisted) {
+            $this->record['isBlacklisted'] = true;
+
+            $this->firewall->blacklist($this->record['ipAddress'], $blackWhitelisted);
         }
     }
 
     /**
      * Check for expiration.
      *
-     * @param $record
-     *
      * @return mixed
      */
-    private function checkExpiration($record)
+    protected function checkExpiration()
     {
-        if (($record['firstRequestAt']->diffInSeconds(Carbon::now())) <= ($this->getMaxSeconds())) {
-            return $record;
+        if (($this->record['lastRequestAt']->diffInSeconds(Carbon::now())) <= ($this->getMaxSeconds())) {
+            return $this->record;
         }
 
         return $this->getEmptyRecord();
@@ -108,7 +120,7 @@ class AttackBlocker
      *
      * @return array
      */
-    private function getEmptyRecord()
+    protected function getEmptyRecord()
     {
         return $this->makeRecord();
     }
@@ -136,7 +148,7 @@ class AttackBlocker
     /**
      * Get max request count from config.
      */
-    private function getMaxRequestCount()
+    protected function getMaxRequestCount()
     {
         return !is_null($this->maxRequestCount)
             ? $this->maxRequestCount
@@ -148,7 +160,7 @@ class AttackBlocker
      *
      * @return mixed
      */
-    private function getMaxSeconds()
+    protected function getMaxSeconds()
     {
         return !is_null($this->maxSeconds)
             ? $this->maxSeconds
@@ -158,7 +170,7 @@ class AttackBlocker
     /**
      * @return mixed
      */
-    private function getResponseConfig()
+    protected function getResponseConfig()
     {
         return $this->config->get('attack_blocker.response');
     }
@@ -166,28 +178,24 @@ class AttackBlocker
     /**
      * Increment request count.
      *
-     * @param $record
+     * @param $this->record
      *
      * @return mixed
      */
-    private function increment($record)
+    protected function increment()
     {
-        $record['requestCount'] = $record['requestCount'] + 1;
-
-        return $this->store($record);
+        return $this->save(['requestCount' => $this->record['requestCount'] + 1]);
     }
 
     /**
      * Check if this is an attack.
      *
-     * @param $record
-     *
      * @return mixed
      */
-    private function isAttack($record)
+    protected function isAttack()
     {
-        if ($isAttack = $record['requestCount'] > $this->getMaxRequestCount()) {
-            $this->takeAction($record);
+        if ($isAttack = $this->record['requestCount'] > $this->getMaxRequestCount()) {
+            $this->takeAction($this->record);
         }
 
         return $isAttack;
@@ -206,14 +214,10 @@ class AttackBlocker
             return false;
         }
 
-        $record = $this->increment(
-            $this->checkExpiration(
-                $this->loadRecord($ipAddress)
-            )
-        );
+        $this->loadRecord($ipAddress);
 
-        if ($this->isAttack($record)) {
-            return $this->makeAttackResponse($record);
+        if ($this->isAttack()) {
+            return $this->makeAttackResponse();
         }
 
         return false;
@@ -222,7 +226,7 @@ class AttackBlocker
     /**
      * Get enabled state.
      */
-    private function isEnabled()
+    protected function isEnabled()
     {
         return $this->config->get('attack_blocker.enabled');
     }
@@ -234,23 +238,27 @@ class AttackBlocker
      *
      * @return array|\Illuminate\Contracts\Cache\Repository
      */
-    private function loadRecord($ipAddress)
+    protected function loadRecord($ipAddress)
     {
-        if (is_null($record = $this->cache->get($this->makeKey($ipAddress)))) {
-            return $this->getEmptyRecord();
+        if (is_null($this->record = $this->cache->get($this->makeKey($ipAddress)))) {
+            $this->record = $this->getEmptyRecord();
         }
 
-        return $record;
+        $this->checkExpiration();
+
+        $this->increment();
+
+        return $this->record;
     }
 
-    private function log($record)
+    protected function log()
     {
-        $this->firewall->log("Attacker detected - IP: {$record['ipAddress']} - Request count: {$record['requestCount']}");
+        $this->firewall->log("Attacker detected - IP: {$this->record['ipAddress']} - Request count: {$this->record['requestCount']}");
     }
 
-    private function makeAttackResponse($record)
+    protected function makeAttackResponse()
     {
-        return (new Responder())->respond($this->getResponseConfig(), $record);
+        return (new Responder())->respond($this->getResponseConfig(), $this->record);
     }
 
     /**
@@ -260,7 +268,7 @@ class AttackBlocker
      *
      * @return string
      */
-    private function makeKey($ipAddress)
+    protected function makeKey($ipAddress)
     {
         return
             $this->key =
@@ -274,35 +282,56 @@ class AttackBlocker
      *
      * @param null $ipAddress
      * @param null $requestCount
-     * @param null $firstRequestAt
+     * @param null $lastRequestAt
      *
      * @return array
      */
-    private function makeRecord($ipAddress = null, $requestCount = null, $firstRequestAt = null)
+    protected function makeRecord($ipAddress = null, $requestCount = null, $lastRequestAt = null)
     {
         return [
             'ipAddress' => $ipAddress ?: $this->ipAddress,
 
             'requestCount' => $requestCount ?: 0,
 
-            'firstRequestAt' => $firstRequestAt ?: Carbon::now(),
+            'firstRequestAt' => $lastRequestAt ?: Carbon::now(),
+
+            'lastRequestAt' => $lastRequestAt ?: Carbon::now(),
+
+            'isBlacklisted' => false,
+
+            'wasNotified' => false,
+
+            'userAgent' => request()->server('HTTP_USER_AGENT'),
+
+            'server' => request()->server(),
+
+            'geoIp' => $this->firewall->geoIp->searchAddr('8.8.8.8')
         ];
     }
 
-    private function notify($record)
+    protected function notify()
     {
+        if (!$this->record['wasNotified'] && $this->config->get('notifications.enabled')) {
+            $this->save(['wasNotified' => true]);
+
+            collect($this->config->get('notifications.channels'))->filter(function ($value, $channel) {
+                try {
+                    event(new AttackDetected($this->record, $channel));
+                } catch (\Exception $exception) {
+                    dd($exception);
+                    // Notifications are broken, ignore it
+                }
+            });
+        }
     }
 
     /**
      * Renew first request timestamp, to keep the offender blocked.
      *
-     * @param $record
      */
-    private function renew($record)
+    protected function renew()
     {
-        $record['firstRequestAt'] = Carbon::now();
-
-        $this->store($record);
+        $this->save(['lastRequestAt' => Carbon::now()]);
     }
 
     /**
@@ -318,30 +347,30 @@ class AttackBlocker
     /**
      * Store record on cache.
      *
-     * @param $record
-     *
+     * @param array $items
      * @return mixed
      */
-    private function store($record)
+    protected function save($items = [])
     {
-        $this->cache->put($this->getKey(), $record, $this->getMaxSeconds() / 60);
+        $this->record = array_merge($this->record, $items);
 
-        return $record;
+        $this->cache->put($this->getKey(), $this->record, $this->getMaxSeconds() / 60);
+
+        return $this->record;
     }
 
     /**
      * Take the necessary action to keep the offender blocked.
      *
-     * @param $record
      */
-    private function takeAction($record)
+    protected function takeAction()
     {
-        $this->log($record);
+        $this->log();
 
-        $this->notify($record);
+        $this->notify();
 
-        $this->renew($record);
+        $this->renew();
 
-        $this->blacklist($record);
+        $this->blacklist();
     }
 }

@@ -151,7 +151,7 @@ return [
 
     'attack_blocker' => [
 
-        'enabled' => false,
+        'enabled' => true,
 
         'cache_key_prefix' => 'firewall-attack-blocker',
 
@@ -171,23 +171,57 @@ return [
 
         ],
 
-        'notifications' => [
-
-            'enabled' => false,
-
-        ],
-
         'response' => [
             'code' => 403,
 
             'message' => null,
 
-            'view' => 'too-many-requests',
+            'view' => null,
 
             'redirect_to' => null,
 
             'abort' => false, // return abort() instead of Response::make() - disabled by default
         ],
 
+    ],
+
+    'notifications' => [
+        'enabled' => true,
+
+        'title' => 'User agent',
+
+        'message' => "An attack on '%s' was detected. Offending IP address: %s",
+
+        'route' => '',
+
+        'from' => [
+            'name' => 'Laravel Firewall',
+
+            'address' => 'firewall@mydomain.com',
+
+            'icon_emoji' => ':fire:',
+        ],
+
+        'users' => [
+            'model' => PragmaRX\Firewall\Vendor\Laravel\Models\User::class,
+
+            'emails' => [
+                'admin@mydomain.com',
+            ],
+        ],
+
+        'channels' => [
+//            'mail' => [
+//                'enabled' => true,
+//                'sender' => PragmaRX\Firewall\Notifications\Channels\Mail::class,
+//            ],
+
+            'slack' => [
+                'enabled' => true,
+                'sender' => PragmaRX\Firewall\Notifications\Channels\Slack::class,
+            ],
+        ],
+
+        'notifier' => 'PragmaRX\Firewall\Notifications',
     ],
 ];

@@ -2,7 +2,9 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel;
 
+use Illuminate\Support\Facades\Event;
 use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
 use PragmaRX\Firewall\Filters\Blacklist;
 use PragmaRX\Firewall\Filters\Whitelist;
@@ -20,6 +22,7 @@ use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
+use PragmaRX\Firewall\Listeners\NotifyAdmins;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\GeoIp\GeoIp;
@@ -131,6 +134,8 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->registerUpdateGeoIpCommand();
 
         $this->registerMiddleware();
+
+        $this->registerEventListeners();
     }
 
     /**
@@ -211,6 +216,14 @@ class ServiceProvider extends PragmaRXServiceProvider
                 new Countries()
             );
         });
+    }
+
+    /**
+     * Register event listeners.
+     */
+    private function registerEventListeners()
+    {
+        Event::listen(AttackDetected::class, NotifyAdmins::class);
     }
 
     /**

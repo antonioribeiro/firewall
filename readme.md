@@ -243,8 +243,8 @@ Add middlewares to your app/Http/Kernel.php
 ```php
 protected $routeMiddleware = [
     ...
-    'fw-allow-wl' => \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
-    'fw-block-bl' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+    'fw-only-whitelisted' => \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
+    'fw-block-blacklisted' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
     'fw-block-attacks' => \PragmaRX\Firewall\Middleware\BlockAttacks::class,
 ];
 ```
@@ -253,12 +253,17 @@ or
 
 ```php
 protected $middlewareGroups = [
-    ...
+    'web' => [
+        ...
+    ],
+
+    'api' => [
+        ...
+    ],
     
     'firewall' => [
-        \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
-        \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
-        \PragmaRX\Firewall\Middleware\BlockAttacks::class,
+        'fw-block-blacklisted' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+        'fw-block-attacks' => \PragmaRX\Firewall\Middleware\BlockAttacks::class,
     ],
 ];
 ```
