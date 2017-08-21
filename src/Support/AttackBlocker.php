@@ -305,7 +305,7 @@ class AttackBlocker
 
             'server' => request()->server(),
 
-            'geoIp' => $this->firewall->geoIp->searchAddr('8.8.8.8')
+            'geoIp' => $this->firewall->geoIp->searchAddr('179.35.100.188')
         ];
     }
 
