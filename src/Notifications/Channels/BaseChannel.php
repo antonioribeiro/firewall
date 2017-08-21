@@ -6,11 +6,9 @@ use Request;
 
 abstract class BaseChannel implements Contract
 {
-    private function getActionMessage($item)
+    private function getActionMessage()
     {
-        return isset($item['message'])
-                ? $item['message']
-                : config('firewall.notifications.message');
+        return config('firewall.notifications.message.message');
     }
 
     /**
@@ -33,7 +31,7 @@ abstract class BaseChannel implements Contract
         return sprintf(
             $this->getActionMessage($item),
             $domain,
-            $item['ipAddress']
+            $this->makeMessage($item)
         );
     }
 
@@ -45,5 +43,20 @@ abstract class BaseChannel implements Contract
         if ($route = config('firewall.notification.route')) {
             return route($route);
         }
+    }
+
+    /**
+     * @param $item
+     * @return mixed
+     */
+    protected function makeMessage($item)
+    {
+        $ip = "{$item['ipAddress']} - {$item['host']}";
+
+        if ($item['type'] == 'ip') {
+            return "$ip";
+        }
+
+        return "{$item['country_code']}-{$item['country_name']} ({$ip})";
     }
 }

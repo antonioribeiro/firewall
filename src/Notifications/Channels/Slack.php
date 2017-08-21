@@ -8,6 +8,21 @@ use Illuminate\Notifications\Messages\SlackMessage;
 class Slack extends BaseChannel
 {
     /**
+     * @param $item
+     * @return array
+     */
+    function getGeolocation($item)
+    {
+        return collect([
+            config('firewall.notifications.message.geolocation.field_latitude') => $item['geoIp']['latitude'],
+            config('firewall.notifications.message.geolocation.field_longitude') => $item['geoIp']['longitude'],
+            config('firewall.notifications.message.geolocation.field_country_code') => $item['geoIp']['country_code'],
+            config('firewall.notifications.message.geolocation.field_country_name') => $item['geoIp']['country_name'],
+            config('firewall.notifications.message.geolocation.field_city') => $item['geoIp']['city'],
+        ])->filter()->toArray();
+    }
+
+    /**
      * @param $notifiable
      * @param $item
      *
@@ -23,10 +38,10 @@ class Slack extends BaseChannel
             )
             ->content($this->getMessage($item))
             ->attachment(function ($attachment) use ($item) {
-                $attachment->title('Request count')
+                $attachment->title(config('firewall.notifications.message.request_count.title'))
                             ->content(
                                 sprintf(
-                                    'Client made %s requests in the last %s seconds. Timestamp of first request: %s',
+                                    config('firewall.notifications.message.request_count.message'),
                                     $item['requestCount'],
                                     $item['firstRequestAt']->diffInSeconds(Carbon::now()),
                                     (string) $item['firstRequestAt']
@@ -34,24 +49,22 @@ class Slack extends BaseChannel
                             );
             })
             ->attachment(function ($attachment) use ($item) {
-                $attachment->title('URI')
+                $attachment->title($title = config('firewall.notifications.message.uri.title'))
                            ->content($item['server']['REQUEST_URI']);
             })
             ->attachment(function ($attachment) use ($item) {
-                $attachment->title('User agent')
+                $attachment->title(config('firewall.notifications.message.user_agent.title'))
                            ->content($item['userAgent']);
+            })
+            ->attachment(function ($attachment) use ($item) {
+                $attachment->title(config('firewall.notifications.message.blacklisted.title'))
+                           ->content($item['isBlacklisted'] ? 'YES' : 'NO');
             });
 
         if ($item['geoIp']) {
             $message->attachment(function ($attachment) use ($item) {
-                $attachment->title('Geolocalization')
-                           ->fields([
-                               'Latitude'     => $item['geoIp']['latitude'],
-                               'Longitude'    => $item['geoIp']['longitude'],
-                               'Country code' => $item['geoIp']['country_code'],
-                               'Country name' => $item['geoIp']['country_name'],
-                               'City'         => $item['geoIp']['city'],
-                           ]);
+                $attachment->title(config('firewall.notifications.message.geolocation.title'))
+                           ->fields($this->getGeolocation($item));
             });
         }
 

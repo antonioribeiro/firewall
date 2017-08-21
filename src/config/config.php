@@ -151,28 +151,48 @@ return [
 
     'attack_blocker' => [
 
-        'enabled' => true,
+        'enabled' => [
+            'ip' => false,
+
+            'country' => true,
+        ],
 
         'cache_key_prefix' => 'firewall-attack-blocker',
 
         'allowed_frequency' => [
 
-            'requests' => 3,
+            'ip' => [
+                'requests' => 2,
 
-            'seconds' => 1 * 60, // 1 minute
+                'seconds' => 1 * 60, // 1 minute
+            ],
+
+            'country' => [
+                'requests' => 15,
+
+                'seconds' => 25, // 10 seconds
+            ],
 
         ],
 
         'action' => [
 
-            'blacklist_unknown_ips' => true,
+            'ip' => [
+                'blacklist_unknown' => true,
 
-            'blacklist_whitelisted_ips' => false,
+                'blacklist_whitelisted' => false,
+            ],
+
+            'country' => [
+                'blacklist_unknown' => false,
+
+                'blacklist_whitelisted' => false,
+            ]
 
         ],
 
         'response' => [
-            'code' => 403,
+            'code' => 403, // 200 = log && notify, but keep pages rendering
 
             'message' => null,
 
@@ -188,9 +208,43 @@ return [
     'notifications' => [
         'enabled' => true,
 
-        'title' => 'User agent',
+        'message' => [
+            'title' => 'User agent',
 
-        'message' => "An attack on '%s' was detected. Offending IP address: %s",
+            'message' => "A possible attack on '%s' has been detected from %s",
+
+            'request_count' => [
+                'title' => 'Request count',
+
+                'message' => 'Received %s requests in the last %s seconds. Timestamp of first request: %s',
+            ],
+
+            'uri' => [
+                'title' => 'First URI offended',
+            ],
+
+            'blacklisted' => [
+                'title' => 'Was it blacklisted?',
+            ],
+
+            'user_agent' => [
+                'title' => 'User agent',
+            ],
+
+            'geolocation' => [
+                'title' => 'Geolocation',
+
+                'field_latitude' => 'Latitude',
+
+                'field_longitude' => 'Longitude',
+
+                'field_country_code' => 'Country code',
+
+                'field_country_name' => 'Country name',
+
+                'field_city' => 'City',
+            ],
+        ],
 
         'route' => '',
 
@@ -211,11 +265,6 @@ return [
         ],
 
         'channels' => [
-//            'mail' => [
-//                'enabled' => true,
-//                'sender' => PragmaRX\Firewall\Notifications\Channels\Mail::class,
-//            ],
-
             'slack' => [
                 'enabled' => true,
                 'sender'  => PragmaRX\Firewall\Notifications\Channels\Slack::class,

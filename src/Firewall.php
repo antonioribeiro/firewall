@@ -560,8 +560,8 @@ class Firewall
      *
      * @return bool
      */
-    public function isBeingAttacked()
+    public function isBeingAttacked($ipAddress = null)
     {
-        return $this->attackBlocker->isBeingAttacked($this->ip);
+        return $this->attackBlocker->isBeingAttacked($ipAddress ?: $this->ip);
     }
 }

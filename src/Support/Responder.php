@@ -9,6 +9,10 @@ class Responder
 {
     public function respond($response, $data = [])
     {
+        if ($response['code'] === 200) {
+            return null;
+        }
+
         if ($response['abort']) {
             return abort(
                 $response['code'],
