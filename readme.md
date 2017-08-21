@@ -241,8 +241,8 @@ protected $middlewareGroups = [
     ],
     
     'firewall' => [
-        'fw-block-blacklisted' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
-        'fw-block-attacks' => \PragmaRX\Firewall\Middleware\BlockAttacks::class,
+        \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+        \PragmaRX\Firewall\Middleware\BlockAttacks::class,
     ],
 ];
 ```
