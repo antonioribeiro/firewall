@@ -1,7 +1,7 @@
 {
     "name": "pragmarx/firewall",
 
-    "description": "A Laravel 4.1+ IP whitelisting and blacklisting",
+    "description": "A Laravel IP whitelisting and blacklisting",
 
     "keywords": ["firewall", "whitelist", "blacklist", "laravel"],
 
@@ -17,10 +17,10 @@
 
     "require": {
         "php": ">=5.3.7",
-        "illuminate/support": "~4|~5",
-        "illuminate/cache": "~4|~5",
-        "illuminate/filesystem": "~4|~5",
-        "pragmarx/support": "~0.6.12"
+        "illuminate/support": "~5.3",
+        "illuminate/cache": "~5.3",
+        "illuminate/filesystem": "~5.3",
+        "pragmarx/support": "~0.6.17"
     },
 
     "suggest": {
