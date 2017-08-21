@@ -3,10 +3,10 @@
 namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
-use PragmaRX\Support\Config;
+use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Firewall;
 use PragmaRX\Support\CacheManager;
-use PragmaRX\Firewall\Events\AttackDetected;
+use PragmaRX\Support\Config;
 
 class AttackBlocker
 {
@@ -303,7 +303,7 @@ class AttackBlocker
 
             'server' => request()->server(),
 
-            'geoIp' => $this->firewall->geoIp->searchAddr($ipAddress)
+            'geoIp' => $this->firewall->geoIp->searchAddr($ipAddress),
         ];
     }
 
