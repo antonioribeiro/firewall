@@ -1,4 +1,4 @@
-# Firewall
+# Firewall 2.0
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall)
 
