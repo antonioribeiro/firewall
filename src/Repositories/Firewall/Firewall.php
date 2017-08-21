@@ -130,7 +130,6 @@ class Firewall implements FirewallInterface
         $result = [];
 
         foreach ($all as $ip) {
-
         }
 
         return collect($result);

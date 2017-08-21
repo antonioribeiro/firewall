@@ -13,7 +13,6 @@ abstract class Base extends Command
         }
     }
 
-
     public function handle()
     {
         $this->fire();
