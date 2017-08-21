@@ -9,11 +9,12 @@ class Mail extends BaseChannel
     /**
      * @param $notifiable
      * @param $item
+     *
      * @return $this
      */
     public function send($notifiable, $item)
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->line($this->getMessage($item))
             ->from(
                 config('firewall.notifications.from.address'),

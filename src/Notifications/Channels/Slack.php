@@ -10,11 +10,12 @@ class Slack extends BaseChannel
     /**
      * @param $notifiable
      * @param $item
+     *
      * @return $this
      */
     public function send($notifiable, $item)
     {
-        $message = (new SlackMessage)
+        $message = (new SlackMessage())
             ->error()
             ->from(
                 config('firewall.notifications.from.name'),
@@ -40,7 +41,6 @@ class Slack extends BaseChannel
                 $attachment->title('User agent')
                            ->content($item['userAgent']);
             });
-        ;
 
         if ($item['geoIp']) {
             $message->attachment(function ($attachment) use ($item) {
