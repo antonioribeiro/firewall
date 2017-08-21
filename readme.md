@@ -6,15 +6,15 @@
 
 ### Features
 
-* All features are available for hosts, IP addresses, ranges of IP addresses and whole countries.
-* Control access to routes and groups via black and white lists. 
-* Allow whitelisted to access the whole site and everyone else to a "coming soon page".
-* Redirect blacklisted users to some other page.
+* Control access to routes and groups via black and white lists.
 * Detect and block attacks to your application, from IP addresses or countries.
 * Send Slack notifications in attack events.
-* Use database or arrays.
+* Allow whitelisted to access the whole site and send everyone else to a "coming soon page".
+* Redirect blacklisted users to some other page.
+* Use database or arrays to store IP lists.
 * Whitelist your development machine using a dynamic DNS host name.
 * Done using middleware, so you can protect/unprotect groups of routes.
+* All features are available for hosts, IP addresses, ranges of IP addresses and whole countries.
 * Super fast, less than 10ms increase in each request
 
 ### Concepts
