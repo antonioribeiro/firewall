@@ -93,14 +93,15 @@ class Firewall
     /**
      * Initialize Firewall object.
      *
-     * @param Config $config
+     * @param Config         $config
      * @param DataRepository $dataRepository
-     * @param CacheManager $cache
-     * @param FileSystem $fileSystem
-     * @param Request $request
-     * @param Migrator $migrator
-     * @param GeoIp $geoIp
-     * @param AttackBlocker $attackBlocker
+     * @param CacheManager   $cache
+     * @param FileSystem     $fileSystem
+     * @param Request        $request
+     * @param Migrator       $migrator
+     * @param GeoIp          $geoIp
+     * @param AttackBlocker  $attackBlocker
+     *
      * @internal param AttackBlocker $blocker
      */
     public function __construct(
@@ -351,6 +352,7 @@ class Firewall
 
     /**
      * @param $range
+     *
      * @return mixed
      */
     private function hostToIp($range)
@@ -363,6 +365,7 @@ class Firewall
      *
      * @param $ip_address
      * @param $range
+     *
      * @return bool
      */
     private function ipIsInValidRange($ip_address, $range)
