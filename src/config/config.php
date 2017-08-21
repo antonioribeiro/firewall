@@ -3,6 +3,13 @@
 return [
 
     /*
+     * Enable / disable firewall
+     *
+     */
+
+    'enabled' => env('FIREWALL_ENABLED', true),
+
+    /*
      * Blacklisted IP  addresses, ranges, countries, files and/or files of files
      *
      */

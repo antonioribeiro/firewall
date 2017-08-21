@@ -4,7 +4,7 @@ namespace PragmaRX\Firewall\Middleware;
 
 use Closure;
 
-class BlockAttacks
+class BlockAttacks extends Middleware
 {
     /**
      * Block attacks.
@@ -16,7 +16,7 @@ class BlockAttacks
      */
     public function handle($request, Closure $next)
     {
-        if ($response = app('firewall')->isBeingAttacked()) {
+        if ($this->enabled() && $response = app('firewall')->isBeingAttacked()) {
             return $response;
         }
 

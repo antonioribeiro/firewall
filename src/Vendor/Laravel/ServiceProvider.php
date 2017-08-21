@@ -106,6 +106,10 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         parent::register();
 
+        if (! $this->getConfig('enabled')) {
+            return;
+        }
+
         $this->registerFileSystem();
 
         $this->registerCache();
