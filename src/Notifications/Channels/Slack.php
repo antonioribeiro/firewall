@@ -46,11 +46,11 @@ class Slack extends BaseChannel
             $message->attachment(function ($attachment) use ($item) {
                 $attachment->title('Geolocalization')
                            ->fields([
-                               'Latitude' => $item['geoIp']['latitude'],
-                               'Longitude' => $item['geoIp']['longitude'],
+                               'Latitude'     => $item['geoIp']['latitude'],
+                               'Longitude'    => $item['geoIp']['longitude'],
                                'Country code' => $item['geoIp']['country_code'],
                                'Country name' => $item['geoIp']['country_name'],
-                               'City' => $item['geoIp']['city'],
+                               'City'         => $item['geoIp']['city'],
                            ]);
             });
         }
