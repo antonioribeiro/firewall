@@ -20,7 +20,7 @@
         "illuminate/support": "~5.3",
         "illuminate/cache": "~5.3",
         "illuminate/filesystem": "~5.3",
-        "pragmarx/support": "~0.6.17"
+        "pragmarx/support": "~0.7.1"
     },
 
     "suggest": {
