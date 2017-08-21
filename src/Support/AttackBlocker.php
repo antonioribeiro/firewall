@@ -199,7 +199,6 @@ class AttackBlocker
 
     /**
      * Get max request count from config.
-     *
      */
     protected function getMaxRequestCountForType($type = 'ip')
     {
@@ -212,6 +211,7 @@ class AttackBlocker
      * Get max seconds from config.
      *
      * @param $type
+     *
      * @return mixed
      */
     protected function getMaxSecondsForType($type)
@@ -265,6 +265,7 @@ class AttackBlocker
      * Check for attacks.
      *
      * @param $ipAddress
+     *
      * @return mixed
      */
     public function isBeingAttacked($ipAddress)
@@ -284,7 +285,6 @@ class AttackBlocker
 
     /**
      * Get enabled state.
-     *
      */
     protected function isEnabled()
     {
@@ -295,6 +295,7 @@ class AttackBlocker
      * Is the current user whitelisted?
      *
      * @param $type
+     *
      * @return bool
      */
     private function isWhitelisted($type)
@@ -305,7 +306,6 @@ class AttackBlocker
 
     /**
      * Load the configuration.
-     *
      */
     private function loadConfig()
     {
@@ -318,6 +318,7 @@ class AttackBlocker
      * Load a record.
      *
      * @param $ipAddress
+     *
      * @return array|\Illuminate\Contracts\Cache\Repository
      */
     protected function loadRecord($ipAddress)
@@ -333,7 +334,6 @@ class AttackBlocker
 
     /**
      * Load all record items.
-     *
      */
     protected function loadRecordItems()
     {
@@ -366,7 +366,6 @@ class AttackBlocker
 
     /**
      * Make a response.
-     *
      */
     protected function makeAttackResponse()
     {
@@ -377,6 +376,7 @@ class AttackBlocker
      * Make a hashed key.
      *
      * @param $field
+     *
      * @return string
      */
     public function makeHashedKey($field)
@@ -391,6 +391,7 @@ class AttackBlocker
      * Make the cache key to record countries.
      *
      * @param $ipAddress
+     *
      * @return string
      */
     protected function makeKeyForType($type, $ipAddress)
@@ -419,6 +420,7 @@ class AttackBlocker
      *
      * @param $key
      * @param $type
+     *
      * @return array
      */
     protected function makeRecord($key, $type)
@@ -501,6 +503,7 @@ class AttackBlocker
      *
      * @param $type
      * @param array $items
+     *
      * @return array
      */
     protected function save($type, $items = [])
@@ -520,7 +523,6 @@ class AttackBlocker
 
     /**
      * Take the necessary action to keep the offender blocked.
-     *
      */
     protected function takeAction($record)
     {
