@@ -187,7 +187,7 @@ return [
                 'blacklist_unknown' => false,
 
                 'blacklist_whitelisted' => false,
-            ]
+            ],
 
         ],
 

@@ -9,16 +9,17 @@ class Slack extends BaseChannel
 {
     /**
      * @param $item
+     *
      * @return array
      */
-    function getGeolocation($item)
+    public function getGeolocation($item)
     {
         return collect([
-            config('firewall.notifications.message.geolocation.field_latitude') => $item['geoIp']['latitude'],
-            config('firewall.notifications.message.geolocation.field_longitude') => $item['geoIp']['longitude'],
+            config('firewall.notifications.message.geolocation.field_latitude')     => $item['geoIp']['latitude'],
+            config('firewall.notifications.message.geolocation.field_longitude')    => $item['geoIp']['longitude'],
             config('firewall.notifications.message.geolocation.field_country_code') => $item['geoIp']['country_code'],
             config('firewall.notifications.message.geolocation.field_country_name') => $item['geoIp']['country_name'],
-            config('firewall.notifications.message.geolocation.field_city') => $item['geoIp']['city'],
+            config('firewall.notifications.message.geolocation.field_city')         => $item['geoIp']['city'],
         ])->filter()->toArray();
     }
 
