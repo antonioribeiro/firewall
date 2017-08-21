@@ -4,6 +4,19 @@
 
 #### A Laravel package to help you block IP addresses from accessing your application or just some routes
 
+### Features
+
+* All features are available for hosts, IP addresses, ranges of IP addresses and whole countries.
+* Control access to routes and groups via black and white lists. 
+* Allow whitelisted to access the whole site and everyone else to a "coming soon page".
+* Redirect blacklisted users to some other page.
+* Detect and block attacks to your application, from IP addresses or countries.
+* Send Slack notifications in attack events.
+* Use database or arrays.
+* Whitelist your development machine using a dynamic DNS host name.
+* Done using middleware, so you can protect/unprotect groups of routes.
+* Super fast, less than 10ms increase in each request
+
 ### Concepts
 
 #### Blacklist
@@ -12,7 +25,7 @@ All IP addresses in those lists will no be able to access routes filtered by the
 
 #### Whitelist
 
-Those IP addresses can
+Those IP addresses, ranges or countries can
 
 - Access blacklisted routes even if they are in a range of blacklisted IP addresses.
 - Access 'allow whitelisted' filtered routes.
@@ -25,40 +38,6 @@ Click [here](http://pragmarx.com/firewall) to see it working and in case you nee
 Playground's screenshot:
 
 ![playground](docs/playground.png)
-
-### Routes
-
-This package provides two middleware groups to use in your routes:
-
-`'fw-block-bl'`: to block all blacklisted IP addresses to access filtered routes
-
-`'fw-allow-wl'`: to allow all whitelisted IP addresses to access filtered routes
-
-So, for instance, you could have a blocking group and put all your routes inside it:
-
-```php
-Route::group(['middleware' => 'fw-block-bl'], function () 
-{
-    Route::get('/', 'HomeController@index');
-});
-```
-
-Or you could use both. In the following example the allow group will give free access to the 'coming soon' page and block or just redirect non-whitelisted IP addresses to another, while still blocking access to the blacklisted ones.
-
-```php
-Route::group(['middleware' => 'fw-block-bl'], function () 
-{
-    Route::get('coming/soon', function()
-    {
-        return "We are about to launch, please come back in a few days.";
-    });
-
-    Route::group(['middleware' => 'fw-allow-wl'], function () 
-    {
-        Route::get('/', 'HomeController@index');
-    });
-});
-```
 
 ### IPs lists
 
@@ -267,6 +246,33 @@ protected $middlewareGroups = [
     ],
 ];
 ```
+
+Then you can use them in your routes:
+
+```php
+Route::group(['middleware' => 'fw-block-blacklisted'], function () 
+{
+    Route::get('/', 'HomeController@index');
+});
+```
+
+Or you could use both. In the following example the allow group will give free access to the 'coming soon' page and block or just redirect non-whitelisted IP addresses to another, while still blocking access to the blacklisted ones.
+
+```php
+Route::group(['middleware' => 'fw-block-blacklisted'], function () 
+{
+    Route::get('coming/soon', function()
+    {
+        return "We are about to launch, please come back in a few days.";
+    });
+
+    Route::group(['middleware' => 'fw-only-whitelisted'], function () 
+    {
+        Route::get('/', 'HomeController@index');
+    });
+});
+```
+
 
 **Note:** You can add other middleware you have already created to the new groups by simply 
 adding it to the `fw-allow-wl` or `fw-block-bl` middleware group.
