@@ -187,6 +187,32 @@ Firewall::blacklistOnSession($ip);
 Firewall::removeFromSession($ip);
 ```
 
+### Attack Detection
+
+![attack](docs/attack.png)
+
+Firewall is able to detect simple attacks to your page, by counting requests from the same IP or country. Just enable it on your `config/firewall.php` and, to receive notifications, configure the Slack service in `config/services.php`:
+   
+```php
+'slack' => [
+    'webhook_url' => env('SLACK_WEBHOOK_URL'),
+],
+```
+
+and add the route notification method to your user model:
+
+```php
+/**
+ * Route notifications for the Slack channel.
+ *
+ * @return string
+ */
+public function routeNotificationForSlack()
+{
+    return config('services.slack.webhook_url');
+}
+``` 
+
 ### Installation
 
 #### Compatible with
@@ -272,7 +298,6 @@ Route::group(['middleware' => 'fw-block-blacklisted'], function ()
     });
 });
 ```
-
 
 **Note:** You can add other middleware you have already created to the new groups by simply 
 adding it to the `fw-allow-wl` or `fw-block-bl` middleware group.
