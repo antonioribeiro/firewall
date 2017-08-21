@@ -39,9 +39,4 @@ class UpdateGeoIp extends Base
 
         $this->displayMessages($type, $this->laravel->firewall->getMessages());
     }
-
-    public function handle()
-    {
-        $this->fire();
-    }
 }

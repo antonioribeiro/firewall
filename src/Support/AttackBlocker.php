@@ -70,8 +70,18 @@ class AttackBlocker
      */
     protected $firewall;
 
+    /**
+     * The country.
+     *
+     * @var string
+     */
     protected $country;
 
+    /**
+     * The enabled items.
+     *
+     * @var array
+     */
     protected $enabledItems;
 
     /**
@@ -189,6 +199,7 @@ class AttackBlocker
 
     /**
      * Get max request count from config.
+     *
      */
     protected function getMaxRequestCountForType($type = 'ip')
     {
@@ -201,7 +212,6 @@ class AttackBlocker
      * Get max seconds from config.
      *
      * @param $type
-     *
      * @return mixed
      */
     protected function getMaxSecondsForType($type)
@@ -212,6 +222,8 @@ class AttackBlocker
     }
 
     /**
+     * Get the response configuration.
+     *
      * @return mixed
      */
     protected function getResponseConfig()
@@ -239,7 +251,7 @@ class AttackBlocker
     protected function isAttack()
     {
         $this->enabledItems->filter(function ($index, $type) {
-            if ($isAttack = $this->record[$type]['requestCount'] > $this->getMaxRequestCountForType($type)) {
+            if (!$this->isWhitelisted($type) && $isAttack = $this->record[$type]['requestCount'] > $this->getMaxRequestCountForType($type)) {
                 $this->takeAction($this->record[$type]);
 
                 return true;
@@ -253,7 +265,6 @@ class AttackBlocker
      * Check for attacks.
      *
      * @param $ipAddress
-     *
      * @return mixed
      */
     public function isBeingAttacked($ipAddress)
@@ -273,6 +284,7 @@ class AttackBlocker
 
     /**
      * Get enabled state.
+     *
      */
     protected function isEnabled()
     {
@@ -280,7 +292,20 @@ class AttackBlocker
     }
 
     /**
-     * Load configuration.
+     * Is the current user whitelisted?
+     *
+     * @param $type
+     * @return bool
+     */
+    private function isWhitelisted($type)
+    {
+        return $this->firewall->whichList($this->record[$type]['ipAddress']) == 'whitelist' &&
+                $this->config->get("attack_blocker.action.{$this->record[$type]['type']}.blacklist_whitelisted");
+    }
+
+    /**
+     * Load the configuration.
+     *
      */
     private function loadConfig()
     {
@@ -293,7 +318,6 @@ class AttackBlocker
      * Load a record.
      *
      * @param $ipAddress
-     *
      * @return array|\Illuminate\Contracts\Cache\Repository
      */
     protected function loadRecord($ipAddress)
@@ -309,6 +333,7 @@ class AttackBlocker
 
     /**
      * Load all record items.
+     *
      */
     protected function loadRecordItems()
     {
@@ -329,11 +354,20 @@ class AttackBlocker
         $this->firewall->log($string);
     }
 
+    /**
+     * Send attack the the log.
+     *
+     * @param $record
+     */
     protected function logAttack($record)
     {
         $this->log("Attacker detected - IP: {$record['ipAddress']} - Request count: {$record['requestCount']}");
     }
 
+    /**
+     * Make a response.
+     *
+     */
     protected function makeAttackResponse()
     {
         return (new Responder())->respond($this->getResponseConfig(), $this->record);
@@ -343,7 +377,6 @@ class AttackBlocker
      * Make a hashed key.
      *
      * @param $field
-     *
      * @return string
      */
     public function makeHashedKey($field)
@@ -358,7 +391,6 @@ class AttackBlocker
      * Make the cache key to record countries.
      *
      * @param $ipAddress
-     *
      * @return string
      */
     protected function makeKeyForType($type, $ipAddress)
@@ -387,7 +419,6 @@ class AttackBlocker
      *
      * @param $key
      * @param $type
-     *
      * @return array
      */
     protected function makeRecord($key, $type)
@@ -425,6 +456,11 @@ class AttackBlocker
         ];
     }
 
+    /**
+     * Send notifications.
+     *
+     * @param $record
+     */
     protected function notify($record)
     {
         if (!$record['wasNotified'] && $this->config->get('notifications.enabled')) {
@@ -465,7 +501,6 @@ class AttackBlocker
      *
      * @param $type
      * @param array $items
-     *
      * @return array
      */
     protected function save($type, $items = [])
@@ -485,15 +520,16 @@ class AttackBlocker
 
     /**
      * Take the necessary action to keep the offender blocked.
+     *
      */
     protected function takeAction($record)
     {
-        $this->logAttack($record);
-
-        $this->notify($record);
-
         $this->renew($record);
 
         $this->blacklist($record);
+
+        $this->notify($record);
+
+        $this->logAttack($record);
     }
 }

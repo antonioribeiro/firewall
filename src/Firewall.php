@@ -93,14 +93,15 @@ class Firewall
     /**
      * Initialize Firewall object.
      *
-     * @param Config         $config
+     * @param Config $config
      * @param DataRepository $dataRepository
-     * @param CacheManager   $cache
-     * @param FileSystem     $fileSystem
-     * @param Request        $request
-     * @param Migrator       $migrator
-     * @param GeoIp          $geoIp
-     * @param AttackBlocker  $blocker
+     * @param CacheManager $cache
+     * @param FileSystem $fileSystem
+     * @param Request $request
+     * @param Migrator $migrator
+     * @param GeoIp $geoIp
+     * @param AttackBlocker $attackBlocker
+     * @internal param AttackBlocker $blocker
      */
     public function __construct(
         Config $config,
@@ -187,6 +188,12 @@ class Firewall
         return false;
     }
 
+    /**
+     * Add IP address to sessions list.
+     *
+     * @param $whitelist
+     * @param $ip
+     */
     public function addToSessionList($whitelist, $ip)
     {
         $this->dataRepository->firewall->addToSessionList($whitelist, $ip);
@@ -249,15 +256,8 @@ class Firewall
      */
     private function checkSecondaryLists($ip_address)
     {
-        if (!$this->config->get('enable_range_search')) {
-            return false;
-        }
-
         foreach ($this->dataRepository->firewall->all() as $range) {
-            if (
-                IpAddress::ipV4Valid($range['ip_address']) &&
-                ipv4_in_range($ip_address, $range['ip_address'])
-            ) {
+            if ($this->hostToIp($range) == $ip_address || $this->ipIsInValidRange($ip_address, $range)) {
                 return $range;
             }
         }
@@ -350,6 +350,29 @@ class Firewall
     }
 
     /**
+     * @param $range
+     * @return mixed
+     */
+    private function hostToIp($range)
+    {
+        return $this->dataRepository->firewall->hostToIp($range->ip_address);
+    }
+
+    /**
+     * Check if IP is in a valid range.
+     *
+     * @param $ip_address
+     * @param $range
+     * @return bool
+     */
+    private function ipIsInValidRange($ip_address, $range)
+    {
+        return $this->config->get('enable_range_search') &&
+            IpAddress::ipV4Valid($range->ip_address) &&
+            ipv4_in_range($ip_address, $range->ip_address);
+    }
+
+    /**
      * Check if IP address is valid.
      *
      * @param $ip
@@ -358,6 +381,8 @@ class Firewall
      */
     public function ipIsValid($ip)
     {
+        $ip = $this->dataRepository->firewall->hostToIp($ip);
+
         try {
             return IpAddress::ipV4Valid($ip) || $this->validCountry($ip);
         } catch (Exception $e) {
@@ -440,6 +465,11 @@ class Firewall
         return $this->removeFromSessionList($ip);
     }
 
+    /**
+     * Remove ip address from sessions list.
+     *
+     * @param $ip
+     */
     private function removeFromSessionList($ip)
     {
         $this->dataRepository->firewall->removeFromSessionList($ip);

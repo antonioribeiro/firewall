@@ -125,6 +125,17 @@ class Firewall implements FirewallInterface
         return $model;
     }
 
+    private function expandIpAddresses($all)
+    {
+        $result = [];
+
+        foreach ($all as $ip) {
+
+        }
+
+        return collect($result);
+    }
+
     /**
      * Find a Ip in the data source.
      *
@@ -223,8 +234,8 @@ class Firewall implements FirewallInterface
     {
         $cacheTime = $this->config->get('ip_list_cache_expire_time');
 
-        if ($cacheTime && $this->cache->has(static::IP_ADDRESS_LIST_CACHE_NAME)) {
-            return $this->cache->get(static::IP_ADDRESS_LIST_CACHE_NAME);
+        if ($cacheTime && $list = $this->cache->get(static::IP_ADDRESS_LIST_CACHE_NAME)) {
+            return $list;
         }
 
         $list = $this->mergeLists(
@@ -402,6 +413,8 @@ class Firewall implements FirewallInterface
             return [$item];
         }
 
+        $item = $this->hostToIp($item);
+
         if (IpAddress::ipV4Valid($item)) {
             return [$item];
         }
@@ -425,18 +438,16 @@ class Firewall implements FirewallInterface
     }
 
     /**
+     * Get all IPs from database.
+     *
      * @return array
      */
     private function getAllFromDatabase()
     {
         if ($this->config->get('use_database')) {
-            $database_ips = $this->model->all();
-
-            return $database_ips;
+            return $this->model->all();
         } else {
-            $database_ips = $this->toCollection([]);
-
-            return $database_ips;
+            return $this->toCollection([]);
         }
     }
 
@@ -445,5 +456,14 @@ class Firewall implements FirewallInterface
         return collect($database_ips)
                 ->merge(collect($config_ips))
                 ->merge(collect($session_ips));
+    }
+
+    public function hostToIp($ip)
+    {
+        if (is_string($ip) && starts_with($ip, $string = 'host:')) {
+            return gethostbyname(str_replace($string, '', $ip));
+        }
+
+        return $ip;
     }
 }

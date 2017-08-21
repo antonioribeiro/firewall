@@ -14,6 +14,7 @@ return [
         // '10.0.0.1-10.0.0.255'
         // '172.17.*.*'
         // 'country:br'
+        // 'host:google.com',
         // storage_path().DIRECTORY_SEPARATOR.'blacklisted.txt',
     ],
 
@@ -29,6 +30,7 @@ return [
         // '10.0.1.1-10.0.1.255'
         // '172.16.*.*'
         // 'country:ch'
+        // 'host:google.com',
         // storage_path().DIRECTORY_SEPARATOR.'whitelisted.txt',
     ],
 
@@ -38,7 +40,7 @@ return [
      */
 
     'response' => [
-        'code' => 403,
+        'code' => 403, // 200 = log && notify, but keep pages rendering
 
         'message' => null,
 
@@ -152,9 +154,9 @@ return [
     'attack_blocker' => [
 
         'enabled' => [
-            'ip' => false,
+            'ip' => true,
 
-            'country' => true,
+            'country' => false,
         ],
 
         'cache_key_prefix' => 'firewall-attack-blocker',
@@ -162,15 +164,15 @@ return [
         'allowed_frequency' => [
 
             'ip' => [
-                'requests' => 2,
+                'requests' => 50,
 
                 'seconds' => 1 * 60, // 1 minute
             ],
 
             'country' => [
-                'requests' => 15,
+                'requests' => 3000,
 
-                'seconds' => 25, // 10 seconds
+                'seconds' => 2 * 60, // 2 minutes
             ],
 
         ],
@@ -270,7 +272,5 @@ return [
                 'sender'  => PragmaRX\Firewall\Notifications\Channels\Slack::class,
             ],
         ],
-
-        'notifier' => 'PragmaRX\Firewall\Notifications',
     ],
 ];

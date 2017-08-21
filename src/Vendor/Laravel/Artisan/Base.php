@@ -12,4 +12,10 @@ abstract class Base extends Command
             $this->$type($message);
         }
     }
+
+
+    public function handle()
+    {
+        $this->fire();
+    }
 }
