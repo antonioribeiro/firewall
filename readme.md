@@ -31,13 +31,31 @@ Those IP addresses, ranges or countries can
 - Access 'allow whitelisted' filtered routes.
 - If a route is filtered by the 'allow whitelisted' filter and the IP is not whitelisted, the request will be redirected to an alternative url or route name.
 
-#### Playground & Bootstrap App 
+### Attack Detection
 
-Click [here](http://pragmarx.com/firewall) to see it working and in case you need a help figuring out things, try [this repository](https://github.com/antonioribeiro/pragmarx.com). 
+![attack](docs/attack.png)
 
-Playground's screenshot:
+Firewall is able to detect simple attacks to your page, by counting requests from the same IP or country. Just enable it on your `config/firewall.php` and, to receive notifications, configure the Slack service in `config/services.php`:
+   
+```php
+'slack' => [
+    'webhook_url' => env('SLACK_WEBHOOK_URL'),
+],
+```
 
-![playground](docs/playground.png)
+and add the route notification method to your user model:
+
+```php
+/**
+ * Route notifications for the Slack channel.
+ *
+ * @return string
+ */
+public function routeNotificationForSlack()
+{
+    return config('services.slack.webhook_url');
+}
+``` 
 
 ### IPs lists
 
@@ -187,31 +205,11 @@ Firewall::blacklistOnSession($ip);
 Firewall::removeFromSession($ip);
 ```
 
-### Attack Detection
+#### Playground & Bootstrap App 
 
-![attack](docs/attack.png)
+Click [here](http://pragmarx.com/firewall) to see it working and in case you need a help figuring out things, try [this repository](https://github.com/antonioribeiro/pragmarx.com). 
 
-Firewall is able to detect simple attacks to your page, by counting requests from the same IP or country. Just enable it on your `config/firewall.php` and, to receive notifications, configure the Slack service in `config/services.php`:
-   
-```php
-'slack' => [
-    'webhook_url' => env('SLACK_WEBHOOK_URL'),
-],
-```
-
-and add the route notification method to your user model:
-
-```php
-/**
- * Route notifications for the Slack channel.
- *
- * @return string
- */
-public function routeNotificationForSlack()
-{
-    return config('services.slack.webhook_url');
-}
-``` 
+![playground](docs/playground.png)
 
 ### Installation
 
