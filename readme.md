@@ -96,7 +96,7 @@ Non-whitelisted IP addresses can be blocked or redirected. To configure redirect
 
 ## Artisan Commands
 
-To blacklist or whitelist IP addresses, use the artisan commands:
+You have access to the following commands:
 
 #### Global
 
