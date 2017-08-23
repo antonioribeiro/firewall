@@ -98,11 +98,15 @@ Non-whitelisted IP addresses can be blocked or redirected. To configure redirect
 
 To blacklist or whitelist IP addresses, use the artisan commands:
 
+#### When database is enabled
+
 ```
-  firewall:list               List all IP address, white and blacklisted.
+  firewall:list         List all IP address, white and blacklisted.
+  firewall:tables       Create the migrations for Firewall database tables and columns
+  firewall:updategeoip  Update the GeoIP database.
 ```
 
-### Exclusive for database usage
+#### When database is enabled
 
 ```
 firewall
