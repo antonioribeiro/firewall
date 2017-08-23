@@ -109,7 +109,6 @@ You have access to the following commands:
 #### When database is enabled
 
 ```
-firewall
   firewall:blacklist          Add an IP address to blacklist.
   firewall:clear              Remove all ip addresses from white and black lists.
   firewall:remove             Remove an IP address from white or black list.
