@@ -2,9 +2,11 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall)
 
-#### A Laravel package to help you block IP addresses from accessing your application or just some routes
+## Purpose
 
-### Features
+This a "soft-firewall" package, not made to replase real firewalls, its purpose is to help people prevent unauthorized access to routes **by IP address**. It is able to watch fro IPs, countries and hosts (dynamic ip), and redirect non-authorized users to, for instance, a "Coming Soon" page, while letting whitelisted IPs to see the page. It is now also able to detect and block attacks from single IPs or whole countries.
+
+## Features
 
 * Control access to routes and groups via black and white lists.
 * Detect and block attacks to your application, from IP addresses or countries.
@@ -17,13 +19,13 @@
 * All features are available for hosts, IP addresses, ranges of IP addresses and whole countries.
 * Super fast, less than 10ms increase in each request
 
-### Concepts
+## Concepts
 
-#### Blacklist
+### Blacklist
 
 All IP addresses in those lists will no be able to access routes filtered by the blacklist filter.
 
-#### Whitelist
+### Whitelist
 
 Those IP addresses, ranges or countries can
 
@@ -31,7 +33,7 @@ Those IP addresses, ranges or countries can
 - Access 'allow whitelisted' filtered routes.
 - If a route is filtered by the 'allow whitelisted' filter and the IP is not whitelisted, the request will be redirected to an alternative url or route name.
 
-### Attack Detection
+## Attack Detection
 
 ![attack](docs/attack.png)
 
@@ -57,7 +59,7 @@ public function routeNotificationForSlack()
 }
 ``` 
 
-### IPs lists
+## IPs lists
 
 IPs (white and black) lists can be stored in array, files and database. Initially database access to lists is disabled, so, to test your Firewall configuration you can publish the config file and edit the `blacklist` or `whitelist` arrays:
 
@@ -81,7 +83,7 @@ The file (for instance `/usr/bin/firewall/blacklisted.txt`) must contain one IP,
 /tmp/blacklist.txt
 ```
 
-### Redirecting non-whitelisted IP addresses
+## Redirecting non-whitelisted IP addresses
 
 Non-whitelisted IP addresses can be blocked or redirected. To configure redirection you'll have to publish the  `config.php` file and configure:
 
@@ -89,7 +91,7 @@ Non-whitelisted IP addresses can be blocked or redirected. To configure redirect
 'redirect_non_whitelisted_to' => 'coming/soon',
 ```
 
-### Artisan Commands
+## Artisan Commands
 
 To blacklist or whitelist IP addresses, use the artisan commands:
 
@@ -97,7 +99,7 @@ To blacklist or whitelist IP addresses, use the artisan commands:
   firewall:list               List all IP address, white and blacklisted.
 ```
 
-##### Exclusive for database usage
+### Exclusive for database usage
 
 ```
 firewall
@@ -129,7 +131,7 @@ Those are results from `firewall:list`:
 +-----------------------+-----------+-----------+
 ```
 
-### Facade
+## Facade
 
 You can also use the `Firewall Facade` to manage the lists:
 
@@ -161,7 +163,7 @@ Suspicious events will be (if you wish) logged, so `tail` it:
 php artisan tail
 ```
 
-### Blocking Whole Countries
+## Blocking Whole Countries
 
 You can block a country by, instead of an ip address, pass `country:<2-letter ISO code>`. So, to block all Brazil's IP addresses, you do:
 
@@ -195,7 +197,7 @@ php artisan firewall:updategeoip
 
 You can find those codes here: [isocodes](http://www.spoonfork.org/isocodes.html)
 
-### Session Blocking
+## Session Blocking
 
 You can block users from accessing some pages only for the current session, by using those methods:
 
@@ -205,19 +207,21 @@ Firewall::blacklistOnSession($ip);
 Firewall::removeFromSession($ip);
 ```
 
-#### Playground & Bootstrap App 
+## Playground & Bootstrap App 
 
 Click [here](http://pragmarx.com/firewall) to see it working and in case you need a help figuring out things, try [this repository](https://github.com/antonioribeiro/pragmarx.com). 
 
 ![playground](docs/playground.png)
 
-### Installation
+## Installation
 
-#### Compatible with
+### Compatible with
 
-- Laravel 4+ and 5+
+- Laravel 4+ (version 1.*) 
+- Laravel 5.0 - 5.3 (version 1.*)
+- Laravel 5.4+ (version 2.*)
 
-#### Installing
+### Installing
 
 Require the Firewall package using [Composer](https://getcomposer.org/doc/01-basic-usage.md):
 
@@ -326,18 +330,18 @@ php artisan config:publish pragmarx/firewall
 php artisan vendor:publish --provider="PragmaRX\Firewall\Vendor\Laravel\ServiceProvider"
 ```
 
-### TODO
+## TODO
 
 - Tests, tests, tests.
 
-### Author
+## Author
 
 [Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro) 
 
-### License
+## License
 
 Firewall is licensed under the BSD 3-Clause License - see the `LICENSE` file for details
 
-### Contributing
+## Contributing
 
 Pull requests and issues are more than welcome.
