@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This a "soft-firewall" package. Its purpose is to help people prevent unauthorized access to routes **by IP address**. It is able to watch fro IPs, countries and hosts (dynamic ip), and redirect non-authorized users to, for instance, a "Coming Soon" page, while letting whitelisted IPs to see the page. It is now also able to detect and block attacks from single IPs or whole countries.
+This a "soft-firewall" package. Its purpose is to help people prevent unauthorized access to routes **by IP address**. It is able to keep track of IPs, countries and hosts (dynamic ip), and redirect non-authorized users to, for instance, a "Coming Soon" page, while letting whitelisted IPs to have access to the entire site. It is now also able to detect and block attacks (too many requests) from single IPs or whole countries.
 
 This package can prevent some headaches and help you block some access to your apps, but cannot replace firewalls and appliances, for attacks at the network level, you'll still need a real firewall. 
 
@@ -19,7 +19,8 @@ This package can prevent some headaches and help you block some access to your a
 * Whitelist your development machine using a dynamic DNS host name.
 * Done using middleware, so you can protect/unprotect groups of routes.
 * All features are available for hosts, IP addresses, ranges of IP addresses and whole countries.
-* Super fast, less than 10ms increase in each request
+* Super fast, less than 10ms increase in each request.
+* Highly configurable;
 
 ## Concepts
 
