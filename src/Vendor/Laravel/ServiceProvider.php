@@ -106,7 +106,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         parent::register();
 
-        if (! $this->getConfig('enabled')) {
+        if (!$this->getConfig('enabled')) {
             return;
         }
 
