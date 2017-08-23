@@ -20,7 +20,7 @@ This package can prevent some headaches and help you block some access to your a
 * Done using middleware, so you can protect/unprotect groups of routes.
 * All features are available for hosts, IP addresses, ranges of IP addresses and whole countries.
 * Super fast, less than 10ms increase in each request.
-* Highly configurable;
+* Highly configurable.
 
 ## Concepts
 
