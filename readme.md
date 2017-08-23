@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This a "soft-firewall" package, not made to replase real firewalls, its purpose is to help people prevent unauthorized access to routes **by IP address**. It is able to watch fro IPs, countries and hosts (dynamic ip), and redirect non-authorized users to, for instance, a "Coming Soon" page, while letting whitelisted IPs to see the page. It is now also able to detect and block attacks from single IPs or whole countries.
+This a "soft-firewall" package, not made to replace real firewalls, its purpose is to help people prevent unauthorized access to routes **by IP address**. It is able to watch fro IPs, countries and hosts (dynamic ip), and redirect non-authorized users to, for instance, a "Coming Soon" page, while letting whitelisted IPs to see the page. It is now also able to detect and block attacks from single IPs or whole countries.
 
 ## Features
 
