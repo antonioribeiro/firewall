@@ -98,7 +98,7 @@ Non-whitelisted IP addresses can be blocked or redirected. To configure redirect
 
 To blacklist or whitelist IP addresses, use the artisan commands:
 
-#### When database is enabled
+#### Global
 
 ```
   firewall:list         List all IP address, white and blacklisted.
