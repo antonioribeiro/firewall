@@ -581,7 +581,8 @@ class Firewall
      */
     public function updateGeoIp()
     {
-        $success = ($updater = new GeoIpUpdater())->updateGeoIpFiles($this->config->get('geoip_database_path'));
+        $updater = new GeoIpUpdater();
+        $success = $updater->updateGeoIpFiles($this->config->get('geoip_database_path'));
 
         $this->messages = $updater->getMessages();
 
