@@ -1,12 +1,27 @@
+script: phpunit
+
 language: php
 
-php: 
-  - 5.3
+php:
   - 5.4
   - 5.5
+  - 7.0
+  - 7.1
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+env:
+  matrix:
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS=""
 
 before_script:
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install --dev
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
-script: phpunit
