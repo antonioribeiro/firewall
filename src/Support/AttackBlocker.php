@@ -80,7 +80,7 @@ class AttackBlocker
     /**
      * The enabled items.
      *
-     * @var array
+     * @var \Illuminate\Support\Collection
      */
     protected $enabledItems;
 
@@ -271,8 +271,8 @@ class AttackBlocker
     protected function isAttack()
     {
         return $this->enabledItems->filter(function ($index, $type) {
-            if (!$this->isWhitelisted($type) && $isAttack = $this->record[$type]['requestCount'] > $this->getMaxRequestCountForType($type)) {
-                // $this->takeAction($this->record[$type]);
+            if (!$this->isWhitelisted($type) && $this->record[$type]['requestCount'] > $this->getMaxRequestCountForType($type)) {
+                $this->takeAction($this->record[$type]);
 
                 return true;
             }

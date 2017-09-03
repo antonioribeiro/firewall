@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Firewall\Middleware;
 
+use Closure;
+
 abstract class FilterMiddleware extends Middleware
 {
     public function enabled()
@@ -29,4 +31,11 @@ abstract class FilterMiddleware extends Middleware
 
         return $next($request);
     }
+
+    /**
+     * Filter.
+     *
+     * @return mixed
+     */
+    abstract public function filter();
 }

@@ -7,14 +7,21 @@ use Illuminate\Support\Facades\Response;
 
 class Responder
 {
+    /**
+     * Properly respond.
+     *
+     * @var \Illuminate\Support\Collection
+     *
+     * @return mixed
+     */
     public function respond($response, $data = [])
     {
         if ($response['code'] === 200) {
-            return;
+            return null;
         }
 
         if ($response['abort']) {
-            return abort(
+            abort(
                 $response['code'],
                 $response['message']
             );
