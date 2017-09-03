@@ -36,7 +36,7 @@ abstract class Base extends Command
             ? 'info'
             : 'error';
 
-        $this->displayMessages($type, $this->laravel->firewall->getMessages());
+        $this->displayMessages($type, app('firewall')->getMessages());
     }
 
     abstract public function fire();
