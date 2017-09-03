@@ -17,7 +17,7 @@ class Responder
     public function respond($response, $data = [])
     {
         if ($response['code'] === 200) {
-            return null;
+            return;
         }
 
         if ($response['abort']) {
