@@ -189,7 +189,7 @@ class Firewall
     /**
      * Get the messages.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function getMessages()
     {
@@ -211,7 +211,7 @@ class Firewall
     /**
      * Check if IP is blacklisted.
      *
-     * @param null $ip
+     * @param null|string $ip
      *
      * @return bool
      */
@@ -226,7 +226,7 @@ class Firewall
     /**
      * Check if IP address is whitelisted.
      *
-     * @param null $ip
+     * @param null|string $ip
      *
      * @return bool
      */
@@ -349,7 +349,7 @@ class Firewall
     /**
      * Get a response to the attack.
      *
-     * @return bool
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|null
      */
     public function responseToAttack()
     {

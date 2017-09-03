@@ -21,25 +21,13 @@ class Remove extends Base
     protected $description = 'Remove an IP address from white or black list.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
      */
     public function fire()
     {
-        $type = $this->laravel->firewall->remove($this->argument('ip'))
-            ? 'info'
-            : 'error';
-
-        $this->displayMessages($type, $this->laravel->firewall->getMessages());
+        $this->fireCommand('remove', [$this->argument('ip')]);
     }
 
     /**
@@ -51,17 +39,6 @@ class Remove extends Base
     {
         return [
             ['ip', InputArgument::REQUIRED, 'The IP address to be added.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
         ];
     }
 }

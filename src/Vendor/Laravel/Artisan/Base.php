@@ -17,4 +17,13 @@ abstract class Base extends Command
     {
         $this->fire();
     }
+
+    public function fireCommand($method, $parameters)
+    {
+        $type = call_user_func_array ( [$this->laravel->firewall, $method], $parameters)
+            ? 'info'
+            : 'error';
+
+        $this->displayMessages($type, $this->laravel->firewall->getMessages());
+    }
 }

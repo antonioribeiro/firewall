@@ -21,14 +21,6 @@ class Clear extends Base
     protected $description = 'Remove all ip addresses from white and black lists.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -44,17 +36,6 @@ class Clear extends Base
                 $this->info('There were no IP addresses to be deleted.');
             }
         }
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-        ];
     }
 
     /**

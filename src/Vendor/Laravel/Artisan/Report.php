@@ -21,13 +21,6 @@ class Report extends Base
     protected $description = 'List all IP address, white and blacklisted.';
 
     /**
-     * The table helper set.
-     *
-     * @var \Symfony\Component\Console\Helper\TableHelper
-     */
-    protected $table;
-
-    /**
      * Create a new command instance.
      */
     public function __construct()
@@ -42,7 +35,7 @@ class Report extends Base
      */
     public function fire()
     {
-        $this->table = new Table($this->output);
+        $table = new Table($this->output);
 
         $list = [];
 
@@ -58,30 +51,8 @@ class Report extends Base
             ];
         }
 
-        $this->table->setHeaders(['IP Address', 'Whitelist', 'Blacklist'])->setRows($list);
+        $table->setHeaders(['IP Address', 'Whitelist', 'Blacklist'])->setRows($list);
 
-        $this->table->render();
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-        ];
+        $table->render();
     }
 }
