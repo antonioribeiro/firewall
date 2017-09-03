@@ -20,11 +20,12 @@ namespace PragmaRX\Firewall\Repositories;
  * @link       http://pragmarx.com
  */
 
-use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall;
-use PragmaRX\Support\CacheManager;
+use Exception;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\IpAddress;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall as FirewallModel;
 
 class DataRepository implements DataRepositoryInterface
 {
@@ -33,17 +34,17 @@ class DataRepository implements DataRepositoryInterface
     const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
 
     /**
-     * @var object
+     * @var \PragmaRX\Firewall\Firewall
      */
     public $firewall;
 
     /**
-     * @var object
+     * @var \PragmaRX\Firewall\Repositories\Countries
      */
     public $countries;
 
     /**
-     * @var object
+     * @var FirewallModel
      */
     private $model;
 
@@ -70,16 +71,16 @@ class DataRepository implements DataRepositoryInterface
     /**
      * Create instance of DataRepository.
      *
-     * @param Firewall     $model
-     * @param Config       $config
+     * @param FirewallModel $model
+     * @param Config $config
      * @param CacheManager $cache
-     * @param Filesystem   $fileSystem
-     * @param Countries    $countries
+     * @param Filesystem $fileSystem
+     * @param Countries $countries
      *
-     * @return void
+     * @param Message $messageRepository
      */
     public function __construct(
-        Firewall $model,
+        FirewallModel $model,
         Config $config,
         CacheManager $cache,
         Filesystem $fileSystem,
@@ -145,7 +146,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param string $ip
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return mixed
      */
     public function find($ip)
     {
@@ -165,7 +166,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $country
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return mixed
      */
     public function findByCountry($country)
     {
@@ -289,7 +290,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ip
      *
-     * @return \Illuminate\Contracts\Cache\Repository
+     * @return mixed
      */
     public function cacheGet($ip)
     {
@@ -299,7 +300,7 @@ class DataRepository implements DataRepositoryInterface
     /**
      * Remove an ip address from cache.
      *
-     * @param $ip
+     * @param string $ip
      *
      * @return void
      */
