@@ -695,7 +695,7 @@ class DataRepository implements DataRepositoryInterface
     {
         return $this->config->get('enable_range_search') &&
             IpAddress::ipV4Valid($range->ip_address) &&
-            /* @scrutinizer ignore-call */ ipv4_in_range($ip_address, $range->ip_address);
+            IpAddress::ipv4InRange($ip_address, $range->ip_address);
     }
 
     /**
