@@ -21,11 +21,11 @@ namespace PragmaRX\Firewall\Repositories;
  */
 
 use Exception;
-use PragmaRX\Support\Config;
-use PragmaRX\Support\IpAddress;
-use PragmaRX\Support\Filesystem;
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall as FirewallModel;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\IpAddress;
 
 class DataRepository implements DataRepositoryInterface
 {
@@ -72,12 +72,11 @@ class DataRepository implements DataRepositoryInterface
      * Create instance of DataRepository.
      *
      * @param FirewallModel $model
-     * @param Config $config
-     * @param CacheManager $cache
-     * @param Filesystem $fileSystem
-     * @param Countries $countries
-     *
-     * @param Message $messageRepository
+     * @param Config        $config
+     * @param CacheManager  $cache
+     * @param Filesystem    $fileSystem
+     * @param Countries     $countries
+     * @param Message       $messageRepository
      */
     public function __construct(
         FirewallModel $model,
