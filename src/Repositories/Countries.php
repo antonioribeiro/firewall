@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Firewall\Repositories;
 
-use PragmaRX\Support\GeoIp\GeoIp;
 use Illuminate\Support\Collection;
+use PragmaRX\Support\GeoIp\GeoIp;
 
 class Countries
 {

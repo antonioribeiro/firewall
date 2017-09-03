@@ -255,7 +255,6 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     /**
      * Register the message repository.
-     *
      */
     private function registerMessageRepository()
     {
