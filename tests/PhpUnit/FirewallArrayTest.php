@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Tests\PhpUnit;
 
-use PragmaRX\Firewall\Support\Collection;
 use PragmaRX\Firewall\Vendor\Laravel\ServiceProvider as FirewallServiceProvider;
 
 class FirewallArrayTest extends FirewallTestCase
@@ -12,7 +11,7 @@ class FirewallArrayTest extends FirewallTestCase
         $this->setConfig('use_database', false);
 
         return [
-            FirewallServiceProvider::class
+            FirewallServiceProvider::class,
         ];
     }
 }

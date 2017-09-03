@@ -1,18 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateFirewallTable extends Migration {
-
-	/**
-	 * Run the migration.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
+class CreateFirewallTable extends Migration
+{
+    /**
+     * Run the migration.
+     *
+     * @return void
+     */
+    public function up()
+    {
         Schema::create('firewall', function (Blueprint $table) {
             $table->increments('id');
 
@@ -22,16 +22,15 @@ class CreateFirewallTable extends Migration {
 
             $table->timestamps();
         });
-	}
+    }
 
-	/**
-	 * Reverse the migration.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
+    /**
+     * Reverse the migration.
+     *
+     * @return void
+     */
+    public function down()
+    {
         Schema::dropIfExists('firewall');
-	}
-
+    }
 }

@@ -2,10 +2,8 @@
 
 namespace PragmaRX\Firewall\Tests\PhpUnit;
 
-use PragmaRX\Firewall\Support\Collection;
-use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
-use PragmaRX\Firewall\Tests\PhpUnit\TestCase;
 use Illuminate\Http\Response;
+use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class FirewallTestCase extends TestCase
 {
@@ -163,10 +161,10 @@ class FirewallTestCase extends TestCase
             [
                 'ip_address'  => '172.17.0.2',
                 'whitelisted' => 0,
-            ]
+            ],
         ];
 
-        $report = Firewall::report()->map(function($item, $key) {
+        $report = Firewall::report()->map(function ($item, $key) {
             return collect($item->toArray())->only(['ip_address', 'whitelisted']);
         })->toArray();
 
