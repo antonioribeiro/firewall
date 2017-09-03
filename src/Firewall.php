@@ -145,10 +145,7 @@ class Firewall
     /**
      * Create a blocked access response.
      *
-     * @return \Illuminate\Http\Response|void
-     *
-     * @internal param null $content
-     * @internal param null $status
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|null
      */
     public function blockAccess()
     {
@@ -172,7 +169,7 @@ class Firewall
      *
      * @param string $ip
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function find($ip)
     {
