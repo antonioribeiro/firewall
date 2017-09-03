@@ -266,7 +266,7 @@ class AttackBlocker
     /**
      * Check if this is an attack.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isAttack()
     {
@@ -284,7 +284,7 @@ class AttackBlocker
      *
      * @param $ipAddress
      *
-     * @return boolean
+     * @return bool
      */
     public function isBeingAttacked($ipAddress)
     {
@@ -300,7 +300,7 @@ class AttackBlocker
     /**
      * Get enabled state.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isEnabled()
     {
@@ -398,8 +398,6 @@ class AttackBlocker
         if ($this->isAttack()) {
             return (new Responder())->respond($this->getResponseConfig(), $this->record);
         }
-
-        return null;
     }
 
     /**
@@ -439,7 +437,7 @@ class AttackBlocker
 
             unset($this->enabledItems['country']);
 
-            return null;
+            return;
         }
 
         return $this->makeHashedKey($this->ipAddress = $ipAddress);
