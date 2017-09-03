@@ -201,6 +201,7 @@ class AttackBlocker
      * Get max request count from config.
      *
      * @param string $type
+     *
      * @return int|mixed
      */
     protected function getMaxRequestCountForType($type = 'ip')
@@ -373,15 +374,12 @@ class AttackBlocker
 
     /**
      * Make a response.
-     *
      */
     public function responseToAttack()
     {
         if ($this->isAttack()) {
             return (new Responder())->respond($this->getResponseConfig(), $this->record);
         }
-
-        return null;
     }
 
     /**

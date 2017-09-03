@@ -80,13 +80,13 @@ class Firewall
     /**
      * Initialize Firewall object.
      *
-     * @param Config $config
+     * @param Config         $config
      * @param DataRepository $dataRepository
-     * @param CacheManager $cache
-     * @param FileSystem $fileSystem
-     * @param Request $request
-     * @param AttackBlocker $attackBlocker
-     * @param Message $messageRepository
+     * @param CacheManager   $cache
+     * @param FileSystem     $fileSystem
+     * @param Request        $request
+     * @param AttackBlocker  $attackBlocker
+     * @param Message        $messageRepository
      */
     public function __construct(
         Config $config,
@@ -116,7 +116,6 @@ class Firewall
 
     /**
      * Get all IP addresses.
-     *
      */
     public function all()
     {
@@ -127,6 +126,7 @@ class Firewall
      * Get all IP addresses by country.
      *
      * @param $country
+     *
      * @return static
      */
     public function allByCountry($country)
@@ -247,6 +247,7 @@ class Firewall
      * Register messages in log.
      *
      * @param $message
+     *
      * @return void
      */
     public function log($message)
@@ -379,6 +380,7 @@ class Firewall
      * Make a country info from a string.
      *
      * @param $country
+     *
      * @return bool|string
      */
     public function makeCountryFromString($country)
