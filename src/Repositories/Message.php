@@ -23,8 +23,8 @@ class Message
      */
     public function addMessage($message)
     {
-        collect((array) $message)->each(function($item) {
-            collect($item)->flatten()->each(function($flattened) {
+        collect((array) $message)->each(function ($item) {
+            collect($item)->flatten()->each(function ($flattened) {
                 $this->messages->push($flattened);
             });
         });

@@ -3,7 +3,6 @@
 namespace PragmaRX\Firewall\Tests\PhpUnit;
 
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
-use PragmaRX\Firewall\Tests\PhpUnit\TestCase;
 
 class GeoIpTest extends TestCase
 {
@@ -14,13 +13,15 @@ class GeoIpTest extends TestCase
         Firewall::updateGeoIp();
     }
 
-    public function test_get_country() {
+    public function test_get_country()
+    {
         $this->assertEquals('us', Firewall::getCountryFromIp('8.8.8.8'));
 
         $this->assertEquals('br', Firewall::getCountryFromIp('200.222.0.24'));
     }
 
-    public function test_block_per_country() {
+    public function test_block_per_country()
+    {
         Firewall::blacklist('country:us');
 
         $this->assertTrue(Firewall::isBlacklisted('8.8.8.8'));
