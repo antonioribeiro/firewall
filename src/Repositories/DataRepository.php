@@ -20,7 +20,6 @@ namespace PragmaRX\Firewall\Repositories;
  * @link       http://pragmarx.com
  */
 
-use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
@@ -104,6 +103,8 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $whitelist
      * @param $ip
+     *
+     * @return array|mixed
      */
     private function addToArrayList($whitelist, $ip)
     {
@@ -112,6 +113,8 @@ class DataRepository implements DataRepositoryInterface
         $data[] = $ip;
 
         $this->config->set($list, $data);
+
+        return $data;
     }
 
     /**
@@ -120,7 +123,7 @@ class DataRepository implements DataRepositoryInterface
      * @param $whitelist
      * @param $ip
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Model
      */
     private function addToDatabaseList($whitelist, $ip)
     {
@@ -137,31 +140,11 @@ class DataRepository implements DataRepositoryInterface
     }
 
     /**
-     * @param $whitelist
-     * @param $ip
-     *
-     * @return object
-     */
-    private function createModel($whitelist, $ip)
-    {
-        $class = new ReflectionClass(get_class($this->model));
-
-        $model = $class->newInstanceArgs([
-            [
-                'ip_address'  => $ip,
-                'whitelisted' => $whitelist,
-            ],
-        ]);
-
-        return $model;
-    }
-
-    /**
      * Find an IP address in the data source.
      *
      * @param string $ip
      *
-     * @return object|null
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function find($ip)
     {
@@ -181,7 +164,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $country
      *
-     * @return bool|null|object
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function findByCountry($country)
     {
@@ -189,7 +172,7 @@ class DataRepository implements DataRepositoryInterface
             return $this->find($country);
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -197,7 +180,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $country
      *
-     * @return bool|string
+     * @return string
      */
     public function makeCountryFromString($country)
     {
@@ -221,7 +204,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ip_address
      *
-     * @return bool|string
+     * @return string
      */
     public function getCountryFromIp($ip_address)
     {
@@ -250,25 +233,25 @@ class DataRepository implements DataRepositoryInterface
      * Find a Ip in the data source.
      *
      * @param string $ip
-     *
-     * @return object|null
      */
     public function addToProperList($whitelist, $ip)
     {
-        if ($this->config->get('use_database')) {
-            return $this->addToDatabaseList($whitelist, $ip);
-        }
-
-        return $this->addToArrayList($whitelist, $ip);
+        $this->config->get('use_database') ?
+            $this->addToDatabaseList($whitelist, $ip) :
+            $this->addToArrayList($whitelist, $ip);
     }
 
+    /**
+     * Delete ip address.
+     *
+     * @param $ipAddress
+     * @return bool|void
+     */
     public function delete($ipAddress)
     {
-        if ($this->config->get('use_database')) {
-            return $this->removeFromDatabaseList($ipAddress);
-        }
-
-        return $this->removeFromArrayList($ipAddress);
+        $this->config->get('use_database') ?
+            $this->removeFromDatabaseList($ipAddress) :
+            $this->removeFromArrayList($ipAddress);
     }
 
     public function cacheKey($ip)
@@ -302,6 +285,11 @@ class DataRepository implements DataRepositoryInterface
         }
     }
 
+    /**
+     * Get all IP addresses.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function all()
     {
         $cacheTime = $this->config->get('ip_list_cache_expire_time');
@@ -331,7 +319,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $country
      *
-     * @return static
+     * @return \Illuminate\Support\Collection
      */
     public function allByCountry($country)
     {
@@ -401,24 +389,46 @@ class DataRepository implements DataRepositoryInterface
         );
     }
 
+    /**
+     * Remove ip from all array lists.
+     *
+     * @param $ipAddress
+     *
+     * @return bool
+     */
     private function removeFromArrayList($ipAddress)
     {
-        $this->removeFromArrayListType('whitelist', $ipAddress);
-
-        $this->removeFromArrayListType('blacklist', $ipAddress);
+        return $this->removeFromArrayListType('whitelist', $ipAddress) ||
+            $this->removeFromArrayListType('blacklist', $ipAddress);
     }
 
+    /**
+     * Remove the ip address from an array list.
+     *
+     * @param $type
+     * @param $ipAddress
+     * @return bool
+     */
     private function removeFromArrayListType($type, $ipAddress)
     {
-        $data = $this->config->get($type);
-
-        if (($key = array_search($ipAddress, $data)) !== false) {
+        if (($key = array_search($ipAddress, $data = $this->config->get($type))) !== false) {
             unset($data[$key]);
+
+            $this->config->set($type, $data);
+
+            return true;
         }
 
-        $this->config->set($type, $data);
+        return false;
     }
 
+    /**
+     * Remove ip from database.
+     *
+     * @param $ipAddress
+     *
+     * @return bool
+     */
     private function removeFromDatabaseList($ipAddress)
     {
         if ($ip = $this->find($ipAddress)) {
@@ -437,7 +447,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ipList
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     private function toModels($ipList)
     {
@@ -447,19 +457,27 @@ class DataRepository implements DataRepositoryInterface
             $ips[] = $this->makeModel($ip);
         }
 
-        return $ips;
+        return collect($ips);
     }
 
     /**
+     * Make a model instance.
+     *
      * @param $ip
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Model
      */
     private function makeModel($ip)
     {
         return $this->model->newInstance($ip);
     }
 
+    /**
+     * Read a file contents.
+     *
+     * @param $file
+     * @return array
+     */
     private function readFile($file)
     {
         if ($this->fileSystem->exists($file)) {
@@ -471,11 +489,12 @@ class DataRepository implements DataRepositoryInterface
         return [];
     }
 
-    private function toCollection($array)
-    {
-        return new Collection($array);
-    }
-
+    /**
+     * Format all ips in an array.
+     *
+     * @param $list
+     * @return array
+     */
     private function formatIpArray($list)
     {
         return array_map(function ($ip) {
@@ -483,6 +502,12 @@ class DataRepository implements DataRepositoryInterface
         }, $this->makeArrayOfIps($list));
     }
 
+    /**
+     * Make a list of arrays from all sort of things.
+     *
+     * @param $list
+     * @return array
+     */
     private function makeArrayOfIps($list)
     {
         $list = $list ?: [];
@@ -496,6 +521,12 @@ class DataRepository implements DataRepositoryInterface
         return $ips;
     }
 
+    /**
+     * Get a list of ips from anything.
+     *
+     * @param $item
+     * @return array
+     */
     private function getIpsFromAnything($item)
     {
         if (starts_with($item, 'country:')) {
@@ -511,6 +542,13 @@ class DataRepository implements DataRepositoryInterface
         return $this->readFile($item);
     }
 
+    /**
+     * Search for an ip in alist of ips.
+     *
+     * @param $ip
+     * @param $ips
+     * @return null|\Illuminate\Database\Eloquent\Model
+     */
     private function ipArraySearch($ip, $ips)
     {
         foreach ($ips as $key => $value) {
@@ -523,29 +561,43 @@ class DataRepository implements DataRepositoryInterface
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
      * Get all IPs from database.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     private function getAllFromDatabase()
     {
         if ($this->config->get('use_database')) {
             return $this->model->all();
         } else {
-            return $this->toCollection([]);
+            return collect([]);
         }
     }
 
+    /**
+     * Merge IP lists.
+     *
+     * @param $database_ips
+     * @param $config_ips
+     *
+     * @return \Illuminate\Support\Collection
+     */
     private function mergeLists($database_ips, $config_ips)
     {
         return collect($database_ips)
             ->merge(collect($config_ips));
     }
 
+    /**
+     * Get the ip address of a host.
+     *
+     * @param $ip
+     * @return string
+     */
     public function hostToIp($ip)
     {
         if (is_string($ip) && starts_with($ip, $string = 'host:')) {
@@ -560,7 +612,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ip_address
      *
-     * @return bool
+     * @return bool|array
      */
     public function checkSecondaryLists($ip_address)
     {
@@ -659,7 +711,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ip_address
      *
-     * @return bool|string
+     * @return null|string
      */
     public function whichList($ip_address)
     {
@@ -669,7 +721,7 @@ class DataRepository implements DataRepositoryInterface
         if (!$ip_found = $this->find($ip_address)) {
             if (!$ip_found = $this->findByCountry($ip_address)) {
                 if (!$ip_found = $this->checkSecondaryLists($ip_address)) {
-                    return false;
+                    return null;
                 }
             }
         }

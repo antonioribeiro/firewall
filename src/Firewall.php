@@ -60,13 +60,6 @@ class Firewall
     private $request;
 
     /**
-     * The geop ip object.
-     *
-     * @var GeoIp
-     */
-    public $geoIp;
-
-    /**
      * The attack blocker.
      *
      * @var AttackBlocker
@@ -116,6 +109,8 @@ class Firewall
 
     /**
      * Get all IP addresses.
+     *
+     * @return \Illuminate\Support\Collection
      */
     public function all()
     {
@@ -127,7 +122,7 @@ class Firewall
      *
      * @param $country
      *
-     * @return static
+     * @return \Illuminate\Support\Collection
      */
     public function allByCountry($country)
     {
