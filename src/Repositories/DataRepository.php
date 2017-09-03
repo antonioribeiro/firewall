@@ -20,13 +20,13 @@ namespace PragmaRX\Firewall\Repositories;
  * @link       http://pragmarx.com
  */
 
-use ReflectionClass;
-use PragmaRX\Support\Config;
-use PragmaRX\Support\IpAddress;
-use PragmaRX\Support\Filesystem;
-use PragmaRX\Support\CacheManager;
 use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\IpAddress;
+use ReflectionClass;
 
 class DataRepository implements DataRepositoryInterface
 {
@@ -72,11 +72,11 @@ class DataRepository implements DataRepositoryInterface
     /**
      * Create instance of DataRepository.
      *
-     * @param Firewall $model
-     * @param Config $config
+     * @param Firewall     $model
+     * @param Config       $config
      * @param CacheManager $cache
-     * @param Filesystem $fileSystem
-     * @param Countries $countries
+     * @param Filesystem   $fileSystem
+     * @param Countries    $countries
      */
     public function __construct(
         Firewall $model,
@@ -196,6 +196,7 @@ class DataRepository implements DataRepositoryInterface
      * Make a country info from a string.
      *
      * @param $country
+     *
      * @return bool|string
      */
     public function makeCountryFromString($country)
@@ -329,13 +330,14 @@ class DataRepository implements DataRepositoryInterface
      * Get all IP addresses by country.
      *
      * @param $country
+     *
      * @return static
      */
     public function allByCountry($country)
     {
         $country = $this->makeCountryFromString($country);
 
-        return $this->all()->filter(function($item) use ($country) {
+        return $this->all()->filter(function ($item) use ($country) {
             return $item['ip_address'] == $country ||
                 $this->makeCountryFromString($this->getCountryFromIp($item['ip_address'])) == $country;
         });
@@ -434,6 +436,7 @@ class DataRepository implements DataRepositoryInterface
      * Transform a list of ips to a list of models.
      *
      * @param $ipList
+     *
      * @return array
      */
     private function toModels($ipList)
