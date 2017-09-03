@@ -20,7 +20,7 @@ abstract class Base extends Command
 
     public function fireCommand($method, $parameters)
     {
-        $type = call_user_func_array ( [$this->laravel->firewall, $method], $parameters)
+        $type = call_user_func_array([$this->laravel->firewall, $method], $parameters)
             ? 'info'
             : 'error';
 

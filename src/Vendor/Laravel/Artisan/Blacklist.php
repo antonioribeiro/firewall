@@ -2,9 +2,6 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel\Artisan;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-
 class Blacklist extends AddToList
 {
     /**
