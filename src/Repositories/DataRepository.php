@@ -25,7 +25,6 @@ use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\IpAddress;
-use ReflectionClass;
 
 class DataRepository implements DataRepositoryInterface
 {
@@ -171,8 +170,6 @@ class DataRepository implements DataRepositoryInterface
         if ($this->config->get('enable_country_search') && !is_null($country = $this->makeCountryFromString($country))) {
             return $this->find($country);
         }
-
-        return null;
     }
 
     /**
@@ -245,6 +242,7 @@ class DataRepository implements DataRepositoryInterface
      * Delete ip address.
      *
      * @param $ipAddress
+     *
      * @return bool|void
      */
     public function delete($ipAddress)
@@ -407,6 +405,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $type
      * @param $ipAddress
+     *
      * @return bool
      */
     private function removeFromArrayListType($type, $ipAddress)
@@ -476,6 +475,7 @@ class DataRepository implements DataRepositoryInterface
      * Read a file contents.
      *
      * @param $file
+     *
      * @return array
      */
     private function readFile($file)
@@ -493,6 +493,7 @@ class DataRepository implements DataRepositoryInterface
      * Format all ips in an array.
      *
      * @param $list
+     *
      * @return array
      */
     private function formatIpArray($list)
@@ -506,6 +507,7 @@ class DataRepository implements DataRepositoryInterface
      * Make a list of arrays from all sort of things.
      *
      * @param $list
+     *
      * @return array
      */
     private function makeArrayOfIps($list)
@@ -525,6 +527,7 @@ class DataRepository implements DataRepositoryInterface
      * Get a list of ips from anything.
      *
      * @param $item
+     *
      * @return array
      */
     private function getIpsFromAnything($item)
@@ -547,6 +550,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ip
      * @param $ips
+     *
      * @return null|\Illuminate\Database\Eloquent\Model
      */
     private function ipArraySearch($ip, $ips)
@@ -560,8 +564,6 @@ class DataRepository implements DataRepositoryInterface
                 return $value;
             }
         }
-
-        return null;
     }
 
     /**
@@ -596,6 +598,7 @@ class DataRepository implements DataRepositoryInterface
      * Get the ip address of a host.
      *
      * @param $ip
+     *
      * @return string
      */
     public function hostToIp($ip)
@@ -721,7 +724,7 @@ class DataRepository implements DataRepositoryInterface
         if (!$ip_found = $this->find($ip_address)) {
             if (!$ip_found = $this->findByCountry($ip_address)) {
                 if (!$ip_found = $this->checkSecondaryLists($ip_address)) {
-                    return null;
+                    return;
                 }
             }
         }
