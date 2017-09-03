@@ -29,7 +29,7 @@ abstract class BaseChannel implements Contract
         $domain = Request::server('SERVER_NAME');
 
         return sprintf(
-            $this->getActionMessage($item),
+            $this->getActionMessage(),
             $domain,
             $this->makeMessage($item)
         );

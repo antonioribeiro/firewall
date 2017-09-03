@@ -8,11 +8,13 @@ use Illuminate\Notifications\Messages\SlackMessage;
 class Slack extends BaseChannel
 {
     /**
+     * Make a geolocation model for the item.
+     *
      * @param $item
      *
      * @return array
      */
-    public function getGeolocation($item)
+    public function makeGeolocation($item)
     {
         return collect([
             config('firewall.notifications.message.geolocation.field_latitude')     => $item['geoIp']['latitude'],
@@ -24,10 +26,12 @@ class Slack extends BaseChannel
     }
 
     /**
+     * Send a message.
+     *
      * @param $notifiable
      * @param $item
      *
-     * @return $this
+     * @return \Illuminate\Notifications\Messages\SlackMessage
      */
     public function send($notifiable, $item)
     {
@@ -65,7 +69,7 @@ class Slack extends BaseChannel
         if ($item['geoIp']) {
             $message->attachment(function ($attachment) use ($item) {
                 $attachment->title(config('firewall.notifications.message.geolocation.title'))
-                           ->fields($this->getGeolocation($item));
+                           ->fields($this->makeGeolocation($item));
             });
         }
 
