@@ -75,6 +75,8 @@ class DataRepository implements DataRepositoryInterface
      * @param CacheManager $cache
      * @param Filesystem   $fileSystem
      * @param Countries    $countries
+     *
+     * @return void
      */
     public function __construct(
         Firewall $model,
@@ -170,6 +172,8 @@ class DataRepository implements DataRepositoryInterface
         if ($this->config->get('enable_country_search') && !is_null($country = $this->makeCountryFromString($country))) {
             return $this->find($country);
         }
+
+        return null;
     }
 
     /**
@@ -230,6 +234,8 @@ class DataRepository implements DataRepositoryInterface
      * Find a Ip in the data source.
      *
      * @param string $ip
+     *
+     * @return void
      */
     public function addToProperList($whitelist, $ip)
     {
@@ -252,11 +258,25 @@ class DataRepository implements DataRepositoryInterface
             $this->removeFromArrayList($ipAddress);
     }
 
+    /**
+     * Make a cache key.
+     *
+     * @param $ip
+     *
+     * @return string
+     */
     public function cacheKey($ip)
     {
         return static::CACHE_BASE_NAME."ip_address.$ip";
     }
 
+    /**
+     * Check if cache has key.
+     *
+     * @param $ip
+     *
+     * @return bool
+     */
     public function cacheHas($ip)
     {
         if ($this->config->get('cache_expire_time')) {
@@ -266,16 +286,37 @@ class DataRepository implements DataRepositoryInterface
         return false;
     }
 
+    /**
+     * Get a value from the cache.
+     *
+     * @param $ip
+     *
+     * @return \Illuminate\Contracts\Cache\Repository
+     */
     public function cacheGet($ip)
     {
         return $this->cache->get($this->cacheKey($ip));
     }
 
+    /**
+     * Remove an ip address from cache.
+     *
+     * @param $ip
+     *
+     * @return void
+    */
     public function cacheForget($ip)
     {
         $this->cache->forget($this->cacheKey($ip));
     }
 
+    /**
+     * Cache remember.
+     *
+     * @param $model
+     *
+     * @return void
+     */
     public function cacheRemember($model)
     {
         if ($timeout = $this->config->get('cache_expire_time')) {
@@ -336,9 +377,6 @@ class DataRepository implements DataRepositoryInterface
      */
     public function clear()
     {
-        /**
-         * Deletes one by one to also remove them from cache.
-         */
         $deleted = 0;
 
         foreach ($this->all() as $ip) {
@@ -350,6 +388,13 @@ class DataRepository implements DataRepositoryInterface
         return $deleted;
     }
 
+    /**
+     * Find ip address in all lists.
+     *
+     * @param $ip
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     private function findIp($ip)
     {
         if ($model = $this->nonDatabaseFind($ip)) {
@@ -361,6 +406,13 @@ class DataRepository implements DataRepositoryInterface
         }
     }
 
+    /**
+     * Find ip in non database lists.
+     *
+     * @param $ip
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     private function nonDatabaseFind($ip)
     {
         $ips = $this->getNonDatabaseIps();
@@ -370,6 +422,11 @@ class DataRepository implements DataRepositoryInterface
         }
     }
 
+    /**
+     * Get a list of non database ip addresses.
+     *
+     * @return array
+     */
     private function getNonDatabaseIps()
     {
         return array_merge_recursive(

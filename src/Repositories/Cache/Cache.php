@@ -44,11 +44,11 @@ class Cache implements CacheInterface
      * @param mixed  $value
      * @param int    $minutes
      *
-     * @return mixed
+     * @return void
      */
     public function put($key, $value, $minutes = 0)
     {
-        return $this->memory[$key] = serialize($value);
+        $this->memory[$key] = serialize($value);
     }
 
     /**
