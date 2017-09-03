@@ -17,9 +17,7 @@
 
     "require": {
         "php": ">=5.3.7",
-        "illuminate/support": "~5.3",
-        "illuminate/cache": "~5.3",
-        "illuminate/filesystem": "~5.3",
+        "laravel/framework": "~5.2|~5.3|~5.4|~5.5",
         "pragmarx/support": "~0.7.1"
     },
 
