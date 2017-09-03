@@ -172,8 +172,6 @@ class DataRepository implements DataRepositoryInterface
         if ($this->config->get('enable_country_search') && !is_null($country = $this->makeCountryFromString($country))) {
             return $this->find($country);
         }
-
-        return null;
     }
 
     /**
@@ -304,7 +302,7 @@ class DataRepository implements DataRepositoryInterface
      * @param $ip
      *
      * @return void
-    */
+     */
     public function cacheForget($ip)
     {
         $this->cache->forget($this->cacheKey($ip));
