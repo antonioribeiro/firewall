@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Middleware;
 
-use Closure;
 use PragmaRX\Firewall\Filters\Blacklist;
 
 class FirewallBlacklist extends FilterMiddleware
