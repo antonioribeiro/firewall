@@ -695,7 +695,7 @@ class DataRepository implements DataRepositoryInterface
     {
         return $this->config->get('enable_range_search') &&
             IpAddress::ipV4Valid($range->ip_address) &&
-            /** @scrutinizer ignore-call */ ipv4_in_range($ip_address, $range->ip_address);
+            /* @scrutinizer ignore-call */ ipv4_in_range($ip_address, $range->ip_address);
     }
 
     /**
@@ -776,7 +776,7 @@ class DataRepository implements DataRepositoryInterface
         if (!$ip_found = $this->find($ip_address)) {
             if (!$ip_found = $this->findByCountry($ip_address)) {
                 if (!$ip_found = $this->checkSecondaryLists($ip_address)) {
-                    return null;
+                    return;
                 }
             }
         }
