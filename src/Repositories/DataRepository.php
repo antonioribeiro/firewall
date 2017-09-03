@@ -696,7 +696,7 @@ class DataRepository implements DataRepositoryInterface
     {
         return $this->config->get('enable_range_search') &&
             IpAddress::ipV4Valid($range->ip_address) &&
-            ipv4_in_range($ip_address, $range->ip_address);
+            /** @scrutinizer ignore-call */ ipv4_in_range($ip_address, $range->ip_address);
     }
 
     /**
@@ -724,11 +724,11 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $whitelist
      * @param $ip
-     * @param $force
+     * @param bool $force
      *
      * @return bool
      */
-    public function addToList($whitelist, $ip, $force)
+    public function addToList($whitelist, $ip, $force = false)
     {
         $list = $whitelist
             ? 'whitelist'
@@ -747,8 +747,8 @@ class DataRepository implements DataRepositoryInterface
 
             return false;
         } else {
-            if (!$listed || $force) {
-                if ($listed) {
+            if (empty($listed) || $force) {
+                if (!empty($listed)) {
                     $this->remove($ip);
                 }
 
@@ -774,24 +774,17 @@ class DataRepository implements DataRepositoryInterface
      */
     public function whichList($ip_address)
     {
-        $ip_address = $ip_address
-            ?: $this->getIp();
-
         if (!$ip_found = $this->find($ip_address)) {
             if (!$ip_found = $this->findByCountry($ip_address)) {
                 if (!$ip_found = $this->checkSecondaryLists($ip_address)) {
-                    return;
+                    return null;
                 }
             }
         }
 
-        if ($ip_found) {
-            return $ip_found['whitelisted']
-                ? 'whitelist'
-                : 'blacklist';
-        }
-
-        return false;
+        return !is_null($ip_found)
+            ? ($ip_found['whitelisted'] ? 'whitelist' : 'blacklist')
+            : null;
     }
 
     /**
@@ -805,7 +798,7 @@ class DataRepository implements DataRepositoryInterface
     {
         $listed = $this->whichList($ip);
 
-        if ($listed) {
+        if (!empty($listed)) {
             $this->delete($ip);
 
             $this->messageRepository->addMessage(sprintf('%s removed from %s', $ip, $listed));
