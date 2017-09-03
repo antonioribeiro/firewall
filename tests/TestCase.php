@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Firewall\Tests\PhpUnit;
+namespace PragmaRX\Firewall\Tests;
 
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use PragmaRX\Firewall\Vendor\Laravel\ServiceProvider as FirewallServiceProvider;

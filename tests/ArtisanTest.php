@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Firewall\Tests\PhpUnit;
+namespace PragmaRX\Firewall\Tests;
 
 use Artisan;
 
