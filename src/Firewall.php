@@ -172,7 +172,7 @@ class Firewall
      *
      * @param string $ip
      *
-     * @return object|array|null
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function find($ip)
     {
@@ -182,7 +182,7 @@ class Firewall
     /**
      * Get the IP address.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getIp()
     {

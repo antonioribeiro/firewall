@@ -7,7 +7,7 @@ class Message
     /**
      * Saved messages.
      *
-     * @var array
+     * @var \Illuminate\Support\Collection
      */
     private $messages;
 
@@ -20,6 +20,8 @@ class Message
      * Add a message to the messages list.
      *
      * @param $message
+     *
+     * @return void
      */
     public function addMessage($message)
     {
@@ -33,7 +35,7 @@ class Message
     /**
      * Get the messages.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function getMessages()
     {

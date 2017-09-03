@@ -20,7 +20,7 @@ class AttackBlocker
     /**
      * The request record.
      *
-     * @var Config
+     * @var array
      */
     protected $record = [
         'ip' => null,
@@ -126,13 +126,17 @@ class AttackBlocker
             $this->firewall->blacklist($ipAddress, $blackWhitelisted);
 
             $this->save($record);
+
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Check for expiration.
      *
-     * @return mixed
+     * @return void
      */
     protected function checkExpiration()
     {
@@ -160,7 +164,7 @@ class AttackBlocker
      *
      * @param $type
      *
-     * @return float|int
+     * @return \Carbon\Carbon
      */
     protected function getExpirationTimestamp($type)
     {
@@ -178,9 +182,11 @@ class AttackBlocker
     }
 
     /**
+     * Search geo localization by ip.
+     *
      * @param $ipAddress
      *
-     * @return array|null|void
+     * @return array|null
      */
     protected function getGeo($ipAddress)
     {
@@ -202,7 +208,7 @@ class AttackBlocker
      *
      * @param string $type
      *
-     * @return int|mixed
+     * @return int
      */
     protected function getMaxRequestCountForType($type = 'ip')
     {
@@ -216,7 +222,7 @@ class AttackBlocker
      *
      * @param $type
      *
-     * @return mixed
+     * @return int
      */
     protected function getMaxSecondsForType($type)
     {
@@ -238,7 +244,7 @@ class AttackBlocker
     /**
      * Get the response configuration.
      *
-     * @return mixed
+     * @return array
      */
     protected function getResponseConfig()
     {
@@ -248,7 +254,7 @@ class AttackBlocker
     /**
      * Increment request count.
      *
-     * @return mixed
+     * @return void
      */
     protected function increment()
     {
@@ -260,7 +266,7 @@ class AttackBlocker
     /**
      * Check if this is an attack.
      *
-     * @return mixed
+     * @return boolean
      */
     protected function isAttack()
     {
@@ -278,7 +284,7 @@ class AttackBlocker
      *
      * @param $ipAddress
      *
-     * @return mixed
+     * @return boolean
      */
     public function isBeingAttacked($ipAddress)
     {
@@ -293,6 +299,8 @@ class AttackBlocker
 
     /**
      * Get enabled state.
+     *
+     * @return boolean
      */
     protected function isEnabled()
     {
@@ -314,6 +322,8 @@ class AttackBlocker
 
     /**
      * Load the configuration.
+     *
+     * @return void
      */
     private function loadConfig()
     {
@@ -327,7 +337,7 @@ class AttackBlocker
      *
      * @param $ipAddress
      *
-     * @return array|\Illuminate\Contracts\Cache\Repository
+     * @return void
      */
     protected function loadRecord($ipAddress)
     {
@@ -342,6 +352,8 @@ class AttackBlocker
 
     /**
      * Load all record items.
+     *
+     * @return void
      */
     protected function loadRecordItems()
     {
@@ -356,6 +368,8 @@ class AttackBlocker
      * Write to the log.
      *
      * @param $string
+     *
+     * @return void
      */
     protected function log($string)
     {
@@ -366,6 +380,8 @@ class AttackBlocker
      * Send attack the the log.
      *
      * @param $record
+     *
+     * @return void
      */
     protected function logAttack($record)
     {
@@ -374,12 +390,16 @@ class AttackBlocker
 
     /**
      * Make a response.
+     *
+     * @return null|\Illuminate\Http\Response
      */
     public function responseToAttack()
     {
         if ($this->isAttack()) {
             return (new Responder())->respond($this->getResponseConfig(), $this->record);
         }
+
+        return null;
     }
 
     /**
@@ -402,7 +422,7 @@ class AttackBlocker
      *
      * @param $ipAddress
      *
-     * @return string
+     * @return string|null
      */
     protected function makeKeyForType($type, $ipAddress)
     {
@@ -419,7 +439,7 @@ class AttackBlocker
 
             unset($this->enabledItems['country']);
 
-            return;
+            return null;
         }
 
         return $this->makeHashedKey($this->ipAddress = $ipAddress);
@@ -472,6 +492,8 @@ class AttackBlocker
      * Send notifications.
      *
      * @param $record
+     *
+     * @return void
      */
     protected function notify($record)
     {
@@ -492,6 +514,8 @@ class AttackBlocker
      * Renew first request timestamp, to keep the offender blocked.
      *
      * @param $record
+     *
+     * @return void
      */
     protected function renew($record)
     {
@@ -502,6 +526,8 @@ class AttackBlocker
      * Set firewall.
      *
      * @param Firewall $firewall
+     *
+     * @return void
      */
     public function setFirewall($firewall)
     {
@@ -533,6 +559,8 @@ class AttackBlocker
 
     /**
      * Take the necessary action to keep the offender blocked.
+     *
+     * @return void
      */
     protected function takeAction($record)
     {
