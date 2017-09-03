@@ -14,12 +14,14 @@ class NotifyAdmins
     private function getNotifiableUsers()
     {
         return collect(config('firewall.notifications.users.emails'))->map(function ($item) {
-            $model = app(config('firewall.notifications.users.model'));
+            if (class_exists($class = config('firewall.notifications.users.model'))) {
+                $model = app($class);
 
-            $model->email = $item;
+                $model->email = $item;
 
-            return $model;
-        });
+                return $model;
+            }
+        })->filter();
     }
 
     /**

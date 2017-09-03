@@ -2,9 +2,7 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel\Models;
 
-use App\User as AppUser;
-
-class User extends AppUser
+class User
 {
     /**
      * Route notifications for the Email channel.

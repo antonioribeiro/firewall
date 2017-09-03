@@ -16,8 +16,8 @@ class BlockAttacks extends Middleware
      */
     public function handle($request, Closure $next)
     {
-        if ($this->enabled() && $response = app('firewall')->isBeingAttacked()) {
-            return $response;
+        if ($this->enabled() && app('firewall')->isBeingAttacked()) {
+            return app('firewall')->responseToAttack();
         }
 
         return $next($request);

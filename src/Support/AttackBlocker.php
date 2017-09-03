@@ -184,7 +184,7 @@ class AttackBlocker
      */
     protected function getGeo($ipAddress)
     {
-        return $this->firewall->geoIp->searchAddr($ipAddress);
+        return $this->firewall->getGeoIp()->searchAddr($ipAddress);
     }
 
     /**
@@ -199,6 +199,9 @@ class AttackBlocker
 
     /**
      * Get max request count from config.
+     *
+     * @param string $type
+     * @return int|mixed
      */
     protected function getMaxRequestCountForType($type = 'ip')
     {
@@ -219,6 +222,16 @@ class AttackBlocker
         return !is_null($this->maxSeconds)
             ? $this->maxSeconds
             : ($this->maxSeconds = $this->config->get("attack_blocker.allowed_frequency.{$type}.seconds"));
+    }
+
+    /**
+     * Get attack records.
+     *
+     * @return array
+     */
+    public function getRecord()
+    {
+        return $this->record;
     }
 
     /**
@@ -250,15 +263,13 @@ class AttackBlocker
      */
     protected function isAttack()
     {
-        $this->enabledItems->filter(function ($index, $type) {
+        return $this->enabledItems->filter(function ($index, $type) {
             if (!$this->isWhitelisted($type) && $isAttack = $this->record[$type]['requestCount'] > $this->getMaxRequestCountForType($type)) {
-                $this->takeAction($this->record[$type]);
+                // $this->takeAction($this->record[$type]);
 
                 return true;
             }
-
-            return false;
-        });
+        })->count() > 0;
     }
 
     /**
@@ -276,11 +287,7 @@ class AttackBlocker
 
         $this->loadRecord($ipAddress);
 
-        if ($this->isAttack()) {
-            return $this->makeAttackResponse();
-        }
-
-        return false;
+        return $this->isAttack();
     }
 
     /**
@@ -366,10 +373,15 @@ class AttackBlocker
 
     /**
      * Make a response.
+     *
      */
-    protected function makeAttackResponse()
+    public function responseToAttack()
     {
-        return (new Responder())->respond($this->getResponseConfig(), $this->record);
+        if ($this->isAttack()) {
+            return (new Responder())->respond($this->getResponseConfig(), $this->record);
+        }
+
+        return null;
     }
 
     /**

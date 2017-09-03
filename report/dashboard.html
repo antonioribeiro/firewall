@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /Users/antoniocarlos/code/pragmarx/pragmarx.com/vendor/pragmarx/firewall/src</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/nv.d3.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="js/html5shiv.min.js"></script>
+  <script src="js/respond.min.js"></script>
+  <![endif]-->
+ </head>
+ <body>
+  <header>
+   <div class="container">
+    <div class="row">
+     <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="index.html">/Users/antoniocarlos/code/pragmarx/pragmarx.com/vendor/pragmarx/firewall/src</a></li>
+        <li class="active">(Dashboard)</li>
+
+      </ol>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Events/AttackDetected.php.html#7">AttackDetected</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Listeners/NotifyAdmins.php.html#9">NotifyAdmins</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/BlockAttacks.php.html#7">BlockAttacks</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/Middleware.php.html#5">Middleware</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#7">BaseChannel</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Notification.php.html#8">Notification</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#22">Cache</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vendor/Laravel/Models/User.php.html#5">User</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/Redirectable.php.html#5">Redirectable</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/Responder.php.html#8">Responder</a></td><td class="text-right">53%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#11">AttackBlocker</a></td><td class="text-right">63%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#31">DataRepository</a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Repositories/Countries.php.html#8">Countries</a></td><td class="text-right">88%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Support/AttackBlocker.php.html#11">AttackBlocker</a></td><td class="text-right">273</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#31">DataRepository</a></td><td class="text-right">146</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#22">Cache</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="Listeners/NotifyAdmins.php.html#9">NotifyAdmins</a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#7">BaseChannel</a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Middleware/BlockAttacks.php.html#7">BlockAttacks</a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Support/Responder.php.html#8">Responder</a></td><td class="text-right">7</td></tr>
+       <tr><td><a href="Repositories/Countries.php.html#8">Countries</a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Support/Redirectable.php.html#5">Redirectable</a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Events/AttackDetected.php.html#22"><abbr title="AttackDetected::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#369"><abbr title="AttackBlocker::logAttack">logAttack</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Listeners/NotifyAdmins.php.html#16"><abbr title="NotifyAdmins::anonymousFunction:16#72">anonymousFunction:16#72</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#460"><abbr title="DataRepository::readFile">readFile</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#109"><abbr title="AttackBlocker::blacklist">blacklist</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#175"><abbr title="AttackBlocker::getFirewall">getFirewall</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#195"><abbr title="AttackBlocker::getKey">getKey</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#232"><abbr title="AttackBlocker::getRecord">getRecord</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#359"><abbr title="AttackBlocker::log">log</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#478"><abbr title="AttackBlocker::notify">notify</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#111"><abbr title="Cache::getPrefix">getPrefix</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#483"><abbr title="AttackBlocker::anonymousFunction:483#1815">anonymousFunction:483#1815</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#498"><abbr title="AttackBlocker::renew">renew</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#539"><abbr title="AttackBlocker::takeAction">takeAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vendor/Laravel/Models/User.php.html#12"><abbr title="User::routeNotificationForEmail">routeNotificationForEmail</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vendor/Laravel/Models/User.php.html#22"><abbr title="User::routeNotificationForSlack">routeNotificationForSlack</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vendor/Laravel/ServiceProvider.php.html#62"><abbr title="ServiceProvider::getPackageDir">getPackageDir</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vendor/Laravel/ServiceProvider.php.html#82"><abbr title="ServiceProvider::provides">provides</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#145"><abbr title="DataRepository::createModel">createModel</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#287"><abbr title="DataRepository::cacheGet">cacheGet</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#100"><abbr title="Cache::flush">flush</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#49"><abbr title="Cache::put">put</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Listeners/NotifyAdmins.php.html#34"><abbr title="NotifyAdmins::handle">handle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/BlockAttacks.php.html#17"><abbr title="BlockAttacks::handle">handle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/Middleware.php.html#7"><abbr title="Middleware::enabled">enabled</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#9"><abbr title="BaseChannel::getActionMessage">getActionMessage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#17"><abbr title="BaseChannel::getActionTitle">getActionTitle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#27"><abbr title="BaseChannel::getMessage">getMessage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#41"><abbr title="BaseChannel::getActionLink">getActionLink</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#53"><abbr title="BaseChannel::makeMessage">makeMessage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Notification.php.html#27"><abbr title="Notification::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Notification.php.html#39"><abbr title="Notification::getSenderInstance">getSenderInstance</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Notification.php.html#51"><abbr title="Notification::via">via</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Notifications/Notification.php.html#62"><abbr title="Notification::__call">__call</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#90"><abbr title="Cache::forget">forget</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#33"><abbr title="Cache::get">get</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/Redirectable.php.html#14"><abbr title="Redirectable::redirectTo">redirectTo</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#57"><abbr title="Cache::increment">increment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#78"><abbr title="Cache::forever">forever</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#65"><abbr title="Cache::decrement">decrement</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#409"><abbr title="AttackBlocker::makeKeyForType">makeKeyForType</abbr></a></td><td class="text-right">22%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#237"><abbr title="DataRepository::ipIsValid">ipIsValid</abbr></a></td><td class="text-right">50%</td></tr>
+       <tr><td><a href="Support/Responder.php.html#10"><abbr title="Responder::respond">respond</abbr></a></td><td class="text-right">53%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#304"><abbr title="DataRepository::all">all</abbr></a></td><td class="text-right">58%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#521"><abbr title="AttackBlocker::save">save</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Repositories/Countries.php.html#302"><abbr title="Countries::getCountryFromIp">getCountryFromIp</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#297"><abbr title="DataRepository::cacheRemember">cacheRemember</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#546"><abbr title="DataRepository::hostToIp">hostToIp</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#278"><abbr title="DataRepository::cacheHas">cacheHas</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Vendor/Laravel/ServiceProvider.php.html#48"><abbr title="ServiceProvider::getFirewallModel">getFirewallModel</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#690"><abbr title="DataRepository::remove">remove</abbr></a></td><td class="text-right">71%</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#282"><abbr title="AttackBlocker::isBeingAttacked">isBeingAttacked</abbr></a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#166"><abbr title="DataRepository::find">find</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#420"><abbr title="DataRepository::removeFromDatabaseList">removeFromDatabaseList</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#496"><abbr title="DataRepository::getIpsFromAnything">getIpsFromAnything</abbr></a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#201"><abbr title="DataRepository::makeCountryFromString">makeCountryFromString</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#617"><abbr title="DataRepository::addToList">addToList</abbr></a></td><td class="text-right">88%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Support/AttackBlocker.php.html#109"><abbr title="AttackBlocker::blacklist">blacklist</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#478"><abbr title="AttackBlocker::notify">notify</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#409"><abbr title="AttackBlocker::makeKeyForType">makeKeyForType</abbr></a></td><td class="text-right">16</td></tr>
+       <tr><td><a href="Listeners/NotifyAdmins.php.html#34"><abbr title="NotifyAdmins::handle">handle</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Middleware/BlockAttacks.php.html#17"><abbr title="BlockAttacks::handle">handle</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Support/Responder.php.html#10"><abbr title="Responder::respond">respond</abbr></a></td><td class="text-right">7</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#617"><abbr title="DataRepository::addToList">addToList</abbr></a></td><td class="text-right">7</td></tr>
+       <tr><td><a href="Listeners/NotifyAdmins.php.html#16"><abbr title="NotifyAdmins::anonymousFunction:16#72">anonymousFunction:16#72</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#483"><abbr title="AttackBlocker::anonymousFunction:483#1815">anonymousFunction:483#1815</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#460"><abbr title="DataRepository::readFile">readFile</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Support/Redirectable.php.html#14"><abbr title="Redirectable::redirectTo">redirectTo</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Repositories/Cache/Cache.php.html#33"><abbr title="Cache::get">get</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#41"><abbr title="BaseChannel::getActionLink">getActionLink</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Notifications/Channels/BaseChannel.php.html#53"><abbr title="BaseChannel::makeMessage">makeMessage</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#304"><abbr title="DataRepository::all">all</abbr></a></td><td class="text-right">5</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#237"><abbr title="DataRepository::ipIsValid">ipIsValid</abbr></a></td><td class="text-right">4</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#201"><abbr title="DataRepository::makeCountryFromString">makeCountryFromString</abbr></a></td><td class="text-right">4</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#546"><abbr title="DataRepository::hostToIp">hostToIp</abbr></a></td><td class="text-right">3</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#166"><abbr title="DataRepository::find">find</abbr></a></td><td class="text-right">3</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#496"><abbr title="DataRepository::getIpsFromAnything">getIpsFromAnything</abbr></a></td><td class="text-right">3</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#297"><abbr title="DataRepository::cacheRemember">cacheRemember</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Repositories/Countries.php.html#302"><abbr title="Countries::getCountryFromIp">getCountryFromIp</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#521"><abbr title="AttackBlocker::save">save</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Vendor/Laravel/ServiceProvider.php.html#48"><abbr title="ServiceProvider::getFirewallModel">getFirewallModel</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#278"><abbr title="DataRepository::cacheHas">cacheHas</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#690"><abbr title="DataRepository::remove">remove</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Support/AttackBlocker.php.html#282"><abbr title="AttackBlocker::isBeingAttacked">isBeingAttacked</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Repositories/DataRepository.php.html#420"><abbr title="DataRepository::removeFromDatabaseList">removeFromDatabaseList</abbr></a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 4.0.8</a> using <a href="https://secure.php.net/" target="_top">PHP 7.1.8</a> with <a href="https://xdebug.org/">Xdebug 2.5.0</a> and <a href="https://phpunit.de/">PHPUnit 5.7.21</a> at Sun Sep 3 16:18:23 UTC 2017.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="js/jquery.min.js" type="text/javascript"></script>
+  <script src="js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="js/holder.min.js" type="text/javascript"></script>
+  <script src="js/d3.min.js" type="text/javascript"></script>
+  <script src="js/nv.d3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([9,0,0,0,0,0,1,1,0,2,1,15], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([40,0,0,1,0,0,3,6,2,5,1,138], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Events\/AttackDetected.php.html#7\">AttackDetected<\/a>"],[100,0,"<a href=\"Exceptions\/ConfigurationOptionNotAvailable.php.html#7\">ConfigurationOptionNotAvailable<\/a>"],[100,5,"<a href=\"Vendor\/Laravel\/Artisan\/Blacklist.php.html#8\">Blacklist<\/a>"],[100,5,"<a href=\"Vendor\/Laravel\/Artisan\/Whitelist.php.html#8\">Whitelist<\/a>"],[100,0,"<a href=\"Vendor\/Laravel\/Models\/Firewall.php.html#7\">Firewall<\/a>"],[0,7,"<a href=\"Listeners\/NotifyAdmins.php.html#9\">NotifyAdmins<\/a>"],[0,3,"<a href=\"Middleware\/BlockAttacks.php.html#7\">BlockAttacks<\/a>"],[100,4,"<a href=\"Middleware\/FirewallBlacklist.php.html#8\">FirewallBlacklist<\/a>"],[100,4,"<a href=\"Middleware\/FirewallWhitelist.php.html#8\">FirewallWhitelist<\/a>"],[0,1,"<a href=\"Middleware\/Middleware.php.html#5\">Middleware<\/a>"],[0,7,"<a href=\"Notifications\/Channels\/BaseChannel.php.html#7\">BaseChannel<\/a>"],[100,10,"<a href=\"Notifications\/Channels\/Slack.php.html#8\">Slack<\/a>"],[0,4,"<a href=\"Notifications\/Notification.php.html#8\">Notification<\/a>"],[0,9,"<a href=\"Repositories\/Cache\/Cache.php.html#22\">Cache<\/a>"],[88.88888888888889,6,"<a href=\"Repositories\/Countries.php.html#8\">Countries<\/a>"],[85.05154639175258,108,"<a href=\"Repositories\/DataRepository.php.html#31\">DataRepository<\/a>"],[100,5,"<a href=\"Repositories\/Message.php.html#5\">Message<\/a>"],[63.30275229357798,65,"<a href=\"Support\/AttackBlocker.php.html#11\">AttackBlocker<\/a>"],[53.84615384615385,5,"<a href=\"Support\/Responder.php.html#8\">Responder<\/a>"],[100,3,"<a href=\"Vendor\/Laravel\/Artisan\/Base.php.html#7\">Base<\/a>"],[100,6,"<a href=\"Vendor\/Laravel\/Artisan\/Clear.php.html#7\">Clear<\/a>"],[100,5,"<a href=\"Vendor\/Laravel\/Artisan\/Remove.php.html#7\">Remove<\/a>"],[100,7,"<a href=\"Vendor\/Laravel\/Artisan\/Report.php.html#7\">Report<\/a>"],[100,3,"<a href=\"Vendor\/Laravel\/Artisan\/UpdateGeoIp.php.html#5\">UpdateGeoIp<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Facade.php.html#7\">Facade<\/a>"],[0,2,"<a href=\"Vendor\/Laravel\/Models\/User.php.html#5\">User<\/a>"],[96.84210526315789,39,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#29\">ServiceProvider<\/a>"],[100,3,"<a href=\"migrations\/2014_02_01_311070_create_firewall_table.php.html#7\">CreateFirewallTable<\/a>"],[0,2,"<a href=\"Support\/Redirectable.php.html#5\">Redirectable<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Events\/AttackDetected.php.html#22\">AttackDetected::__construct<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Blacklist.php.html#27\">Blacklist::__construct<\/a>"],[100,2,"<a href=\"Vendor\/Laravel\/Artisan\/Blacklist.php.html#37\">Blacklist::fire<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Blacklist.php.html#51\">Blacklist::getArguments<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Blacklist.php.html#63\">Blacklist::getOptions<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Whitelist.php.html#27\">Whitelist::__construct<\/a>"],[100,2,"<a href=\"Vendor\/Laravel\/Artisan\/Whitelist.php.html#37\">Whitelist::fire<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Whitelist.php.html#51\">Whitelist::getArguments<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Whitelist.php.html#63\">Whitelist::getOptions<\/a>"],[100,2,"<a href=\"Listeners\/NotifyAdmins.php.html#14\">NotifyAdmins::getNotifiableUsers<\/a>"],[0,2,"<a href=\"Listeners\/NotifyAdmins.php.html#16\">NotifyAdmins::anonymousFunction:16#72<\/a>"],[0,3,"<a href=\"Listeners\/NotifyAdmins.php.html#34\">NotifyAdmins::handle<\/a>"],[0,3,"<a href=\"Middleware\/BlockAttacks.php.html#17\">BlockAttacks::handle<\/a>"],[100,1,"<a href=\"Middleware\/FirewallBlacklist.php.html#12\">FirewallBlacklist::__construct<\/a>"],[100,3,"<a href=\"Middleware\/FirewallBlacklist.php.html#25\">FirewallBlacklist::handle<\/a>"],[100,1,"<a href=\"Middleware\/FirewallWhitelist.php.html#12\">FirewallWhitelist::__construct<\/a>"],[100,3,"<a href=\"Middleware\/FirewallWhitelist.php.html#25\">FirewallWhitelist::handle<\/a>"],[0,1,"<a href=\"Middleware\/Middleware.php.html#7\">Middleware::enabled<\/a>"],[0,1,"<a href=\"Notifications\/Channels\/BaseChannel.php.html#9\">BaseChannel::getActionMessage<\/a>"],[0,1,"<a href=\"Notifications\/Channels\/BaseChannel.php.html#17\">BaseChannel::getActionTitle<\/a>"],[0,1,"<a href=\"Notifications\/Channels\/BaseChannel.php.html#27\">BaseChannel::getMessage<\/a>"],[0,2,"<a href=\"Notifications\/Channels\/BaseChannel.php.html#41\">BaseChannel::getActionLink<\/a>"],[0,2,"<a href=\"Notifications\/Channels\/BaseChannel.php.html#53\">BaseChannel::makeMessage<\/a>"],[100,1,"<a href=\"Notifications\/Channels\/Slack.php.html#15\">Slack::getGeolocation<\/a>"],[100,3,"<a href=\"Notifications\/Channels\/Slack.php.html#32\">Slack::send<\/a>"],[100,1,"<a href=\"Notifications\/Channels\/Slack.php.html#41\">Slack::anonymousFunction:41#218<\/a>"],[100,1,"<a href=\"Notifications\/Channels\/Slack.php.html#52\">Slack::anonymousFunction:52#294<\/a>"],[100,1,"<a href=\"Notifications\/Channels\/Slack.php.html#56\">Slack::anonymousFunction:56#341<\/a>"],[100,2,"<a href=\"Notifications\/Channels\/Slack.php.html#60\">Slack::anonymousFunction:60#381<\/a>"],[100,1,"<a href=\"Notifications\/Channels\/Slack.php.html#66\">Slack::anonymousFunction:66#442<\/a>"],[0,1,"<a href=\"Notifications\/Notification.php.html#27\">Notification::__construct<\/a>"],[0,1,"<a href=\"Notifications\/Notification.php.html#39\">Notification::getSenderInstance<\/a>"],[0,1,"<a href=\"Notifications\/Notification.php.html#51\">Notification::via<\/a>"],[0,1,"<a href=\"Notifications\/Notification.php.html#62\">Notification::__call<\/a>"],[0,2,"<a href=\"Repositories\/Cache\/Cache.php.html#33\">Cache::get<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#49\">Cache::put<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#57\">Cache::increment<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#65\">Cache::decrement<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#78\">Cache::forever<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#90\">Cache::forget<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#100\">Cache::flush<\/a>"],[0,1,"<a href=\"Repositories\/Cache\/Cache.php.html#111\">Cache::getPrefix<\/a>"],[100,1,"<a href=\"Repositories\/Countries.php.html#268\">Countries::__construct<\/a>"],[100,1,"<a href=\"Repositories\/Countries.php.html#273\">Countries::all<\/a>"],[100,1,"<a href=\"Repositories\/Countries.php.html#283\">Countries::getGeoIp<\/a>"],[100,1,"<a href=\"Repositories\/Countries.php.html#288\">Countries::isValid<\/a>"],[66.66666666666666,2,"<a href=\"Repositories\/Countries.php.html#302\">Countries::getCountryFromIp<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#81\">DataRepository::__construct<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#108\">DataRepository::addToArrayList<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#125\">DataRepository::addToDatabaseList<\/a>"],[0,1,"<a href=\"Repositories\/DataRepository.php.html#145\">DataRepository::createModel<\/a>"],[80,3,"<a href=\"Repositories\/DataRepository.php.html#166\">DataRepository::find<\/a>"],[100,3,"<a href=\"Repositories\/DataRepository.php.html#186\">DataRepository::findByCountry<\/a>"],[85.71428571428571,4,"<a href=\"Repositories\/DataRepository.php.html#201\">DataRepository::makeCountryFromString<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#225\">DataRepository::getCountryFromIp<\/a>"],[50,3,"<a href=\"Repositories\/DataRepository.php.html#237\">DataRepository::ipIsValid<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#255\">DataRepository::addToProperList<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#264\">DataRepository::delete<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#273\">DataRepository::cacheKey<\/a>"],[66.66666666666666,2,"<a href=\"Repositories\/DataRepository.php.html#278\">DataRepository::cacheHas<\/a>"],[0,1,"<a href=\"Repositories\/DataRepository.php.html#287\">DataRepository::cacheGet<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#292\">DataRepository::cacheForget<\/a>"],[66.66666666666666,2,"<a href=\"Repositories\/DataRepository.php.html#297\">DataRepository::cacheRemember<\/a>"],[58.333333333333336,4,"<a href=\"Repositories\/DataRepository.php.html#304\">DataRepository::all<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#334\">DataRepository::allByCountry<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#338\">DataRepository::anonymousFunction:338#1267<\/a>"],[100,3,"<a href=\"Repositories\/DataRepository.php.html#349\">DataRepository::clear<\/a>"],[100,3,"<a href=\"Repositories\/DataRepository.php.html#365\">DataRepository::findIp<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#376\">DataRepository::nonDatabaseFind<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#385\">DataRepository::getNonDatabaseIps<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#388\">DataRepository::anonymousFunction:388#1533<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#394\">DataRepository::anonymousFunction:394#1577<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#402\">DataRepository::removeFromArrayList<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#409\">DataRepository::removeFromArrayListType<\/a>"],[80,2,"<a href=\"Repositories\/DataRepository.php.html#420\">DataRepository::removeFromDatabaseList<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#439\">DataRepository::toModels<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#455\">DataRepository::makeModel<\/a>"],[0,2,"<a href=\"Repositories\/DataRepository.php.html#460\">DataRepository::readFile<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#471\">DataRepository::toCollection<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#476\">DataRepository::formatIpArray<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#478\">DataRepository::anonymousFunction:478#1977<\/a>"],[100,3,"<a href=\"Repositories\/DataRepository.php.html#483\">DataRepository::makeArrayOfIps<\/a>"],[83.33333333333334,3,"<a href=\"Repositories\/DataRepository.php.html#496\">DataRepository::getIpsFromAnything<\/a>"],[100,6,"<a href=\"Repositories\/DataRepository.php.html#511\">DataRepository::ipArraySearch<\/a>"],[100,2,"<a href=\"Repositories\/DataRepository.php.html#531\">DataRepository::getAllFromDatabase<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#540\">DataRepository::mergeLists<\/a>"],[66.66666666666666,3,"<a href=\"Repositories\/DataRepository.php.html#546\">DataRepository::hostToIp<\/a>"],[100,4,"<a href=\"Repositories\/DataRepository.php.html#562\">DataRepository::checkSecondaryLists<\/a>"],[100,3,"<a href=\"Repositories\/DataRepository.php.html#581\">DataRepository::ipIsInValidRange<\/a>"],[100,4,"<a href=\"Repositories\/DataRepository.php.html#595\">DataRepository::validCountry<\/a>"],[88.88888888888889,7,"<a href=\"Repositories\/DataRepository.php.html#617\">DataRepository::addToList<\/a>"],[90.9090909090909,7,"<a href=\"Repositories\/DataRepository.php.html#661\">DataRepository::whichList<\/a>"],[71.42857142857143,2,"<a href=\"Repositories\/DataRepository.php.html#690\">DataRepository::remove<\/a>"],[100,1,"<a href=\"Repositories\/DataRepository.php.html#712\">DataRepository::getGeoIp<\/a>"],[100,1,"<a href=\"Repositories\/Message.php.html#14\">Message::__construct<\/a>"],[100,1,"<a href=\"Repositories\/Message.php.html#24\">Message::addMessage<\/a>"],[100,1,"<a href=\"Repositories\/Message.php.html#26\">Message::anonymousFunction:26#69<\/a>"],[100,1,"<a href=\"Repositories\/Message.php.html#27\">Message::anonymousFunction:27#87<\/a>"],[100,1,"<a href=\"Repositories\/Message.php.html#38\">Message::getMessages<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#93\">AttackBlocker::__construct<\/a>"],[0,5,"<a href=\"Support\/AttackBlocker.php.html#109\">AttackBlocker::blacklist<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#137\">AttackBlocker::checkExpiration<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#139\">AttackBlocker::anonymousFunction:139#371<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#153\">AttackBlocker::getEmptyRecord<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#165\">AttackBlocker::getExpirationTimestamp<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#175\">AttackBlocker::getFirewall<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#185\">AttackBlocker::getGeo<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#195\">AttackBlocker::getKey<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#206\">AttackBlocker::getMaxRequestCountForType<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#220\">AttackBlocker::getMaxSecondsForType<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#232\">AttackBlocker::getRecord<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#242\">AttackBlocker::getResponseConfig<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#252\">AttackBlocker::increment<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#254\">AttackBlocker::anonymousFunction:254#777<\/a>"],[100,3,"<a href=\"Support\/AttackBlocker.php.html#264\">AttackBlocker::isAttack<\/a>"],[100,3,"<a href=\"Support\/AttackBlocker.php.html#266\">AttackBlocker::anonymousFunction:266#843<\/a>"],[75,2,"<a href=\"Support\/AttackBlocker.php.html#282\">AttackBlocker::isBeingAttacked<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#296\">AttackBlocker::isEnabled<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#308\">AttackBlocker::isWhitelisted<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#317\">AttackBlocker::loadConfig<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#319\">AttackBlocker::anonymousFunction:319#1092<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#331\">AttackBlocker::loadRecord<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#345\">AttackBlocker::loadRecordItems<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#347\">AttackBlocker::anonymousFunction:347#1178<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#359\">AttackBlocker::log<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#369\">AttackBlocker::logAttack<\/a>"],[100,2,"<a href=\"Support\/AttackBlocker.php.html#378\">AttackBlocker::responseToAttack<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#394\">AttackBlocker::makeHashedKey<\/a>"],[22.22222222222222,5,"<a href=\"Support\/AttackBlocker.php.html#409\">AttackBlocker::makeKeyForType<\/a>"],[100,3,"<a href=\"Support\/AttackBlocker.php.html#438\">AttackBlocker::makeRecord<\/a>"],[0,4,"<a href=\"Support\/AttackBlocker.php.html#478\">AttackBlocker::notify<\/a>"],[0,2,"<a href=\"Support\/AttackBlocker.php.html#483\">AttackBlocker::anonymousFunction:483#1815<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#498\">AttackBlocker::renew<\/a>"],[100,1,"<a href=\"Support\/AttackBlocker.php.html#508\">AttackBlocker::setFirewall<\/a>"],[66.66666666666666,2,"<a href=\"Support\/AttackBlocker.php.html#521\">AttackBlocker::save<\/a>"],[0,1,"<a href=\"Support\/AttackBlocker.php.html#539\">AttackBlocker::takeAction<\/a>"],[53.84615384615385,5,"<a href=\"Support\/Responder.php.html#10\">Responder::respond<\/a>"],[100,2,"<a href=\"Vendor\/Laravel\/Artisan\/Base.php.html#9\">Base::displayMessages<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Base.php.html#16\">Base::handle<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Clear.php.html#26\">Clear::__construct<\/a>"],[100,3,"<a href=\"Vendor\/Laravel\/Artisan\/Clear.php.html#36\">Clear::fire<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Clear.php.html#54\">Clear::getArguments<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Clear.php.html#65\">Clear::getOptions<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Remove.php.html#26\">Remove::__construct<\/a>"],[100,2,"<a href=\"Vendor\/Laravel\/Artisan\/Remove.php.html#36\">Remove::fire<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Remove.php.html#50\">Remove::getArguments<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Remove.php.html#62\">Remove::getOptions<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Report.php.html#33\">Report::__construct<\/a>"],[100,4,"<a href=\"Vendor\/Laravel\/Artisan\/Report.php.html#43\">Report::fire<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Report.php.html#71\">Report::getArguments<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/Report.php.html#82\">Report::getOptions<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Artisan\/UpdateGeoIp.php.html#24\">UpdateGeoIp::__construct<\/a>"],[100,2,"<a href=\"Vendor\/Laravel\/Artisan\/UpdateGeoIp.php.html#34\">UpdateGeoIp::fire<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/Facade.php.html#14\">Facade::getFacadeAccessor<\/a>"],[0,1,"<a href=\"Vendor\/Laravel\/Models\/User.php.html#12\">User::routeNotificationForEmail<\/a>"],[0,1,"<a href=\"Vendor\/Laravel\/Models\/User.php.html#22\">User::routeNotificationForSlack<\/a>"],[66.66666666666666,2,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#48\">ServiceProvider::getFirewallModel<\/a>"],[0,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#62\">ServiceProvider::getPackageDir<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#72\">ServiceProvider::getRootDirectory<\/a>"],[0,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#82\">ServiceProvider::provides<\/a>"],[100,3,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#92\">ServiceProvider::register<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#135\">ServiceProvider::registerAttackBlocker<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#137\">ServiceProvider::anonymousFunction:137#671<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#150\">ServiceProvider::registerBlacklistCommand<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#152\">ServiceProvider::anonymousFunction:152#727<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#164\">ServiceProvider::registerCache<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#166\">ServiceProvider::anonymousFunction:166#779<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#176\">ServiceProvider::registerClearCommand<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#178\">ServiceProvider::anonymousFunction:178#824<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#190\">ServiceProvider::registerDataRepository<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#192\">ServiceProvider::anonymousFunction:192#876<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#212\">ServiceProvider::registerEventListeners<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#222\">ServiceProvider::registerFileSystem<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#224\">ServiceProvider::anonymousFunction:224#991<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#235\">ServiceProvider::registerFirewall<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#237\">ServiceProvider::anonymousFunction:237#1035<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#260\">ServiceProvider::registerMessageRepository<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#262\">ServiceProvider::anonymousFunction:262#1156<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#272\">ServiceProvider::registerMiddleware<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#274\">ServiceProvider::anonymousFunction:274#1200<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#278\">ServiceProvider::anonymousFunction:278#1235<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#283\">ServiceProvider::registerMigrations<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#288\">ServiceProvider::registerGeoIp<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#290\">ServiceProvider::anonymousFunction:290#1304<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#300\">ServiceProvider::registerRemoveCommand<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#302\">ServiceProvider::anonymousFunction:302#1353<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#314\">ServiceProvider::registerReportCommand<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#316\">ServiceProvider::anonymousFunction:316#1405<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#326\">ServiceProvider::registerUpdateGeoIpCommand<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#328\">ServiceProvider::anonymousFunction:328#1457<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#340\">ServiceProvider::registerWhitelistCommand<\/a>"],[100,1,"<a href=\"Vendor\/Laravel\/ServiceProvider.php.html#342\">ServiceProvider::anonymousFunction:342#1509<\/a>"],[100,1,"<a href=\"migrations\/2014_02_01_311070_create_firewall_table.php.html#14\">CreateFirewallTable::up<\/a>"],[100,1,"<a href=\"migrations\/2014_02_01_311070_create_firewall_table.php.html#16\">CreateFirewallTable::anonymousFunction:16#64<\/a>"],[100,1,"<a href=\"migrations\/2014_02_01_311070_create_firewall_table.php.html#32\">CreateFirewallTable::down<\/a>"],[0,2,"<a href=\"Support\/Redirectable.php.html#14\">Redirectable::redirectTo<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

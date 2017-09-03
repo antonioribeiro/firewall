@@ -3,7 +3,6 @@
 namespace PragmaRX\Firewall\Vendor\Laravel;
 
 use Illuminate\Support\Facades\Event;
-use PragmaRX\Firewall\Database\Migrator;
 use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
 use PragmaRX\Firewall\Filters\Blacklist;
@@ -14,19 +13,17 @@ use PragmaRX\Firewall\Middleware\FirewallBlacklist;
 use PragmaRX\Firewall\Middleware\FirewallWhitelist;
 use PragmaRX\Firewall\Repositories\Countries;
 use PragmaRX\Firewall\Repositories\DataRepository;
-use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
+use PragmaRX\Firewall\Repositories\Message;
 use PragmaRX\Firewall\Support\AttackBlocker;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
-use PragmaRX\Firewall\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
 use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\GeoIp\GeoIp;
-use PragmaRX\Support\Response;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 class ServiceProvider extends PragmaRXServiceProvider
@@ -40,16 +37,6 @@ class ServiceProvider extends PragmaRXServiceProvider
     protected $packageNameCapitalized = 'Firewall';
 
     private $firewall;
-
-    /**
-     * Return a proper response for blocked access.
-     *
-     * @return Response
-     */
-    public function blockAccess()
-    {
-        return $this->app['firewall']->blockAccess();
-    }
 
     /**
      * Get the full path of the stub config file.
@@ -110,6 +97,8 @@ class ServiceProvider extends PragmaRXServiceProvider
             return;
         }
 
+        $this->registerMigrations();
+
         $this->registerFileSystem();
 
         $this->registerCache();
@@ -118,15 +107,13 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerDataRepository();
 
-        $this->registerMigrator();
+        $this->registerMessageRepository();
 
         $this->registerGeoIp();
 
         $this->registerAttackBlocker();
 
         $this->registerReportCommand();
-
-        $this->registerTablesCommand();
 
         if ($this->getConfig('use_database')) {
             $this->registerWhitelistCommand();
@@ -204,12 +191,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $this->app->singleton('firewall.dataRepository', function ($app) {
             return new DataRepository(
-                new FirewallRepository(
-                    $this->getFirewallModel(),
-                    $app['firewall.cache'],
-                    $app['firewall.config'],
-                    $app['firewall.fileSystem']
-                ),
+                $this->getFirewallModel(),
 
                 $app['firewall.config'],
 
@@ -217,7 +199,9 @@ class ServiceProvider extends PragmaRXServiceProvider
 
                 $app['firewall.fileSystem'],
 
-                new Countries()
+                new Countries($app['firewall.geoip']),
+
+                $app['firewall.message']
             );
         });
     }
@@ -259,14 +243,24 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $app['firewall.cache'],
                 $app['firewall.fileSystem'],
                 $app['request'],
-                $app['firewall.migrator'],
-                $app['firewall.geoip'],
-                $attackBlocker = $app['firewall.attackBlocker']
+                $attackBlocker = $app['firewall.attackBlocker'],
+                $app['firewall.message']
             );
 
             $attackBlocker->setFirewall($this->firewall);
 
             return $this->firewall;
+        });
+    }
+
+    /**
+     * Register the message repository.
+     *
+     */
+    private function registerMessageRepository()
+    {
+        $this->app->singleton('firewall.message', function ($app) {
+            return new Message();
         });
     }
 
@@ -286,14 +280,9 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function registerMigrator()
+    private function registerMigrations()
     {
-        $this->app->singleton('firewall.migrator', function ($app) {
-            $connection = $this->getConfig('connection');
-
-            return new Migrator($app['db'], $connection);
-        }
-        );
+        $this->loadMigrationsFrom(__DIR__.'/../../migrations');
     }
 
     private function registerGeoIp()
@@ -329,15 +318,6 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
 
         $this->commands('firewall.list.command');
-    }
-
-    private function registerTablesCommand()
-    {
-        $this->app->singleton('firewall.tables.command', function ($app) {
-            return new TablesCommand();
-        });
-
-        $this->commands('firewall.tables.command');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Firewall\Repositories;
 
+use PragmaRX\Support\GeoIp\GeoIp;
 use Illuminate\Support\Collection;
 
 class Countries
@@ -262,9 +263,26 @@ class Countries
         'zw'   => 'Zimbabwe',
     ];
 
+    protected $geoIp;
+
+    public function __construct(GeoIp $geoIp)
+    {
+        $this->geoIp = $geoIp;
+    }
+
     public function all()
     {
         return new Collection($this->all);
+    }
+
+    /**
+     * Get the GeoIp instance.
+     *
+     * @return GeoIp
+     */
+    public function getGeoIp()
+    {
+        return $this->geoIp;
     }
 
     public function isValid($cc)
@@ -272,5 +290,21 @@ class Countries
         $cc = strtolower(str_replace('country:', '', $cc));
 
         return $this->all()->has($cc);
+    }
+
+    /**
+     * Get country code from an IP address.
+     *
+     * @param $ip_address
+     *
+     * @return bool|string
+     */
+    public function getCountryFromIp($ip_address)
+    {
+        if ($geo = $this->geoIp->searchAddr($ip_address)) {
+            return strtolower($geo['country_code']);
+        }
+
+        return false;
     }
 }

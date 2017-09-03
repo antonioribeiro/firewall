@@ -102,7 +102,6 @@ You have access to the following commands:
 
 ```
   firewall:list         List all IP address, white and blacklisted.
-  firewall:tables       Create the migrations for Firewall database tables and columns
   firewall:updategeoip  Update the GeoIP database.
 ```
 
@@ -312,17 +311,13 @@ Route::group(['middleware' => 'fw-block-blacklisted'], function ()
 **Note:** You can add other middleware you have already created to the new groups by simply 
 adding it to the `fw-allow-wl` or `fw-block-bl` middleware group.
 
-Create the migration:
-
-```
-php artisan firewall:tables
-```
-
-Migrate it
+Migrate your database
 
 ```
 php artisan migrate
 ```
+
+**Warning:** If you already have a Firewall package installed and migrated, you need to update your migration name, in the `migrations` table, to `2014_02_01_311070_create_firewall_table`, otherwise the migrate command will fail tell you the table already exists.  
 
 To publish the configuration file you'll have to:
 
