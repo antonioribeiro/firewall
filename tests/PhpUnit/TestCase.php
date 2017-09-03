@@ -19,9 +19,9 @@ class TestCase extends OrchestraTestCase
         app()->config->set(
             'database.connections.testbench',
             [
-                'driver' => 'sqlite',
+                'driver'   => 'sqlite',
                 'database' => $database,
-                'prefix' => '',
+                'prefix'   => '',
             ]
         );
     }

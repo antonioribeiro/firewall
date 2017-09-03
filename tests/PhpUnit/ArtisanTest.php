@@ -3,7 +3,6 @@
 namespace PragmaRX\Firewall\Tests\PhpUnit;
 
 use Artisan;
-use PragmaRX\Firewall\Tests\PhpUnit\TestCase;
 
 class ArtisanTest extends TestCase
 {
