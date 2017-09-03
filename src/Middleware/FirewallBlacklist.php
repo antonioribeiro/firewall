@@ -5,7 +5,7 @@ namespace PragmaRX\Firewall\Middleware;
 use Closure;
 use PragmaRX\Firewall\Filters\Blacklist;
 
-class FirewallBlacklist extends Middleware
+class FirewallBlacklist extends FilterMiddleware
 {
     protected $blacklist;
 
@@ -15,23 +15,12 @@ class FirewallBlacklist extends Middleware
     }
 
     /**
-     * Filter Request through blacklist.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * Filter Request.
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function filter()
     {
-        if ($this->enabled()) {
-            $filterResponse = $this->blacklist->filter();
-
-            if ($filterResponse != null) {
-                return $filterResponse;
-            }
-        }
-
-        return $next($request);
+        return $this->blacklist->filter();
     }
 }

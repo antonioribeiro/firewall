@@ -5,7 +5,7 @@ namespace PragmaRX\Firewall\Middleware;
 use Closure;
 use PragmaRX\Firewall\Filters\Whitelist;
 
-class FirewallWhitelist extends Middleware
+class FirewallWhitelist extends FilterMiddleware
 {
     protected $whitelist;
 
@@ -15,23 +15,12 @@ class FirewallWhitelist extends Middleware
     }
 
     /**
-     * Filter Request through whitelist.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * Filter Request.
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function filter()
     {
-        if ($this->enabled()) {
-            $filterResponse = $this->whitelist->filter();
-
-            if ($filterResponse != null) {
-                return $filterResponse;
-            }
-        }
-
-        return $next($request);
+        return $this->whitelist->filter();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Firewall\Middleware;
 
-class Middleware
+abstract class Middleware
 {
     public function enabled()
     {

@@ -186,9 +186,4 @@ class FirewallTestCase extends TestCase
 
         $this->assertInstanceOf(Response::class, Firewall::responseToAttack());
     }
-
-    public function test_range_disabled()
-    {
-        // $app['config']->set('firewall.enable_range_search', true);
-    }
 }
