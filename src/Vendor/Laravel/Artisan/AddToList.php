@@ -24,7 +24,7 @@ abstract class AddToList extends Base
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function fire()
     {

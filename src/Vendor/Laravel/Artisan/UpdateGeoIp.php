@@ -19,9 +19,9 @@ class UpdateGeoIp extends Base
     protected $description = 'Update the GeoIP database.';
 
     /**
-     * Execute the console command.
+     * Update the geo ip database.
      *
-     * @return mixed
+     * @return void
      */
     public function fire()
     {

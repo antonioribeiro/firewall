@@ -21,7 +21,7 @@ class Remove extends Base
     protected $description = 'Remove an IP address from white or black list.';
 
     /**
-     * Execute the console command.
+     * Remove an ip from a list.
      *
      * @return mixed
      */

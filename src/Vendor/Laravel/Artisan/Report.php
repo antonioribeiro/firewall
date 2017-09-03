@@ -29,7 +29,7 @@ class Report extends Base
     }
 
     /**
-     * Execute the console command.
+     * List all ips from all lists.
      *
      * @return mixed
      */

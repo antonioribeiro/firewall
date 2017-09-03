@@ -21,7 +21,7 @@ class Clear extends Base
     protected $description = 'Remove all ip addresses from white and black lists.';
 
     /**
-     * Execute the console command.
+     * Clear the list.
      *
      * @return mixed
      */
