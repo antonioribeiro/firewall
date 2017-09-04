@@ -3,11 +3,11 @@
 namespace PragmaRX\Firewall\Repositories;
 
 use Exception;
-use PragmaRX\Support\Config;
-use PragmaRX\Support\IpAddress;
-use PragmaRX\Support\Filesystem;
 use PragmaRX\Firewall\Repositories\Cache\Cache;
 use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall as FirewallModel;
+use PragmaRX\Support\Config;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\IpAddress;
 
 class DataRepository implements DataRepositoryInterface
 {
