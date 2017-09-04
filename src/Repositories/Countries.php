@@ -4,7 +4,6 @@ namespace PragmaRX\Firewall\Repositories;
 
 use Illuminate\Support\Collection;
 use PragmaRX\Firewall\Support\ServiceInstances;
-use PragmaRX\Support\IpAddress;
 
 class Countries
 {

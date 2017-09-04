@@ -17,7 +17,6 @@ class Message
 
     /**
      * Message constructor.
-     *
      */
     public function __construct()
     {

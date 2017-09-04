@@ -22,8 +22,6 @@ trait ServiceInstances
         if (isset($this->instances[$binding])) {
             return $this->instances[$binding];
         }
-
-        return null;
     }
 
     public function setInstance($binding, $instance)
