@@ -1,6 +1,6 @@
-# Firewall 2.0
+# Firewall 2.1
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall)
+[![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/firewall.svg?style=flat-square)](https://packagist.org/packages/pragmarx/firewall) [![Code Quality](https://img.shields.io/scrutinizer/g/antonioribeiro/firewall.svg?style=flat-square)](https://scrutinizer-ci.com/g/antonioribeiro/firewall/?branch=master) [![Build](https://img.shields.io/scrutinizer/build/g/antonioribeiro/firewall.svg?style=flat-square)](https://scrutinizer-ci.com/g/antonioribeiro/firewall/?branch=master) [![Coverage](https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/firewall.svg?style=flat-square)](https://scrutinizer-ci.com/g/antonioribeiro/firewall/?branch=master) [![StyleCI](https://styleci.io/repos/15290899/shield)](https://styleci.io/repos/15290899)
 
 ## Purpose
 
