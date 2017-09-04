@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Firewall\Listeners;
 
-use Exception;
 use ErrorException;
+use Exception;
 use Notification as IlluminateNotification;
 use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Notifications\Notification;
