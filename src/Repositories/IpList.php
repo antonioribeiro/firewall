@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Repositories;
 
-use PragmaRX\Support\IpAddress;
 use PragmaRX\Firewall\Support\ServiceInstances;
 use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall as FirewallModel;
 
@@ -47,7 +46,6 @@ class IpList
         );
     }
 
-
     /**
      * Remove ip from all array lists.
      *
@@ -60,7 +58,6 @@ class IpList
         return $this->removeFromArrayListType('whitelist', $ipAddress) ||
             $this->removeFromArrayListType('blacklist', $ipAddress);
     }
-
 
     /**
      * Remove the ip address from an array list.

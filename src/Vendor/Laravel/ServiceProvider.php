@@ -149,7 +149,6 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     /**
      * Register the countries repository.
-     *
      */
     private function registerCountriesRepository()
     {
