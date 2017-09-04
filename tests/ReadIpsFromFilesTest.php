@@ -24,8 +24,7 @@ class ReadIpsFromFilesTest extends TestCase
             "192.168.17.0/24\n".
             "127.0.0.1/255.255.255.255\n".
             "10.0.0.1-10.0.0.255\n".
-            "172.17.*.*\n"
-        ;
+            "172.17.*.*\n";
 
         file_put_contents($this->getFilename(), $lines);
 
