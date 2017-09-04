@@ -292,7 +292,7 @@ class Countries
      *
      * @param $ip_address
      *
-     * @return bool|string
+     * @return string|null
      */
     public function getCountryFromIp($ip_address)
     {
@@ -300,7 +300,7 @@ class Countries
             return strtolower($geo['country_code']);
         }
 
-        return false;
+        return null;
     }
 
     /**

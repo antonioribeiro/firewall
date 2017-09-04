@@ -30,7 +30,7 @@ class DataRepository implements DataRepositoryInterface
      *
      * @param $ip_address
      *
-     * @return string
+     * @return string|null
      */
     public function getCountryFromIp($ip_address)
     {
@@ -87,7 +87,7 @@ class DataRepository implements DataRepositoryInterface
     /**
      * Get the GeoIP instance.
      *
-     * @return object
+     * @return \PragmaRX\Support\GeoIp\GeoIp
      */
     public function getGeoIp()
     {

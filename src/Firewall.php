@@ -145,7 +145,7 @@ class Firewall
      *
      * @param string $ip
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return mixed
      */
     public function find($ip)
     {

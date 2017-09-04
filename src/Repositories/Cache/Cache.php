@@ -94,9 +94,9 @@ class Cache implements CacheInterface
     /**
      * Get a value from the cache.
      *
-     * @param $ip
+     * @param $key
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function get($key)
     {

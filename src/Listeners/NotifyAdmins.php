@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Firewall\Listeners;
 
+use Exception;
+use ErrorException;
 use Notification as IlluminateNotification;
 use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Notifications\Notification;
@@ -40,10 +42,10 @@ class NotifyAdmins
                 $this->getNotifiableUsers(),
                 new Notification($event->record, $event->channel)
             );
-        } catch (\Exception $exception) {
-            info($exception->getMessage());
-        } catch (\ErrorException $exception) {
-            info($exception->getMessage());
+        } catch (Exception $exception) {
+            info((string) $exception);
+        } catch (ErrorException $exception) {
+            info((string) $exception);
         }
     }
 }
