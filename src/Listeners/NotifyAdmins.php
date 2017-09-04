@@ -9,7 +9,9 @@ use PragmaRX\Firewall\Notifications\Notification;
 class NotifyAdmins
 {
     /**
-     * @return static
+     * Get notifiable users.
+     *
+     * @return \Illuminate\Support\Collection
      */
     private function getNotifiableUsers()
     {
@@ -39,9 +41,9 @@ class NotifyAdmins
                 new Notification($event->record, $event->channel)
             );
         } catch (\Exception $exception) {
-            info($exception);
+            info($exception->getMessage());
         } catch (\ErrorException $exception) {
-            info($exception);
+            info($exception->getMessage());
         }
     }
 }

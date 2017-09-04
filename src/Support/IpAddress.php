@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Firewall\Support;
 
+use Exception;
 use PragmaRX\Support\IpAddress as SupportIpAddress;
 
 class IpAddress

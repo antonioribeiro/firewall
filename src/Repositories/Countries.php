@@ -273,7 +273,7 @@ class Countries
     /**
      * Get the GeoIp instance.
      *
-     * @return GeoIp
+     * @return \PragmaRX\Support\GeoIp\GeoIp
      */
     public function getGeoIp()
     {
@@ -325,16 +325,6 @@ class Countries
         }
 
         return "country:{$country}";
-    }
-
-    /**
-     * Set the data repository instance.
-     *
-     * @param \PragmaRX\Firewall\Repositories\DataRepository $dataRepository
-     */
-    public function setDataRepository($dataRepository)
-    {
-        $this->dataRepository = $dataRepository;
     }
 
     /**

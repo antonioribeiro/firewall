@@ -9,15 +9,17 @@ class IpList
 {
     use ServiceInstances;
 
+    const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
+
     /**
-     * @var FirewallModel
+     * @var \PragmaRX\Firewall\Vendor\Laravel\Models\Firewall
      */
     private $model;
 
     /**
      * Create instance of DataRepository.
      *
-     * @param FirewallModel $model
+     * @param \PragmaRX\Firewall\Vendor\Laravel\Models\Firewall $model
      */
     public function __construct(FirewallModel $model)
     {
@@ -83,7 +85,7 @@ class IpList
     /**
      * Remove ip from database.
      *
-     * @param $ipAddress
+     * @param \Illuminate\Database\Eloquent\Model $ipAddress
      *
      * @return bool
      */
@@ -139,7 +141,7 @@ class IpList
      */
     private function readFile($file)
     {
-        if ($this->fileSystem->exists($file)) {
+        if ($this->fileSystem()->exists($file)) {
             $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
             return $this->makeArrayOfIps($lines);

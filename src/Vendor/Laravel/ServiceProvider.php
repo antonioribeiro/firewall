@@ -45,7 +45,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      *
      * @throws ConfigurationOptionNotAvailable
      *
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Model
      */
     private function getFirewallModel()
     {
@@ -142,7 +142,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerAttackBlocker()
     {
-        $this->app->singleton('firewall.attackBlocker', function ($app) {
+        $this->app->singleton('firewall.attackBlocker', function () {
             return new AttackBlocker();
         });
     }
@@ -152,7 +152,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerCountriesRepository()
     {
-        $this->app->singleton('firewall.countries', function ($app) {
+        $this->app->singleton('firewall.countries', function () {
             return new Countries();
         });
     }
@@ -164,7 +164,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerBlacklistCommand()
     {
-        $this->app->singleton('firewall.blacklist.command', function ($app) {
+        $this->app->singleton('firewall.blacklist.command', function () {
             return new BlacklistCommand();
         });
 
@@ -178,7 +178,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerCache()
     {
-        $this->app->singleton('firewall.cache', function ($app) {
+        $this->app->singleton('firewall.cache', function () {
             return new Cache(app('cache'));
         });
     }
@@ -190,7 +190,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerClearCommand()
     {
-        $this->app->singleton('firewall.clear.command', function ($app) {
+        $this->app->singleton('firewall.clear.command', function () {
             return new ClearCommand();
         });
 
@@ -204,7 +204,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerDataRepository()
     {
-        $this->app->singleton('firewall.datarepository', function ($app) {
+        $this->app->singleton('firewall.datarepository', function () {
             return new DataRepository();
         });
     }
@@ -224,7 +224,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerFileSystem()
     {
-        $this->app->singleton('firewall.filesystem', function ($app) {
+        $this->app->singleton('firewall.filesystem', function () {
             return new Filesystem();
         });
     }
@@ -256,24 +256,29 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     private function registerIpAddress()
     {
-        $this->app->singleton('firewall.ipaddress', function ($app) {
+        $this->app->singleton('firewall.ipaddress', function () {
             return new IpAddress();
         });
     }
 
+    /**
+     * Register the ip list repository.
+     *
+     */
     private function registerIpList()
     {
-        $this->app->singleton('firewall.iplist', function ($app) {
+        $this->app->singleton('firewall.iplist', function () {
             return new IpList($this->getFirewallModel());
         });
     }
 
     /**
      * Register the message repository.
+     *
      */
     private function registerMessageRepository()
     {
-        $this->app->singleton('firewall.messages', function ($app) {
+        $this->app->singleton('firewall.messages', function () {
             return new Message();
         });
     }
@@ -285,11 +290,11 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerMiddleware()
     {
-        $this->app->singleton('firewall.middleware.blacklist', function ($app) {
+        $this->app->singleton('firewall.middleware.blacklist', function () {
             return new FirewallBlacklist(new Blacklist());
         });
 
-        $this->app->singleton('firewall.middleware.whitelist', function ($app) {
+        $this->app->singleton('firewall.middleware.whitelist', function () {
             return new FirewallWhitelist(new Whitelist());
         });
     }
@@ -313,7 +318,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerRemoveCommand()
     {
-        $this->app->singleton('firewall.remove.command', function ($app) {
+        $this->app->singleton('firewall.remove.command', function () {
             return new RemoveCommand();
         });
 
@@ -327,7 +332,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerReportCommand()
     {
-        $this->app->singleton('firewall.list.command', function ($app) {
+        $this->app->singleton('firewall.list.command', function () {
             return new ReportCommand();
         });
 
@@ -339,7 +344,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerUpdateGeoIpCommand()
     {
-        $this->app->singleton('firewall.updategeoip.command', function ($app) {
+        $this->app->singleton('firewall.updategeoip.command', function () {
             return new UpdateGeoIpCommand();
         });
 
@@ -353,7 +358,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerWhitelistCommand()
     {
-        $this->app->singleton('firewall.whitelist.command', function ($app) {
+        $this->app->singleton('firewall.whitelist.command', function () {
             return new WhitelistCommand();
         });
 

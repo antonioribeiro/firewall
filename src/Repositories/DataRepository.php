@@ -8,8 +8,6 @@ class DataRepository implements DataRepositoryInterface
 {
     use ServiceInstances;
 
-    const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
-
     /**
      * @var \PragmaRX\Firewall\Firewall
      */
