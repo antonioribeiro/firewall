@@ -72,7 +72,7 @@ return [
      *
      */
 
-    'cache_expire_time' => 0, // minutes - disabled by default
+    'cache_expire_time' => 10, // minutes
 
     /*
      *--------------------------------------------------------------------------
