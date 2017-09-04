@@ -299,8 +299,6 @@ class Countries
         if ($geo = $this->geoIp()->searchAddr($ip_address)) {
             return strtolower($geo['country_code']);
         }
-
-        return null;
     }
 
     /**
