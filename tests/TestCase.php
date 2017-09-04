@@ -43,6 +43,8 @@ class TestCase extends OrchestraTestCase
 
         $app['config']->set('firewall.enable_country_search', true);
 
+        $app['config']->set('firewall.cache_expire_time', 10);
+
         return [
             FirewallServiceProvider::class,
         ];

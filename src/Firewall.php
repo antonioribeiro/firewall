@@ -8,9 +8,7 @@ use PragmaRX\Firewall\Repositories\Message;
 use PragmaRX\Firewall\Support\AttackBlocker;
 use PragmaRX\Firewall\Support\Redirectable;
 use PragmaRX\Firewall\Support\Responder;
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\FileSystem;
 use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
 
 class Firewall
@@ -30,20 +28,6 @@ class Firewall
      * @var Config
      */
     private $config;
-
-    /**
-     * The cache manager objetc.
-     *
-     * @var CacheManager
-     */
-    private $cache;
-
-    /**
-     * The file system object.
-     *
-     * @var FileSystem
-     */
-    private $fileSystem;
 
     /**
      * The data repository object.
@@ -75,8 +59,6 @@ class Firewall
      *
      * @param Config         $config
      * @param DataRepository $dataRepository
-     * @param CacheManager   $cache
-     * @param FileSystem     $fileSystem
      * @param Request        $request
      * @param AttackBlocker  $attackBlocker
      * @param Message        $messageRepository
@@ -84,8 +66,6 @@ class Firewall
     public function __construct(
         Config $config,
         DataRepository $dataRepository,
-        CacheManager $cache,
-        FileSystem $fileSystem,
         Request $request,
         AttackBlocker $attackBlocker,
         Message $messageRepository
@@ -93,10 +73,6 @@ class Firewall
         $this->config = $config;
 
         $this->dataRepository = $dataRepository;
-
-        $this->cache = $cache;
-
-        $this->fileSystem = $fileSystem;
 
         $this->request = $request;
 

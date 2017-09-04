@@ -3,10 +3,10 @@
 namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
-use PragmaRX\Firewall\Events\AttackDetected;
-use PragmaRX\Firewall\Firewall;
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
+use PragmaRX\Firewall\Firewall;
+use PragmaRX\Firewall\Events\AttackDetected;
+use PragmaRX\Firewall\Repositories\Cache\Cache;
 
 class AttackBlocker
 {
@@ -90,7 +90,7 @@ class AttackBlocker
      * @param Config       $config
      * @param CacheManager $cache
      */
-    public function __construct(Config $config, CacheManager $cache)
+    public function __construct(Config $config, Cache $cache)
     {
         $this->config = $config;
 

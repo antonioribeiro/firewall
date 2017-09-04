@@ -2,53 +2,24 @@
 
 namespace PragmaRX\Firewall\Repositories\Cache;
 
-/**
- * Part of the Firewall package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- *
- * @link       http://pragmarx.com
- */
+use PragmaRX\Support\Config;
+use Illuminate\Cache\CacheManager;
+
 class Cache implements CacheInterface
 {
+    const CACHE_BASE_NAME = 'firewall.';
+
     private $memory = [];
 
-    /**
-     * Get the cache value.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function get($key)
-    {
-        return isset($this->memory[$key])
-                     ? unserialize($this->memory[$key])
-                     : null;
-    }
+    private $cache;
 
-    /**
-     * Insert or replace a value for a given key.
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param int    $minutes
-     *
-     * @return void
-     */
-    public function put($key, $value, $minutes = 0)
+    private $config;
+
+    public function __construct(Config $config, CacheManager $cache)
     {
-        $this->memory[$key] = serialize($value);
+        $this->config = $config;
+
+        $this->cache = $cache;
     }
 
     /**
@@ -77,19 +48,81 @@ class Cache implements CacheInterface
      */
     public function forever($key, $value)
     {
-        $this->put($key, $value);
+        if ($this->expireTime()) {
+            $this->put($this->key($key), $value);
+        }
     }
 
     /**
-     * Forget a key.
+     * Cache remember.
      *
-     * @param string $key
+     * @param $model
+     *
+     * @return void
+     */
+    public function remember($model)
+    {
+        if ($timeout = $this->expireTime()) {
+            $this->put($this->key($model->ip_address), $model, $timeout);
+        }
+    }
+
+    /**
+     * Make a cache key.
+     *
+     * @param $ip
+     *
+     * @return string
+     */
+    public function key($key)
+    {
+        return sha1(static::CACHE_BASE_NAME."ip_address.$key");
+    }
+
+    /**
+     * Check if cache has key.
+     *
+     * @param $ip
+     *
+     * @return bool
+     */
+    public function has($key)
+    {
+        if ($this->expireTime()) {
+            return $this->cache->has($this->key($key));
+        }
+
+        return false;
+    }
+
+    /**
+     * Get a value from the cache.
+     *
+     * @param $ip
+     *
+     * @return mixed
+     */
+    public function get($key)
+    {
+        if ($this->expireTime()) {
+            return $this->cache->get($this->key($key));
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove an ip address from cache.
+     *
+     * @param string $ip
      *
      * @return void
      */
     public function forget($key)
     {
-        unset($this->memory[$key]);
+        if ($this->expireTime()) {
+            $this->cache->forget($this->key($key));
+        }
     }
 
     /**
@@ -99,17 +132,32 @@ class Cache implements CacheInterface
      */
     public function flush()
     {
-        $this->memory = [];
+        $this->cache->flush();
     }
 
     /**
-     * Get the cache Prefix,
-     *   returns an empty string for backward compatility with Interface.
+     * Store an item in the cache for a given number of minutes.
      *
-     * @return string
+     * @param string         $key
+     * @param mixed          $value
+     * @param int|null|bool  $minutes
+     *
+     * @return void
      */
-    public function getPrefix()
+    public function put($key, $value, $minutes = null)
     {
-        return '';
+        if ($timeout = $this->expireTime()) {
+            $this->cache->put($this->key($key), $value, $minutes ?: $timeout);
+        }
+    }
+
+    /**
+     * Get cache expire time.
+     *
+     * @return int|bool
+     */
+    public function expireTime()
+    {
+        return $this->config->get('cache_expire_time');
     }
 }

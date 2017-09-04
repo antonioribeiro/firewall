@@ -2,35 +2,15 @@
 
 namespace PragmaRX\Firewall\Repositories;
 
-/*
- * Part of the Firewall package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Firewall
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
-
 use Exception;
-use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall as FirewallModel;
-use PragmaRX\Support\CacheManager;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\IpAddress;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Firewall\Repositories\Cache\Cache;
+use PragmaRX\Firewall\Vendor\Laravel\Models\Firewall as FirewallModel;
 
 class DataRepository implements DataRepositoryInterface
 {
-    const CACHE_BASE_NAME = 'firewall.';
-
     const IP_ADDRESS_LIST_CACHE_NAME = 'firewall.ip_address_list';
 
     /**
@@ -81,7 +61,7 @@ class DataRepository implements DataRepositoryInterface
     public function __construct(
         FirewallModel $model,
         Config $config,
-        CacheManager $cache,
+        Cache $cache,
         Filesystem $fileSystem,
         Countries $countries,
         Message $messageRepository
@@ -135,7 +115,7 @@ class DataRepository implements DataRepositoryInterface
             'whitelisted' => $whitelist,
         ]);
 
-        $this->cacheRemember($model);
+        $this->cache->remember($model);
 
         return $model;
     }
@@ -149,12 +129,12 @@ class DataRepository implements DataRepositoryInterface
      */
     public function find($ip)
     {
-        if ($this->cacheHas($ip)) {
-            return $this->cacheGet($ip);
+        if ($this->cache->has($ip)) {
+            return $this->cache->get($ip);
         }
 
         if ($model = $this->findIp($ip)) {
-            $this->cacheRemember($model);
+            $this->cache->remember($model);
         }
 
         return $model;
@@ -254,72 +234,6 @@ class DataRepository implements DataRepositoryInterface
         $this->config->get('use_database') ?
             $this->removeFromDatabaseList($ipAddress) :
             $this->removeFromArrayList($ipAddress);
-    }
-
-    /**
-     * Make a cache key.
-     *
-     * @param $ip
-     *
-     * @return string
-     */
-    public function cacheKey($ip)
-    {
-        return static::CACHE_BASE_NAME."ip_address.$ip";
-    }
-
-    /**
-     * Check if cache has key.
-     *
-     * @param $ip
-     *
-     * @return bool
-     */
-    public function cacheHas($ip)
-    {
-        if ($this->config->get('cache_expire_time')) {
-            return $this->cache->has($this->cacheKey($ip));
-        }
-
-        return false;
-    }
-
-    /**
-     * Get a value from the cache.
-     *
-     * @param $ip
-     *
-     * @return mixed
-     */
-    public function cacheGet($ip)
-    {
-        return $this->cache->get($this->cacheKey($ip));
-    }
-
-    /**
-     * Remove an ip address from cache.
-     *
-     * @param string $ip
-     *
-     * @return void
-     */
-    public function cacheForget($ip)
-    {
-        $this->cache->forget($this->cacheKey($ip));
-    }
-
-    /**
-     * Cache remember.
-     *
-     * @param $model
-     *
-     * @return void
-     */
-    public function cacheRemember($model)
-    {
-        if ($timeout = $this->config->get('cache_expire_time')) {
-            $this->cache->put($this->cacheKey($model->ip_address), $model, $timeout);
-        }
     }
 
     /**
@@ -488,7 +402,7 @@ class DataRepository implements DataRepositoryInterface
         if ($ip = $this->find($ipAddress)) {
             $ip->delete();
 
-            $this->cacheForget($ipAddress);
+            $this->cache->forget($ipAddress);
 
             return true;
         }

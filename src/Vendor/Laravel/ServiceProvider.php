@@ -21,10 +21,11 @@ use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
-use PragmaRX\Support\CacheManager;
+use Illuminate\Cache\CacheManager;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
+use PragmaRX\Firewall\Repositories\Cache\Cache;
 
 class ServiceProvider extends PragmaRXServiceProvider
 {
@@ -164,7 +165,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     private function registerCache()
     {
         $this->app->singleton('firewall.cache', function ($app) {
-            return new CacheManager($app);
+            return new Cache($app['firewall.config'], app('cache'));
         });
     }
 
@@ -240,8 +241,6 @@ class ServiceProvider extends PragmaRXServiceProvider
             $this->firewall = new Firewall(
                 $app['firewall.config'],
                 $app['firewall.dataRepository'],
-                $app['firewall.cache'],
-                $app['firewall.fileSystem'],
                 $app['request'],
                 $attackBlocker = $app['firewall.attackBlocker'],
                 $app['firewall.message']
