@@ -39,7 +39,7 @@ class Report extends Base
 
         $list = [];
 
-        foreach ($this->laravel->firewall->report() as $ip) {
+        foreach (app('firewall')->report() as $ip) {
             $list[] = [
                 $ip['ip_address'],
                 $ip['whitelisted'] == false

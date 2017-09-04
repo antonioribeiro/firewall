@@ -10,12 +10,7 @@ use PragmaRX\Support\Config;
 
 class AttackBlocker
 {
-    /**
-     * The config.
-     *
-     * @var Config
-     */
-    protected $config;
+    use ServiceInstances;
 
     /**
      * The request record.
@@ -27,13 +22,6 @@ class AttackBlocker
 
         'country' => null,
     ];
-
-    /**
-     * The cache.
-     *
-     * @var CacheManager
-     */
-    protected $cache;
 
     /**
      * The ip address.
@@ -87,15 +75,9 @@ class AttackBlocker
     /**
      * AttackBlocker constructor.
      *
-     * @param Config       $config
-     * @param CacheManager $cache
      */
-    public function __construct(Config $config, Cache $cache)
+    public function __construct()
     {
-        $this->config = $config;
-
-        $this->cache = $cache;
-
         $this->loadConfig();
     }
 
@@ -112,9 +94,9 @@ class AttackBlocker
             return false;
         }
 
-        $blacklistUnknown = $this->config->get("attack_blocker.action.{$record['type']}.blacklist_unknown");
+        $blacklistUnknown = $this->config()->get("attack_blocker.action.{$record['type']}.blacklist_unknown");
 
-        $blackWhitelisted = $this->config->get("attack_blocker.action.{$record['type']}.blacklist_whitelisted");
+        $blackWhitelisted = $this->config()->get("attack_blocker.action.{$record['type']}.blacklist_whitelisted");
 
         if ($blacklistUnknown || $blackWhitelisted) {
             $record['isBlacklisted'] = true;
@@ -214,7 +196,7 @@ class AttackBlocker
     {
         return !is_null($this->maxRequestCount)
             ? $this->maxRequestCount
-            : ($this->maxRequestCount = $this->config->get("attack_blocker.allowed_frequency.{$type}.requests"));
+            : ($this->maxRequestCount = $this->config()->get("attack_blocker.allowed_frequency.{$type}.requests"));
     }
 
     /**
@@ -228,7 +210,7 @@ class AttackBlocker
     {
         return !is_null($this->maxSeconds)
             ? $this->maxSeconds
-            : ($this->maxSeconds = $this->config->get("attack_blocker.allowed_frequency.{$type}.seconds"));
+            : ($this->maxSeconds = $this->config()->get("attack_blocker.allowed_frequency.{$type}.seconds"));
     }
 
     /**
@@ -248,7 +230,7 @@ class AttackBlocker
      */
     protected function getResponseConfig()
     {
-        return $this->config->get('attack_blocker.response');
+        return $this->config()->get('attack_blocker.response');
     }
 
     /**
@@ -317,7 +299,7 @@ class AttackBlocker
     private function isWhitelisted($type)
     {
         return $this->firewall->whichList($this->record[$type]['ipAddress']) == 'whitelist' &&
-                $this->config->get("attack_blocker.action.{$this->record[$type]['type']}.blacklist_whitelisted");
+                $this->config()->get("attack_blocker.action.{$this->record[$type]['type']}.blacklist_whitelisted");
     }
 
     /**
@@ -327,7 +309,7 @@ class AttackBlocker
      */
     private function loadConfig()
     {
-        $this->enabledItems = collect($this->config->get('attack_blocker.enabled'))->filter(function ($item) {
+        $this->enabledItems = collect($this->config()->get('attack_blocker.enabled'))->filter(function ($item) {
             return $item === true;
         });
     }
@@ -358,7 +340,7 @@ class AttackBlocker
     protected function loadRecordItems()
     {
         $this->enabledItems->each(function ($index, $type) {
-            if (is_null($this->record[$type] = $this->cache->get($key = $this->makeKeyForType($type, $this->ipAddress)))) {
+            if (is_null($this->record[$type] = $this->cache()->get($key = $this->makeKeyForType($type, $this->ipAddress)))) {
                 $this->record[$type] = $this->getEmptyRecord($key, $type);
             }
         });
@@ -411,7 +393,7 @@ class AttackBlocker
     {
         return hash(
             'sha256',
-            $this->config->get('attack_blocker.cache_key_prefix').'-'.$field
+            $this->config()->get('attack_blocker.cache_key_prefix').'-'.$field
         );
     }
 
@@ -495,10 +477,10 @@ class AttackBlocker
      */
     protected function notify($record)
     {
-        if (!$record['wasNotified'] && $this->config->get('notifications.enabled')) {
+        if (!$record['wasNotified'] && $this->config()->get('notifications.enabled')) {
             $this->save($record['type'], ['wasNotified' => true]);
 
-            collect($this->config->get('notifications.channels'))->filter(function ($value, $channel) use ($record) {
+            collect($this->config()->get('notifications.channels'))->filter(function ($value, $channel) use ($record) {
                 try {
                     event(new AttackDetected($record, $channel));
                 } catch (\Exception $exception) {
@@ -550,7 +532,7 @@ class AttackBlocker
 
         $this->record[$type] = array_merge($this->record[$type], $items);
 
-        $this->cache->put($this->record[$type]['key'], $this->record[$type], $this->getExpirationTimestamp($type));
+        $this->cache()->put($this->record[$type]['key'], $this->record[$type], $this->getExpirationTimestamp($type));
 
         return $this->record[$type];
     }

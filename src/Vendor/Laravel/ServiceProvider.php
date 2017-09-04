@@ -14,8 +14,10 @@ use PragmaRX\Firewall\Middleware\FirewallWhitelist;
 use PragmaRX\Firewall\Repositories\Cache\Cache;
 use PragmaRX\Firewall\Repositories\Countries;
 use PragmaRX\Firewall\Repositories\DataRepository;
+use PragmaRX\Firewall\Repositories\IpList;
 use PragmaRX\Firewall\Repositories\Message;
 use PragmaRX\Firewall\Support\AttackBlocker;
+use PragmaRX\Firewall\Support\IpAddress;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
@@ -109,11 +111,17 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerMessageRepository();
 
+        $this->registerIpList();
+
+        $this->registerIpAddress();
+
         $this->registerGeoIp();
 
         $this->registerAttackBlocker();
 
         $this->registerReportCommand();
+
+        $this->registerCountriesRepository();
 
         if ($this->getConfig('use_database')) {
             $this->registerWhitelistCommand();
@@ -135,10 +143,18 @@ class ServiceProvider extends PragmaRXServiceProvider
     private function registerAttackBlocker()
     {
         $this->app->singleton('firewall.attackBlocker', function ($app) {
-            return new AttackBlocker(
-                $app['firewall.config'],
-                $app['firewall.cache']
-            );
+            return new AttackBlocker();
+        });
+    }
+
+    /**
+     * Register the countries repository.
+     *
+     */
+    private function registerCountriesRepository()
+    {
+        $this->app->singleton('firewall.countries', function ($app) {
+            return new Countries();
         });
     }
 
@@ -164,7 +180,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     private function registerCache()
     {
         $this->app->singleton('firewall.cache', function ($app) {
-            return new Cache($app['firewall.config'], app('cache'));
+            return new Cache(app('cache'));
         });
     }
 
@@ -189,20 +205,8 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerDataRepository()
     {
-        $this->app->singleton('firewall.dataRepository', function ($app) {
-            return new DataRepository(
-                $this->getFirewallModel(),
-
-                $app['firewall.config'],
-
-                $app['firewall.cache'],
-
-                $app['firewall.fileSystem'],
-
-                new Countries($app['firewall.geoip']),
-
-                $app['firewall.message']
-            );
+        $this->app->singleton('firewall.datarepository', function ($app) {
+            return new DataRepository();
         });
     }
 
@@ -221,7 +225,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerFileSystem()
     {
-        $this->app->singleton('firewall.fileSystem', function ($app) {
+        $this->app->singleton('firewall.filesystem', function ($app) {
             return new Filesystem();
         });
     }
@@ -239,10 +243,10 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->firewall = new Firewall(
                 $app['firewall.config'],
-                $app['firewall.dataRepository'],
+                $app['firewall.datarepository'],
                 $app['request'],
                 $attackBlocker = $app['firewall.attackBlocker'],
-                $app['firewall.message']
+                $app['firewall.messages']
             );
 
             $attackBlocker->setFirewall($this->firewall);
@@ -251,12 +255,26 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
+    private function registerIpAddress()
+    {
+        $this->app->singleton('firewall.ipaddress', function ($app) {
+            return new IpAddress();
+        });
+    }
+
+    private function registerIpList()
+    {
+        $this->app->singleton('firewall.iplist', function ($app) {
+            return new IpList($this->getFirewallModel());
+        });
+    }
+
     /**
      * Register the message repository.
      */
     private function registerMessageRepository()
     {
-        $this->app->singleton('firewall.message', function ($app) {
+        $this->app->singleton('firewall.messages', function ($app) {
             return new Message();
         });
     }

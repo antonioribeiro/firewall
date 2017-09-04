@@ -2,18 +2,26 @@
 
 namespace PragmaRX\Firewall\Repositories;
 
+use PragmaRX\Firewall\Support\ServiceInstances;
+
 class Message
 {
+    use ServiceInstances;
+
     /**
      * Saved messages.
      *
      * @var \Illuminate\Support\Collection
      */
-    private $messages;
+    private $messageList;
 
+    /**
+     * Message constructor.
+     *
+     */
     public function __construct()
     {
-        $this->messages = collect();
+        $this->messageList = collect();
     }
 
     /**
@@ -27,7 +35,7 @@ class Message
     {
         collect((array) $message)->each(function ($item) {
             collect($item)->flatten()->each(function ($flattened) {
-                $this->messages->push($flattened);
+                $this->messageList->push($flattened);
             });
         });
     }
@@ -39,6 +47,6 @@ class Message
      */
     public function getMessages()
     {
-        return $this->messages;
+        return $this->messageList;
     }
 }

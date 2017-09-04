@@ -25,10 +25,12 @@ class UpdateGeoIp extends Base
      */
     public function fire()
     {
-        $type = $this->laravel->firewall->updateGeoIp()
+        $firewall = app('firewall');
+
+        $type = $firewall->updateGeoIp()
             ? 'info'
             : 'error';
 
-        $this->displayMessages($type, $this->laravel->firewall->getMessages());
+        $this->displayMessages($type, $firewall->getMessages());
     }
 }

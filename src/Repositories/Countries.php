@@ -3,10 +3,13 @@
 namespace PragmaRX\Firewall\Repositories;
 
 use Illuminate\Support\Collection;
-use PragmaRX\Support\GeoIp\GeoIp;
+use PragmaRX\Firewall\Support\ServiceInstances;
+use PragmaRX\Support\IpAddress;
 
 class Countries
 {
+    use ServiceInstances;
+
     protected $all = [
         'ad'   => 'Andorra, Principality of',
         'ae'   => 'United Arab Emirates',
@@ -263,13 +266,6 @@ class Countries
         'zw'   => 'Zimbabwe',
     ];
 
-    protected $geoIp;
-
-    public function __construct(GeoIp $geoIp)
-    {
-        $this->geoIp = $geoIp;
-    }
-
     public function all()
     {
         return new Collection($this->all);
@@ -282,7 +278,7 @@ class Countries
      */
     public function getGeoIp()
     {
-        return $this->geoIp;
+        return $this->geoIp();
     }
 
     public function isValid($cc)
@@ -301,8 +297,62 @@ class Countries
      */
     public function getCountryFromIp($ip_address)
     {
-        if ($geo = $this->geoIp->searchAddr($ip_address)) {
+        if ($geo = $this->geoIp()->searchAddr($ip_address)) {
             return strtolower($geo['country_code']);
+        }
+
+        return false;
+    }
+
+    /**
+     * Make a country info from a string.
+     *
+     * @param $country
+     *
+     * @return string
+     */
+    public function makeCountryFromString($country)
+    {
+        if ($ips = $this->ipAddress()->isCidr($country)) {
+            $country = $ips[0];
+        }
+
+        if ($this->validCountry($country)) {
+            return $country;
+        }
+
+        if ($this->dataRepository()->ipIsValid($country)) {
+            $country = $this->getCountryFromIp($country);
+        }
+
+        return "country:{$country}";
+    }
+
+    /**
+     * Set the data repository instance.
+     *
+     * @param \PragmaRX\Firewall\Repositories\DataRepository $dataRepository
+     */
+    public function setDataRepository($dataRepository)
+    {
+        $this->dataRepository = $dataRepository;
+    }
+
+    /**
+     * Check if a string is a valid country info.
+     *
+     * @param $country
+     *
+     * @return bool
+     */
+    public function validCountry($country)
+    {
+        $country = strtolower($country);
+
+        if ($this->config()->get('enable_country_search')) {
+            if (starts_with($country, 'country:') && $this->isValid($country)) {
+                return true;
+            }
         }
 
         return false;

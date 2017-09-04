@@ -3,22 +3,18 @@
 namespace PragmaRX\Firewall\Repositories\Cache;
 
 use Illuminate\Cache\CacheManager;
-use PragmaRX\Support\Config;
+use PragmaRX\Firewall\Support\ServiceInstances;
 
 class Cache implements CacheInterface
 {
-    const CACHE_BASE_NAME = 'firewall.';
+    use ServiceInstances;
 
-    private $memory = [];
+    const CACHE_BASE_NAME = 'firewall.';
 
     private $cache;
 
-    private $config;
-
-    public function __construct(Config $config, CacheManager $cache)
+    public function __construct(CacheManager $cache)
     {
-        $this->config = $config;
-
         $this->cache = $cache;
     }
 
@@ -156,6 +152,6 @@ class Cache implements CacheInterface
      */
     public function expireTime()
     {
-        return $this->config->get('cache_expire_time');
+        return $this->config()->get('cache_expire_time');
     }
 }

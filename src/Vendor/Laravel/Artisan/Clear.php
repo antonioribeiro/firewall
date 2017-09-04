@@ -30,7 +30,7 @@ class Clear extends Base
         if (!$this->option('force')) {
             $this->error('This command won\'t run unless you use --force.');
         } else {
-            if ($this->laravel->firewall->clear()) {
+            if (app('firewall')->clear()) {
                 $this->info('List cleared.');
             } else {
                 $this->info('There were no IP addresses to be deleted.');
