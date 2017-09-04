@@ -11,6 +11,7 @@ use PragmaRX\Firewall\Firewall;
 use PragmaRX\Firewall\Listeners\NotifyAdmins;
 use PragmaRX\Firewall\Middleware\FirewallBlacklist;
 use PragmaRX\Firewall\Middleware\FirewallWhitelist;
+use PragmaRX\Firewall\Repositories\Cache\Cache;
 use PragmaRX\Firewall\Repositories\Countries;
 use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Firewall\Repositories\Message;
@@ -21,11 +22,9 @@ use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
-use Illuminate\Cache\CacheManager;
 use PragmaRX\Support\Filesystem;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
-use PragmaRX\Firewall\Repositories\Cache\Cache;
 
 class ServiceProvider extends PragmaRXServiceProvider
 {

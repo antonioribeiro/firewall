@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Firewall\Repositories\Cache;
 
-use PragmaRX\Support\Config;
 use Illuminate\Cache\CacheManager;
+use PragmaRX\Support\Config;
 
 class Cache implements CacheInterface
 {
@@ -107,8 +107,6 @@ class Cache implements CacheInterface
         if ($this->expireTime()) {
             return $this->cache->get($this->key($key));
         }
-
-        return null;
     }
 
     /**
@@ -138,9 +136,9 @@ class Cache implements CacheInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param string         $key
-     * @param mixed          $value
-     * @param int|null|bool  $minutes
+     * @param string        $key
+     * @param mixed         $value
+     * @param int|null|bool $minutes
      *
      * @return void
      */
