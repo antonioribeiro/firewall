@@ -5,7 +5,7 @@ namespace PragmaRX\Firewall\Repositories\Cache;
 use Illuminate\Cache\CacheManager;
 use PragmaRX\Firewall\Support\ServiceInstances;
 
-class Cache implements CacheInterface
+class Cache
 {
     use ServiceInstances;
 
@@ -16,37 +16,6 @@ class Cache implements CacheInterface
     public function __construct(CacheManager $cache)
     {
         $this->cache = $cache;
-    }
-
-    /**
-     * Increment is not supported.
-     */
-    public function increment($key, $value = 1)
-    {
-        throw new \Exception('Increment operations not supported by this driver.');
-    }
-
-    /**
-     * Decrement is not supported.
-     */
-    public function decrement($key, $value = 1)
-    {
-        throw new \Exception('Decrement operations not supported by this driver.');
-    }
-
-    /**
-     * Insert or replace a value for a key and remember is forever.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return void
-     */
-    public function forever($key, $value)
-    {
-        if ($this->expireTime()) {
-            $this->put($this->key($key), $value);
-        }
     }
 
     /**
@@ -66,7 +35,7 @@ class Cache implements CacheInterface
     /**
      * Make a cache key.
      *
-     * @param $ip
+     * @param $key
      *
      * @return string
      */
@@ -78,7 +47,7 @@ class Cache implements CacheInterface
     /**
      * Check if cache has key.
      *
-     * @param $ip
+     * @param $key
      *
      * @return bool
      */
@@ -108,7 +77,7 @@ class Cache implements CacheInterface
     /**
      * Remove an ip address from cache.
      *
-     * @param string $ip
+     * @param $key
      *
      * @return void
      */
@@ -117,16 +86,6 @@ class Cache implements CacheInterface
         if ($this->expireTime()) {
             $this->cache->forget($this->key($key));
         }
-    }
-
-    /**
-     * Erase the whole cache.
-     *
-     * @return void
-     */
-    public function flush()
-    {
-        $this->cache->flush();
     }
 
     /**

@@ -3,4 +3,5 @@ composer.phar
 composer.lock
 .DS_Store
 tests/geoipdb/*
-tests/database.sqlite
+reports/*
+coverage/*

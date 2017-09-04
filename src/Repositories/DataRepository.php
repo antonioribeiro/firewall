@@ -4,7 +4,7 @@ namespace PragmaRX\Firewall\Repositories;
 
 use PragmaRX\Firewall\Support\ServiceInstances;
 
-class DataRepository implements DataRepositoryInterface
+class DataRepository
 {
     use ServiceInstances;
 

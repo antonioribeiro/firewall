@@ -173,7 +173,7 @@ class IpList
      */
     private function makeArrayOfIps($list)
     {
-        $list = $list ?: [];
+        $list = (array) $list ?: [];
 
         $ips = [];
 
