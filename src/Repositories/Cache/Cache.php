@@ -19,16 +19,6 @@ class Cache
     }
 
     /**
-     * Flush cache.
-     *
-     * @return void
-     */
-    public function flush()
-    {
-        $this->cache->flush();
-    }
-
-    /**
      * Cache remember.
      *
      * @param $model
