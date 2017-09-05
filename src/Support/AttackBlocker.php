@@ -120,9 +120,6 @@ class AttackBlocker
     protected function checkExpiration()
     {
         $this->enabledItems->each(function ($index, $type) {
-            $now = (string) $this->now();
-            $last = (string) $this->record[$type]['lastRequestAt'];
-
             if (($this->now()->diffInSeconds($this->record[$type]['lastRequestAt'])) <= ($this->getMaxSecondsForType($type))) {
                 return $this->record;
             }
