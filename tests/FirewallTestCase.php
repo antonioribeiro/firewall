@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use Illuminate\Http\Response;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class FirewallTestCase extends TestCase
@@ -165,22 +164,6 @@ class FirewallTestCase extends TestCase
         })->toArray();
 
         $this->assertEquals($expected, $report);
-    }
-
-    public function test_attack()
-    {
-        $this->config('notifications.enabled', false);
-
-        $this->config('attack_blocker.allowed_frequency.ip.requests', 2);
-
-        $this->assertFalse(Firewall::isBeingAttacked('172.17.0.1'));
-        $this->assertFalse(Firewall::isBeingAttacked('172.17.0.1'));
-
-        $this->assertNull(Firewall::responseToAttack());
-
-        $this->assertTrue(Firewall::isBeingAttacked('172.17.0.1'));
-
-        $this->assertInstanceOf(Response::class, Firewall::responseToAttack());
     }
 
     public function test_do_not_reinsert_existent()

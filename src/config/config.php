@@ -95,7 +95,7 @@ return [
      *
      */
 
-    'ip_list_cache_expire_time' => 0, // minutes - disabled by default
+    'ip_list_cache_expire_time' => 0, // minutes
 
     /*
      * Send suspicious events to log?

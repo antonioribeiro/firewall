@@ -463,11 +463,7 @@ class IpList
         );
 
         if ($cacheTime > 0) {
-            $this->cache()->put(
-                static::IP_ADDRESS_LIST_CACHE_NAME,
-                $list,
-                $cacheTime
-            );
+            $this->cache()->put(static::IP_ADDRESS_LIST_CACHE_NAME, $list, $cacheTime);
         }
 
         return $list;

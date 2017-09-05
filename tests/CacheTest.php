@@ -46,4 +46,25 @@ class CacheTest extends TestCase
 
         $this->assertNull($this->cache->get($key));
     }
+
+    public function test_list_cache()
+    {
+        $this->firewall->blacklist($ip = '172.17.0.1');
+
+        $this->assertTrue($this->firewall->isBlacklisted($ip));
+
+        $this->firewall->clear($ip);
+
+        $this->assertFalse($this->firewall->isBlacklisted($ip));
+
+        $this->config('ip_list_cache_expire_time', 1);
+
+        $this->firewall->blacklist($ip);
+
+        $this->assertTrue($this->firewall->isBlacklisted($ip));
+
+        $this->firewall->clear($ip);
+
+        $this->assertTrue($this->firewall->isBlacklisted($ip));
+    }
 }

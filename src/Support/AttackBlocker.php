@@ -153,16 +153,6 @@ class AttackBlocker
     }
 
     /**
-     * Get firewall.
-     *
-     * @return Firewall
-     */
-    public function getFirewall()
-    {
-        return $this->firewall;
-    }
-
-    /**
      * Search geo localization by ip.
      *
      * @param $ipAddress
@@ -172,16 +162,6 @@ class AttackBlocker
     protected function getGeo($ipAddress)
     {
         return $this->firewall->getGeoIp()->searchAddr($ipAddress);
-    }
-
-    /**
-     * Get the cache key.
-     *
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
     }
 
     /**
@@ -210,16 +190,6 @@ class AttackBlocker
         return !is_null($this->maxSeconds)
             ? $this->maxSeconds
             : ($this->maxSeconds = $this->config()->get("attack_blocker.allowed_frequency.{$type}.seconds"));
-    }
-
-    /**
-     * Get attack records.
-     *
-     * @return array
-     */
-    public function getRecord()
-    {
-        return $this->record;
     }
 
     /**
