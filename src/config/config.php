@@ -10,35 +10,23 @@ return [
     'enabled' => env('FIREWALL_ENABLED', true),
 
     /*
-     * Blacklisted IP  addresses, ranges, countries, files and/or files of files
+     * Whitelisted and blacklisted IP addresses, ranges, countries, files and/or files of files
      *
+     *  Examples of IP address, hosts, country codes and CIDRs
+     *      '127.0.0.1',
+     *      '192.168.17.0/24'
+     *      '127.0.0.1/255.255.255.255'
+     *      '10.0.0.1-10.0.0.255'
+     *      '172.17.*.*'
+     *      'country:br'
+     *      'host:google.com',
+     *      storage_path().DIRECTORY_SEPARATOR.'blacklisted.txt', // a file with IPs, one per line
      */
 
     'blacklist' => [
-        // '127.0.0.1',
-        // '192.168.17.0/24'
-        // '127.0.0.1/255.255.255.255'
-        // '10.0.0.1-10.0.0.255'
-        // '172.17.*.*'
-        // 'country:br'
-        // 'host:google.com',
-        // storage_path().DIRECTORY_SEPARATOR.'blacklisted.txt',
     ],
 
-    /*
-     * Whitelisted IP addresses, ranges, countries, files and/or files of files
-     *
-     */
-
     'whitelist' => [
-        // '127.0.0.2',
-        // '192.168.18.0/24'
-        // '127.0.0.2/255.255.255.255'
-        // '10.0.1.1-10.0.1.255'
-        // '172.16.*.*'
-        // 'country:ch'
-        // 'host:google.com',
-        // storage_path().DIRECTORY_SEPARATOR.'whitelisted.txt',
     ],
 
     /*
