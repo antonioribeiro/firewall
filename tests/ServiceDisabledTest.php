@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use ReflectionException;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 use PragmaRX\Firewall\Vendor\Laravel\ServiceProvider as FirewallServiceProvider;
+use ReflectionException;
 
 class ServiceDisabledTest extends TestCase
 {

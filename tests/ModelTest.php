@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
+use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class ModelTest extends TestCase
 {

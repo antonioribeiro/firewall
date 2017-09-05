@@ -153,6 +153,7 @@ class Firewall
      * Get the IP address.
      *
      * @param null $ip
+     *
      * @return null|string
      */
     public function getIp($ip = null)
