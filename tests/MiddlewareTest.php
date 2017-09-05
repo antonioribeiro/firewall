@@ -11,11 +11,11 @@ use PragmaRX\Firewall\Middleware\FirewallBlacklist;
 use PragmaRX\Firewall\Middleware\FirewallWhitelist;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
-class MiddlwareTest extends TestCase
+class MiddlewareTest extends TestCase
 {
     private function getNextClosure()
     {
-        return function() {
+        return function () {
             return 'next';
         };
     }
@@ -37,7 +37,8 @@ class MiddlwareTest extends TestCase
         $this->config('attack_blocker.allowed_frequency.ip.requests', 2);
     }
 
-    public function test_blacklist() {
+    public function test_blacklist()
+    {
         $this->blacklist->filter($this->request);
 
         $this->assertEquals('next', $this->blacklist->handle($this->request, $this->getNextClosure()));
@@ -47,7 +48,8 @@ class MiddlwareTest extends TestCase
         $this->assertInstanceOf(Response::class, $this->blacklist->handle($this->request, $this->getNextClosure()));
     }
 
-    public function test_whitelist() {
+    public function test_whitelist()
+    {
         $this->whitelist->filter($this->request);
 
         $this->assertInstanceOf(Response::class, $this->whitelist->handle($this->request, $this->getNextClosure()));
@@ -57,7 +59,8 @@ class MiddlwareTest extends TestCase
         $this->assertEquals('next', $this->whitelist->handle($this->request, $this->getNextClosure()));
     }
 
-    public function test_block_attack() {
+    public function test_block_attack()
+    {
         $this->assertFalse(Firewall::isBeingAttacked('127.0.0.1'));
 
         $this->assertEquals('next', $this->blockAttacks->handle($this->request, $this->getNextClosure()));
