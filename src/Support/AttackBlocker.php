@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Support;
 
-use DateTime;
 use Carbon\Carbon;
 use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Firewall;
@@ -128,7 +127,7 @@ class AttackBlocker
                 return $this->record;
             }
 
-            return ($this->record[$type] = $this->getEmptyRecord($this->record[$type]['key'], $type));
+            return $this->record[$type] = $this->getEmptyRecord($this->record[$type]['key'], $type);
         });
     }
 
