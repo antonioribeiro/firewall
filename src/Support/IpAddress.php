@@ -68,6 +68,13 @@ class IpAddress
         return SupportIpAddress::ipV4Valid($item);
     }
 
+    /**
+     * Check if a string is a CIDR.
+     *
+     * @param $country
+     *
+     * @return bool|array
+     */
     public function isCidr($country)
     {
         return SupportIpAddress::isCidr($country);

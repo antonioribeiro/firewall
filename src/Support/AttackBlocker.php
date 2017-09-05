@@ -74,6 +74,7 @@ class AttackBlocker
 
     /**
      * AttackBlocker constructor.
+     *
      */
     public function __construct()
     {
