@@ -314,6 +314,8 @@ class Firewall
     /**
      * Check if the application is receiving some sort of attack.
      *
+     * @param null $ipAddress
+     *
      * @return bool
      */
     public function isBeingAttacked($ipAddress = null)

@@ -69,4 +69,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertInstanceOf(Response::class, $this->blockAttacks->handle($this->request, $this->getNextClosure()));
     }
+
+    public function test_register()
+    {
+        $this->assertInstanceOf(FirewallBlacklist::class, app('firewall.middleware.blacklist'));
+
+        $this->assertInstanceOf(FirewallWhitelist::class, app('firewall.middleware.whitelist'));
+    }
 }

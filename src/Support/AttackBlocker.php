@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Firewall\Support;
 
+use DateTime;
 use Carbon\Carbon;
 use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Firewall;
@@ -120,11 +121,14 @@ class AttackBlocker
     protected function checkExpiration()
     {
         $this->enabledItems->each(function ($index, $type) {
-            if (($this->record[$type]['lastRequestAt']->diffInSeconds(Carbon::now())) <= ($this->getMaxSecondsForType($type))) {
+            $now = (string) $this->now();
+            $last = (string) $this->record[$type]['lastRequestAt'];
+
+            if (($this->now()->diffInSeconds($this->record[$type]['lastRequestAt'])) <= ($this->getMaxSecondsForType($type))) {
                 return $this->record;
             }
 
-            return $this->getEmptyRecord($this->record[$type]['key'], $type);
+            return ($this->record[$type] = $this->getEmptyRecord($this->record[$type]['key'], $type));
         });
     }
 
@@ -147,7 +151,7 @@ class AttackBlocker
      */
     protected function getExpirationTimestamp($type)
     {
-        return Carbon::now()->addSeconds($this->getMaxSecondsForType($type));
+        return $this->now()->addSeconds($this->getMaxSecondsForType($type));
     }
 
     /**
@@ -338,6 +342,18 @@ class AttackBlocker
     }
 
     /**
+     * Get the current date time.
+     *
+     * @return Carbon
+     */
+    private function now()
+    {
+        Carbon::setTestNow();
+
+        return Carbon::now();
+    }
+
+    /**
      * Make a response.
      *
      * @return null|\Illuminate\Http\Response
@@ -413,9 +429,9 @@ class AttackBlocker
 
             'requestCount' => 0,
 
-            'firstRequestAt' => Carbon::now(),
+            'firstRequestAt' => $this->now(),
 
-            'lastRequestAt' => Carbon::now(),
+            'lastRequestAt' => $this->now(),
 
             'isBlacklisted' => false,
 
@@ -466,7 +482,7 @@ class AttackBlocker
      */
     protected function renew($record)
     {
-        $this->save($record['type'], ['lastRequestAt' => Carbon::now()]);
+        $this->save($record['type'], ['lastRequestAt' => $this->now()]);
     }
 
     /**
