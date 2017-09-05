@@ -460,11 +460,7 @@ class AttackBlocker
             $this->save($record['type'], ['wasNotified' => true]);
 
             collect($this->config()->get('notifications.channels'))->filter(function ($value, $channel) use ($record) {
-                try {
-                    event(new AttackDetected($record, $channel));
-                } catch (\Exception $exception) {
-                    info($exception);
-                }
+                event(new AttackDetected($record, $channel));
             });
         }
     }
