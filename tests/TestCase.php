@@ -10,7 +10,7 @@ class TestCase extends OrchestraTestCase
 {
     protected function config($key, $value = null)
     {
-        if (! is_null($value)) {
+        if (!is_null($value)) {
             app()->config->set("firewall.{$key}", $value);
         }
 

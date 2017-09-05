@@ -2,12 +2,12 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use Route;
-use InvalidArgumentException;
 use Illuminate\Http\RedirectResponse;
-use PragmaRX\Firewall\Filters\Whitelist;
+use InvalidArgumentException;
 use PragmaRX\Firewall\Filters\Blacklist;
+use PragmaRX\Firewall\Filters\Whitelist;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
+use Route;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MiddlewareTest extends TestCase
@@ -39,7 +39,7 @@ class MiddlewareTest extends TestCase
 
     public function test_redirect_whitelisted_to_route_name()
     {
-        Route::get('/redirected', ['as' => 'redirected', function() {
+        Route::get('/redirected', ['as' => 'redirected', function () {
             return 'whatever';
         }]);
 
