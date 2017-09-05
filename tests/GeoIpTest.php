@@ -60,4 +60,11 @@ class GeoIpTest extends TestCase
 
         $this->assertFalse(Firewall::validCountry('country:xx'));
     }
+
+    public function test_country_cidr()
+    {
+        Firewall::blacklist('country:us');
+
+        $this->assertTrue(Firewall::isBlacklisted('8.8.8.0/24'));
+    }
 }

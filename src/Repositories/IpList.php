@@ -51,30 +51,34 @@ class IpList
     /**
      * Remove ip from all array lists.
      *
-     * @param $ipAddress
+     * @param $ip
      *
      * @return bool
      */
-    private function removeFromArrayList($ipAddress)
+    private function removeFromArrayList($ip)
     {
-        return $this->removeFromArrayListType('whitelist', $ipAddress) ||
-            $this->removeFromArrayListType('blacklist', $ipAddress);
+        return $this->removeFromArrayListType('whitelist', $ip) ||
+            $this->removeFromArrayListType('blacklist', $ip);
     }
 
     /**
      * Remove the ip address from an array list.
      *
      * @param $type
-     * @param $ipAddress
+     * @param $ip
      *
      * @return bool
      */
-    private function removeFromArrayListType($type, $ipAddress)
+    private function removeFromArrayListType($type, $ip)
     {
-        if (($key = array_search($ipAddress, $data = $this->config()->get($type))) !== false) {
+        if (($key = array_search($ip, $data = $this->config()->get($type))) !== false) {
             unset($data[$key]);
 
+            $this->cache()->forget($ip);
+
             $this->config()->set($type, $data);
+
+            $this->messages()->addMessage(sprintf('%s removed from %s', $ip, $type));
 
             return true;
         }
@@ -85,21 +89,19 @@ class IpList
     /**
      * Remove ip from database.
      *
-     * @param \Illuminate\Database\Eloquent\Model $ipAddress
+     * @param \Illuminate\Database\Eloquent\Model $ip
      *
      * @return bool
      */
-    private function removeFromDatabaseList($ipAddress)
+    private function removeFromDatabaseList($ip)
     {
-        if ($ip = $this->find($ipAddress)) {
-            $ip->delete();
+        $ip = $this->find($ip);
 
-            $this->cache()->forget($ipAddress);
+        $ip->delete();
 
-            return true;
-        }
+        $this->cache()->forget($ip->ip_address);
 
-        return false;
+        $this->messages()->addMessage(sprintf('%s removed from %s', $ip, $ip->whitelisted ? 'whitelist' : 'blacklist'));
     }
 
     /**
@@ -265,7 +267,7 @@ class IpList
     public function checkSecondaryLists($ip_address)
     {
         foreach ($this->all() as $range) {
-            if ($this->ipAddress()->hostToIp($range) == $ip_address || $this->ipAddress()->validRange($ip_address, $range)) {
+            if ($this->ipAddress()->hostToIp($range->ip_address) == $ip_address || $this->ipAddress()->validRange($ip_address, $range)) {
                 return $range;
             }
         }
@@ -289,8 +291,6 @@ class IpList
             : 'blacklist';
 
         if (!$this->ipAddress()->isValid($ip)) {
-            $this->messages()->addMessage(sprintf('%s is not a valid IP address', $ip));
-
             return false;
         }
 
@@ -354,8 +354,6 @@ class IpList
 
         if (!empty($listed)) {
             $this->delete($ip);
-
-            $this->messages()->addMessage(sprintf('%s removed from %s', $ip, $listed));
 
             return true;
         }
@@ -435,15 +433,15 @@ class IpList
     /**
      * Delete ip address.
      *
-     * @param $ipAddress
+     * @param $ip
      *
      * @return bool|void
      */
-    public function delete($ipAddress)
+    public function delete($ip)
     {
         $this->config()->get('use_database') ?
-            $this->removeFromDatabaseList($ipAddress) :
-            $this->removeFromArrayList($ipAddress);
+            $this->removeFromDatabaseList($ip) :
+            $this->removeFromArrayList($ip);
     }
 
     /**

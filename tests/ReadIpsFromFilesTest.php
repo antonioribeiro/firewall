@@ -28,7 +28,7 @@ class ReadIpsFromFilesTest extends TestCase
 
         file_put_contents($this->getFilename(), $lines);
 
-        $this->setConfig('blacklist', $this->getFilename());
+        $this->config('blacklist', $this->getFilename());
     }
 
     public function test_read_file()

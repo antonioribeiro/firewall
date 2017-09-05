@@ -319,7 +319,7 @@ class Countries
         }
 
         if ($this->dataRepository()->ipIsValid($country)) {
-            $country = $this->getCountryFromIp($country);
+            $country = $this->getCountryFromIp($this->ipAddress()->hostToIp($country));
         }
 
         return "country:{$country}";

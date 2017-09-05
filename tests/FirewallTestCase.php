@@ -7,6 +7,11 @@ use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class FirewallTestCase extends TestCase
 {
+    public function test_invalid_ip()
+    {
+        $this->assertFalse(Firewall::blacklist('127.0.0.256'));
+    }
+
     public function test_firewall_is_instantiable()
     {
         $false = Firewall::isBlackListed('impossible');
@@ -16,7 +21,7 @@ class FirewallTestCase extends TestCase
 
     public function test_disable_firewall()
     {
-        $this->setConfig('enabled', false);
+        $this->config('enabled', false);
 
         Firewall::blacklist($ip = '172.17.0.100');
 
@@ -132,15 +137,6 @@ class FirewallTestCase extends TestCase
         Firewall::log('whatever');
     }
 
-    public function test_setip()
-    {
-        $this->assertEquals('127.0.0.1', Firewall::getIp());
-
-        Firewall::setIp($ip = '127.0.0.2');
-
-        $this->assertEquals($ip, Firewall::getIp());
-    }
-
     public function test_ip_validation()
     {
         $this->assertTrue(Firewall::ipIsValid('172.17.0.100'));
@@ -173,9 +169,9 @@ class FirewallTestCase extends TestCase
 
     public function test_attack()
     {
-        $this->setConfig('notifications.enabled', false);
+        $this->config('notifications.enabled', false);
 
-        $this->setConfig('attack_blocker.allowed_frequency.ip.requests', 2);
+        $this->config('attack_blocker.allowed_frequency.ip.requests', 2);
 
         $this->assertFalse(Firewall::isBeingAttacked('172.17.0.1'));
         $this->assertFalse(Firewall::isBeingAttacked('172.17.0.1'));
@@ -185,5 +181,51 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isBeingAttacked('172.17.0.1'));
 
         $this->assertInstanceOf(Response::class, Firewall::responseToAttack());
+    }
+
+    public function test_do_not_reinsert_existent()
+    {
+        Firewall::blacklist('172.17.0.1');
+
+        Firewall::blacklist('172.17.0.1');
+
+        $this->assertTrue(Firewall::isBlacklisted('172.17.0.1'));
+    }
+
+    public function test_do_not_remove_non_existent()
+    {
+        Firewall::remove('172.17.0.1');
+
+        Firewall::blacklist('172.17.0.1');
+
+        Firewall::remove('172.17.0.1');
+
+        Firewall::remove('172.17.0.1');
+
+        $this->assertFalse(Firewall::isWhitelisted('172.17.0.1'));
+
+        $this->assertFalse(Firewall::isBlacklisted('172.17.0.1'));
+    }
+
+    public function test_setip()
+    {
+        $this->assertEquals('127.0.0.1', Firewall::getIp());
+
+        Firewall::setIp($ip = '127.0.0.2');
+
+        $this->assertEquals($ip, Firewall::getIp());
+
+        Firewall::setIp($ip = '127.0.0.1');
+
+        Firewall::blacklist('127.0.0.1');
+
+        $this->assertTrue(Firewall::isBlacklisted());
+    }
+
+    public function test_list_by_host()
+    {
+        Firewall::blacklist('host:corinna.antoniocarlosribeiro.com');
+
+        $this->assertTrue(Firewall::isBlacklisted('67.205.143.231'));
     }
 }

@@ -2,24 +2,26 @@
 
 namespace PragmaRX\Firewall\Filters;
 
-use PragmaRX\Firewall\Support\Redirectable;
+use PragmaRX\Firewall\Support\Responder;
+use PragmaRX\Firewall\Support\ServiceInstances;
 
 class Whitelist
 {
-    use Redirectable;
+    use ServiceInstances;
 
     public function filter()
     {
         $firewall = app()->make('firewall');
 
         if (!$firewall->isWhitelisted()) {
-            if ($to = app()->make('firewall.config')->get('redirect_non_whitelisted_to')) {
-                $action = 'redirected';
+            $response = (new Responder())->respond(
+                $this->config()->get('responses.whitelist')
+            );
 
-                $response = $this->redirectTo($to);
+            if (!is_null($this->config()->get('responses.whitelist.redirect_to'))) {
+                $action = 'redirected';
             } else {
                 $action = 'blocked';
-                $response = $firewall->blockAccess();
             }
 
             $message = sprintf('[%s] IP not whitelisted: %s', $action, $firewall->getIp());

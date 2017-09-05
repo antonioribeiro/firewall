@@ -3,13 +3,18 @@
 namespace PragmaRX\Firewall\Tests;
 
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 use PragmaRX\Firewall\Vendor\Laravel\ServiceProvider as FirewallServiceProvider;
 
 class TestCase extends OrchestraTestCase
 {
-    protected function setConfig($key, $value)
+    protected function config($key, $value = null)
     {
-        app()->config->set("firewall.{$key}", $value);
+        if (! is_null($value)) {
+            app()->config->set("firewall.{$key}", $value);
+        }
+
+        app()->config->get("firewall.{$key}");
     }
 
     private function configureDatabase()

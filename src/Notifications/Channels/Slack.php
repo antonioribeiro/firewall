@@ -5,26 +5,8 @@ namespace PragmaRX\Firewall\Notifications\Channels;
 use Carbon\Carbon;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class Slack extends BaseChannel
+class Slack extends BaseChannel implements Contract
 {
-    /**
-     * Make a geolocation model for the item.
-     *
-     * @param $item
-     *
-     * @return array
-     */
-    public function makeGeolocation($item)
-    {
-        return collect([
-            config('firewall.notifications.message.geolocation.field_latitude')     => $item['geoIp']['latitude'],
-            config('firewall.notifications.message.geolocation.field_longitude')    => $item['geoIp']['longitude'],
-            config('firewall.notifications.message.geolocation.field_country_code') => $item['geoIp']['country_code'],
-            config('firewall.notifications.message.geolocation.field_country_name') => $item['geoIp']['country_name'],
-            config('firewall.notifications.message.geolocation.field_city')         => $item['geoIp']['city'],
-        ])->filter()->toArray();
-    }
-
     /**
      * Send a message.
      *

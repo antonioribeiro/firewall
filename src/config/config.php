@@ -46,16 +46,30 @@ return [
      *
      */
 
-    'response' => [
-        'code' => 403, // 200 = log && notify, but keep pages rendering
+    'responses' => [
+        'blacklist' => [
+            'code' => 403, // 200 = log && notify, but keep pages rendering
 
-        'message' => null,
+            'message' => null,
 
-        'view' => null,
+            'view' => null,
 
-        'redirect_to' => null,
+            'redirect_to' => null,
 
-        'abort' => false, // return abort() instead of Response::make() - disabled by default
+            'abort' => false, // return abort() instead of Response::make() - disabled by default
+        ],
+
+        'whitelist' => [
+            'code' => 403, // 200 = log && notify, but keep pages rendering
+
+            'message' => null,
+
+            'view' => null,
+
+            'redirect_to' => null,
+
+            'abort' => false, // return abort() instead of Response::make() - disabled by default
+        ],
     ],
 
     /*
@@ -277,6 +291,11 @@ return [
             'slack' => [
                 'enabled' => true,
                 'sender'  => PragmaRX\Firewall\Notifications\Channels\Slack::class,
+            ],
+
+            'mail' => [
+                'enabled' => true,
+                'sender'  => PragmaRX\Firewall\Notifications\Channels\Mail::class,
             ],
         ],
     ],

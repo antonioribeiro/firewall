@@ -27,8 +27,8 @@ class Cache
      */
     public function remember($model)
     {
-        if ($timeout = $this->expireTime()) {
-            $this->put($this->key($model->ip_address), $model, $timeout);
+        if (($timeout = $this->expireTime()) > 0) {
+            $this->put($model->ip_address, $model, $timeout);
         }
     }
 
@@ -53,7 +53,7 @@ class Cache
      */
     public function has($key)
     {
-        if ($this->expireTime()) {
+        if ($this->enabled()) {
             return $this->cache->has($this->key($key));
         }
 
@@ -69,7 +69,7 @@ class Cache
      */
     public function get($key)
     {
-        if ($this->expireTime()) {
+        if ($this->enabled()) {
             return $this->cache->get($this->key($key));
         }
     }
@@ -83,7 +83,7 @@ class Cache
      */
     public function forget($key)
     {
-        if ($this->expireTime()) {
+        if ($this->enabled()) {
             $this->cache->forget($this->key($key));
         }
     }
@@ -99,7 +99,7 @@ class Cache
      */
     public function put($key, $value, $minutes = null)
     {
-        if ($timeout = $this->expireTime()) {
+        if ($timeout = $this->enabled()) {
             $this->cache->put($this->key($key), $value, $minutes ?: $timeout);
         }
     }
@@ -112,5 +112,16 @@ class Cache
     public function expireTime()
     {
         return $this->config()->get('cache_expire_time');
+    }
+
+    /**
+     * Get enabled state.
+     *
+     * @return int|bool
+     */
+    public function enabled()
+    {
+        return $this->config()->get('cache_expire_time') !== false &&
+            $this->expireTime() > 0;
     }
 }

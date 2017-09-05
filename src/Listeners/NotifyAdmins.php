@@ -44,8 +44,6 @@ class NotifyAdmins
             );
         } catch (Exception $exception) {
             info((string) $exception);
-        } catch (ErrorException $exception) {
-            info((string) $exception);
         }
     }
 }

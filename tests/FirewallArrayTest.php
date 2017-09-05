@@ -8,7 +8,7 @@ class FirewallArrayTest extends FirewallTestCase
 {
     protected function getPackageProviders($app)
     {
-        $this->setConfig('use_database', false);
+        $this->config('use_database', false);
 
         return [
             FirewallServiceProvider::class,

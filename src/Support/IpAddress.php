@@ -18,13 +18,12 @@ class IpAddress
      */
     public function isValid($ip)
     {
-        $ip = $this->hostToIp($ip);
-
-        try {
-            return SupportIpAddress::ipV4Valid($ip) || $this->countries()->validCountry($ip);
-        } catch (Exception $e) {
-            return false;
+        if (!$result = SupportIpAddress::ipV4Valid($ip = $this->hostToIp($ip)) ||
+            $this->countries()->validCountry($ip)) {
+            $this->messages()->addMessage(sprintf('%s is not a valid IP address', $ip));
         }
+
+        return $result;
     }
 
     /**

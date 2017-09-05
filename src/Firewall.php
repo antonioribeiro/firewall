@@ -6,15 +6,12 @@ use Illuminate\Http\Request;
 use PragmaRX\Firewall\Repositories\DataRepository;
 use PragmaRX\Firewall\Repositories\Message;
 use PragmaRX\Firewall\Support\AttackBlocker;
-use PragmaRX\Firewall\Support\Redirectable;
 use PragmaRX\Firewall\Support\Responder;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
 
 class Firewall
 {
-    use Redirectable;
-
     /**
      * The IP adress.
      *
@@ -126,7 +123,7 @@ class Firewall
     public function blockAccess()
     {
         return (new Responder())->respond(
-            $this->config->get('response')
+            $this->config->get('responses.blacklist')
         );
     }
 
@@ -155,11 +152,12 @@ class Firewall
     /**
      * Get the IP address.
      *
-     * @return string|null
+     * @param null $ip
+     * @return null|string
      */
-    public function getIp()
+    public function getIp($ip = null)
     {
-        return $this->ip;
+        return $ip ?: $this->ip;
     }
 
     /**
@@ -274,13 +272,13 @@ class Firewall
     /**
      * Tell in which list (black/white) an IP address is.
      *
-     * @param $ip_address
+     * @param $ip
      *
      * @return bool|string
      */
-    public function whichList($ip_address)
+    public function whichList($ip)
     {
-        return $this->dataRepository->whichList($ip_address);
+        return $this->dataRepository->whichList($this->getIp($ip));
     }
 
     /**
@@ -335,13 +333,13 @@ class Firewall
     /**
      * Get country code from an IP address.
      *
-     * @param $ip_address
+     * @param $ip
      *
      * @return bool|string
      */
-    public function getCountryFromIp($ip_address)
+    public function getCountryFromIp($ip)
     {
-        return $this->dataRepository->getCountryFromIp($ip_address);
+        return $this->dataRepository->getCountryFromIp($ip);
     }
 
     /**
