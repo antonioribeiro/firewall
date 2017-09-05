@@ -318,7 +318,7 @@ class Firewall
      */
     public function isBeingAttacked($ipAddress = null)
     {
-        return $this->attackBlocker->isBeingAttacked($ipAddress ?: $this->ip);
+        return $this->attackBlocker->isBeingAttacked($this->getIp($ipAddress));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Firewall\Tests;
 
+use Illuminate\Http\Response;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class FirewallTestCase extends TestCase

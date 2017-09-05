@@ -100,9 +100,7 @@ class AttackBlocker
         if ($blacklistUnknown || $blackWhitelisted) {
             $record['isBlacklisted'] = true;
 
-            $ipAddress = $record['type'] == 'country'
-                        ? 'country:'.$record['country_code']
-                        : $record['ipAddress'];
+            $ipAddress = $record['type'] == 'country' ? 'country:'.$record['country_code'] : $record['ipAddress'];
 
             $this->firewall->blacklist($ipAddress, $blackWhitelisted);
 

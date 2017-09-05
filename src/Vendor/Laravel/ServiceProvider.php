@@ -57,16 +57,6 @@ class ServiceProvider extends PragmaRXServiceProvider
     }
 
     /**
-     * Get the current package directory.
-     *
-     * @return string
-     */
-    public function getPackageDir()
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
-    }
-
-    /**
      * Get the root directory for this ServiceProvider.
      *
      * @return string
@@ -74,16 +64,6 @@ class ServiceProvider extends PragmaRXServiceProvider
     public function getRootDirectory()
     {
         return __DIR__.'/../..';
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['firewall'];
     }
 
     /**

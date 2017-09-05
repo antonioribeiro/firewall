@@ -38,6 +38,8 @@ class TestCase extends OrchestraTestCase
         $this->configureDatabase();
 
         $this->artisan('migrate:refresh', ['--database' => 'testbench']);
+
+        app('firewall.cache')->flush();
     }
 
     protected function getPackageProviders($app)

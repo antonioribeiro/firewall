@@ -2,103 +2,68 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use Illuminate\Http\RedirectResponse;
-use InvalidArgumentException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use PragmaRX\Firewall\Filters\Blacklist;
 use PragmaRX\Firewall\Filters\Whitelist;
+use PragmaRX\Firewall\Middleware\BlockAttacks;
+use PragmaRX\Firewall\Middleware\FirewallBlacklist;
+use PragmaRX\Firewall\Middleware\FirewallWhitelist;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
-use Route;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class MiddlewareTest extends TestCase
+class MiddlwareTest extends TestCase
 {
+    private function getNextClosure()
+    {
+        return function() {
+            return 'next';
+        };
+    }
+
     public function setUp()
     {
         parent::setUp();
 
-        Firewall::setIp('127.0.0.1');
+        $this->request = new Request();
+
+        $this->blockAttacks = (new BlockAttacks());
+
+        $this->blacklist = (new FirewallBlacklist(new Blacklist()));
+
+        $this->whitelist = (new FirewallWhitelist(new Whitelist()));
+
+        $this->config('attack_blocker.enabled.ip', true);
+
+        $this->config('attack_blocker.allowed_frequency.ip.requests', 2);
     }
 
-    public function test_whitelist()
-    {
-        Firewall::whitelist('127.0.0.1');
+    public function test_blacklist() {
+        $this->blacklist->filter($this->request);
 
-        $response = (new Whitelist())->filter();
+        $this->assertEquals('next', $this->blacklist->handle($this->request, $this->getNextClosure()));
 
-        $this->assertNull($response);
-    }
-
-    public function test_redirect_whitelisted()
-    {
-        $this->config('responses.whitelist.redirect_to', 'http://whatever.com');
-
-        $response = (new Whitelist())->filter();
-
-        $this->assertInstanceOf(RedirectResponse::class, $response);
-    }
-
-    public function test_redirect_whitelisted_to_route_name()
-    {
-        Route::get('/redirected', ['as' => 'redirected', function () {
-            return 'whatever';
-        }]);
-
-        $this->config('responses.whitelist.redirect_to', 'redirected');
-
-        $response = (new Whitelist())->filter();
-
-        $this->assertInstanceOf(RedirectResponse::class, $response);
-
-        $this->assertTrue(str_contains($response->getContent(), '/redirected'));
-    }
-
-    public function test_redirect_whitelisted_to_view()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->config('responses.whitelist.view', 'redirected');
-
-        $response = (new Whitelist())->filter();
-    }
-
-    public function test_whitelist_ignore_listing()
-    {
-        $this->config('responses.whitelist.code', 200);
-
-        $response = (new Whitelist())->filter();
-
-        $this->assertNull($response);
-    }
-
-    public function test_redirect_whitelisted_to_abort()
-    {
-        $this->expectException(HttpException::class);
-
-        $this->config('responses.whitelist.abort', true);
-
-        $response = (new Whitelist())->filter();
-    }
-
-    public function test_not_whitelisted()
-    {
-        $response = (new Whitelist())->filter();
-
-        $this->assertEquals(403, $response->getStatusCode());
-    }
-
-    public function test_blacklist()
-    {
         Firewall::blacklist('127.0.0.1');
 
-        $response = (new Blacklist())->filter();
-
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertInstanceOf(Response::class, $this->blacklist->handle($this->request, $this->getNextClosure()));
     }
 
-    public function test_not_blacklisted()
-    {
-        $response = (new Blacklist())->filter();
+    public function test_whitelist() {
+        $this->whitelist->filter($this->request);
 
-        $this->assertNull($response);
+        $this->assertInstanceOf(Response::class, $this->whitelist->handle($this->request, $this->getNextClosure()));
+
+        Firewall::whitelist('127.0.0.1');
+
+        $this->assertEquals('next', $this->whitelist->handle($this->request, $this->getNextClosure()));
+    }
+
+    public function test_block_attack() {
+        $this->assertFalse(Firewall::isBeingAttacked('127.0.0.1'));
+
+        $this->assertEquals('next', $this->blockAttacks->handle($this->request, $this->getNextClosure()));
+
+        $this->assertTrue(Firewall::isBeingAttacked('127.0.0.1'));
+
+        $this->assertInstanceOf(Response::class, $this->blockAttacks->handle($this->request, $this->getNextClosure()));
     }
 }
