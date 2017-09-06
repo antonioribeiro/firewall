@@ -212,4 +212,17 @@ class FirewallTestCase extends TestCase
 
         $this->assertTrue(Firewall::isBlacklisted('67.205.143.231'));
     }
+
+    public function test_wildcard()
+    {
+        Firewall::whitelist('172.17.*.*');
+
+        $this->assertTrue(Firewall::isWhitelisted($ip = '172.17.0.100'));
+
+        $this->assertTrue(Firewall::isWhitelisted($ip = '172.17.1.101'));
+
+        $this->assertTrue(Firewall::isWhitelisted($ip = '172.17.2.102'));
+
+        $this->assertTrue(Firewall::isWhitelisted($ip = '172.17.255.255'));
+    }
 }
