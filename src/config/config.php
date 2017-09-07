@@ -72,18 +72,22 @@ return [
     /*
      * How long should we keep IP addresses in cache?
      *
-     */
-
-    'cache_expire_time' => 10, // minutes
-
-    /*
-     *--------------------------------------------------------------------------
-     * How long should we keep lists of IP addresses in cache?
-     *--------------------------------------------------------------------------
+     * This is a general client IP addresses cache. When the user hits your ssytem his/her IP address
+     * is searched and cached for the desiered time. Finding an IP address contained in a CIDR
+     * range (172.17.0.0/24, for instance) can be a "slow", caching it improves performance.
      *
      */
 
-    'ip_list_cache_expire_time' => 0, // minutes
+    'cache_expire_time' => 0, // minutes - disabled by default
+
+    /*
+     * How long should we keep lists of IP addresses in cache?
+     *
+     * This is the list cache. Database lists can take some time to load and process,
+     * caching it, if you are not making frequent changes to your lists, may improve firewall speed a lot.
+     */
+
+    'ip_list_cache_expire_time' => 0, // minutes - disabled by default
 
     /*
      * Send suspicious events to log?
