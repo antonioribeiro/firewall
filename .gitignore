@@ -5,4 +5,4 @@ composer.lock
 tests/geoipdb/*
 reports/*
 coverage/*
-tests/database.sqlite
+tests/databases/*
