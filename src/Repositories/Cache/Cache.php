@@ -45,6 +45,15 @@ class Cache
     }
 
     /**
+     * Flush cache.
+     *
+     */
+    public function flush()
+    {
+        $this->cache->flush();
+    }
+
+    /**
      * Check if cache has key.
      *
      * @param $key

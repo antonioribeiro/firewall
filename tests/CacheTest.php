@@ -9,8 +9,6 @@ class CacheTest extends TestCase
         parent::setup();
 
         $this->cache = app('firewall.cache');
-
-        $this->firewall = app('firewall');
     }
 
     public function test_cache_holds_cached_ip()
