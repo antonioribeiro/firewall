@@ -2,11 +2,13 @@
 
 namespace PragmaRX\Firewall\Support;
 
-trait Redirectable {
+trait Redirectable
+{
     /**
-     * Creates a redirect response for route or address
+     * Creates a redirect response for route or address.
      *
      * @param $to
+     *
      * @return mixed
      */
     public function redirectTo($to)

@@ -6,7 +6,8 @@ use Illuminate\Console\Command;
 
 abstract class Base extends Command
 {
-    public function displayMessages($type, $messages) {
+    public function displayMessages($type, $messages)
+    {
         foreach ($messages as $message) {
             $this->$type($message);
         }
