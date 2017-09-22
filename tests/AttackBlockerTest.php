@@ -23,6 +23,7 @@ class AttackBlockerTest extends TestCase
 
         config()->set('services.slack.webhook_url', '12345');
     }
+
 //
 //    public function test_attack()
 //    {

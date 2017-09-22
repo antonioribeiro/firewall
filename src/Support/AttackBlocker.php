@@ -3,8 +3,8 @@
 namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
-use PragmaRX\Firewall\Firewall;
 use PragmaRX\Firewall\Events\AttackDetected;
+use PragmaRX\Firewall\Firewall;
 
 class AttackBlocker
 {
