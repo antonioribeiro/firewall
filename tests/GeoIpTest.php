@@ -11,6 +11,8 @@ class GeoIpTest extends TestCase
         parent::setUp();
 
         Firewall::updateGeoIp();
+
+        Firewall::clear();
     }
 
     public function test_get_country()
