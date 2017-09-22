@@ -20,7 +20,7 @@ class TestCase extends OrchestraTestCase
 
     private function configureDatabase()
     {
-        if (! file_exists($path = __DIR__.'/databases')) {
+        if (!file_exists($path = __DIR__.'/databases')) {
             mkdir($path);
         }
 
