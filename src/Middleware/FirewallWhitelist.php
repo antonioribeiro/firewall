@@ -9,18 +9,21 @@ class FirewallWhitelist
 {
     protected $whitelist;
 
-    public function __construct(Whitelist $whitelist) {
+    public function __construct(Whitelist $whitelist)
+    {
         $this->whitelist = $whitelist;
     }
 
     /**
      * Filter Request through whitelist.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         $filterResponse = $this->whitelist->filter();
 
         if ($filterResponse != null) {

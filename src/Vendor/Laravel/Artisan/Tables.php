@@ -24,14 +24,15 @@ class Tables extends Base
      * Create a base migration file for the reminders.
      *
      * @param $name
+     *
      * @return string
      */
-    protected function createBaseMigration($name) {
+    protected function createBaseMigration($name)
+    {
         if (isLaravel5()) {
-            $path = base_path() . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations';
-        }
-        else {
-            $path = $this->laravel['path'] . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations';
+            $path = base_path().DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
+        } else {
+            $path = $this->laravel['path'].DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
         }
 
         return $this->laravel['migration.creator']->create($name, $path);
@@ -42,7 +43,8 @@ class Tables extends Base
      *
      * @return void
      */
-    public function fire() {
+    public function fire()
+    {
         foreach ($this->tables as $table) {
             $fullPath = $this->createBaseMigration($table);
 
@@ -53,8 +55,7 @@ class Tables extends Base
 
         if (isLaravel5()) {
             $this->call('optimize');
-        }
-        else {
+        } else {
             $this->call('dump-autoload');
         }
     }
@@ -63,10 +64,12 @@ class Tables extends Base
      * Get the contents of a migration stub.
      *
      * @param $name
+     *
      * @return string
      */
-    protected function getMigrationStub($name) {
-        $stub = file_get_contents(__DIR__ . "/../../../stubs/$name.stub");
+    protected function getMigrationStub($name)
+    {
+        $stub = file_get_contents(__DIR__."/../../../stubs/$name.stub");
 
         return $stub;
     }

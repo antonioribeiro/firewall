@@ -22,9 +22,9 @@ class Clear extends Base
 
     /**
      * Create a new command instance.
-     *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -33,15 +33,14 @@ class Clear extends Base
      *
      * @return mixed
      */
-    public function fire() {
+    public function fire()
+    {
         if (!$this->option('force')) {
             $this->error('This command won\'t run unless you use --force.');
-        }
-        else {
+        } else {
             if ($this->laravel->firewall->clear()) {
                 $this->info('List cleared.');
-            }
-            else {
+            } else {
                 $this->info('There were no IP addresses to be deleted.');
             }
         }
@@ -52,7 +51,8 @@ class Clear extends Base
      *
      * @return array
      */
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
         ];
     }
@@ -62,7 +62,8 @@ class Clear extends Base
      *
      * @return array
      */
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ['force', null, InputOption::VALUE_NONE, 'Remove IP before adding it to the list.'],
         ];

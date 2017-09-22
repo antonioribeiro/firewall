@@ -2,28 +2,28 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel;
 
-use PragmaRX\Firewall\Repositories\Countries;
-use PragmaRX\Support\Response;
-use PragmaRX\Firewall\Firewall;
-use PragmaRX\Support\Filesystem;
-use PragmaRX\Support\CacheManager;
-use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Firewall\Database\Migrator;
+use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
 use PragmaRX\Firewall\Filters\Blacklist;
 use PragmaRX\Firewall\Filters\Whitelist;
-use PragmaRX\Firewall\Repositories\DataRepository;
+use PragmaRX\Firewall\Firewall;
 use PragmaRX\Firewall\Middleware\FirewallBlacklist;
 use PragmaRX\Firewall\Middleware\FirewallWhitelist;
-use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
-use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
-use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
+use PragmaRX\Firewall\Repositories\Countries;
+use PragmaRX\Firewall\Repositories\DataRepository;
+use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
-use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
-use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
-use PragmaRX\Firewall\Repositories\Firewall\Firewall as FirewallRepository;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\Whitelist as WhitelistCommand;
+use PragmaRX\Support\CacheManager;
+use PragmaRX\Support\Filesystem;
+use PragmaRX\Support\GeoIp\GeoIp;
+use PragmaRX\Support\Response;
+use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 class ServiceProvider extends PragmaRXServiceProvider
 {
@@ -36,25 +36,29 @@ class ServiceProvider extends PragmaRXServiceProvider
     protected $packageNameCapitalized = 'Firewall';
 
     /**
-     * Return a proper response for blocked access
+     * Return a proper response for blocked access.
      *
      * @return Response
      */
-    public function blockAccess($content = null, $status = null) {
+    public function blockAccess($content = null, $status = null)
+    {
         return $this->app['firewall']->blockAccess($content, $status);
     }
 
     /**
      * Get the full path of the stub config file.
-     * @return string
+     *
      * @throws ConfigurationOptionNotAvailable
+     *
+     * @return string
      */
-    private function getFirewallModel() {
+    private function getFirewallModel()
+    {
         if (!$firewallModel = $this->getConfig('firewall_model')) {
             throw new ConfigurationOptionNotAvailable('Config option "firewall_model" is not available, please publish/check your configuration.');
         }
 
-        return new $firewallModel;
+        return new $firewallModel();
     }
 
     /**
@@ -62,17 +66,19 @@ class ServiceProvider extends PragmaRXServiceProvider
      *
      * @return string
      */
-    public function getPackageDir() {
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..';
+    public function getPackageDir()
+    {
+        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
     }
 
     /**
-     * Get the root directory for this ServiceProvider
+     * Get the root directory for this ServiceProvider.
      *
      * @return string
      */
-    public function getRootDirectory() {
-        return __DIR__ . '/../..';
+    public function getRootDirectory()
+    {
+        return __DIR__.'/../..';
     }
 
     /**
@@ -80,7 +86,8 @@ class ServiceProvider extends PragmaRXServiceProvider
      *
      * @return array
      */
-    public function provides() {
+    public function provides()
+    {
         return ['firewall'];
     }
 
@@ -89,7 +96,8 @@ class ServiceProvider extends PragmaRXServiceProvider
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
         parent::register();
 
         $this->registerFileSystem();
@@ -121,48 +129,52 @@ class ServiceProvider extends PragmaRXServiceProvider
     }
 
     /**
-     * Register the Blacklist Artisan command
+     * Register the Blacklist Artisan command.
      *
      * @return void
      */
-    private function registerBlacklistCommand() {
+    private function registerBlacklistCommand()
+    {
         $this->app->singleton('firewall.blacklist.command', function ($app) {
-            return new BlacklistCommand;
+            return new BlacklistCommand();
         });
 
         $this->commands('firewall.blacklist.command');
     }
 
     /**
-     * Register the Cache driver used by Firewall
+     * Register the Cache driver used by Firewall.
      *
      * @return void
      */
-    private function registerCache() {
+    private function registerCache()
+    {
         $this->app->singleton('firewall.cache', function ($app) {
             return new CacheManager($app);
         });
     }
 
     /**
-     * Register the List Artisan command
+     * Register the List Artisan command.
      *
      * @return void
      */
-    private function registerClearCommand() {
+    private function registerClearCommand()
+    {
         $this->app->singleton('firewall.clear.command', function ($app) {
-            return new ClearCommand;
+            return new ClearCommand();
         });
 
         $this->commands('firewall.clear.command');
     }
 
     /**
-     * Register the Data Repository driver used by Firewall
+     * Register the Data Repository driver used by Firewall.
      *
      * @return void
      */
-    private function registerDataRepository() {
+    private function registerDataRepository()
+    {
         $this->app->singleton('firewall.dataRepository', function ($app) {
             return new DataRepository(
                 new FirewallRepository(
@@ -184,13 +196,14 @@ class ServiceProvider extends PragmaRXServiceProvider
     }
 
     /**
-     * Register the Filesystem driver used by Firewall
+     * Register the Filesystem driver used by Firewall.
      *
      * @return void
      */
-    private function registerFileSystem() {
+    private function registerFileSystem()
+    {
         $this->app->singleton('firewall.fileSystem', function ($app) {
-            return new Filesystem;
+            return new Filesystem();
         });
     }
 
@@ -200,7 +213,8 @@ class ServiceProvider extends PragmaRXServiceProvider
      *
      * @return void
      */
-    private function registerFirewall() {
+    private function registerFirewall()
+    {
         $this->app->singleton('firewall', function ($app) {
             $app['firewall.loaded'] = true;
 
@@ -217,11 +231,12 @@ class ServiceProvider extends PragmaRXServiceProvider
     }
 
     /**
-     * Register blocking and unblocking Middleware
+     * Register blocking and unblocking Middleware.
      *
      * @return void
      */
-    private function registerMiddleware() {
+    private function registerMiddleware()
+    {
         $this->app->singleton('firewall.middleware.blacklist', function ($app) {
             return new FirewallBlacklist(new Blacklist());
         });
@@ -231,50 +246,55 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function registerMigrator() {
+    private function registerMigrator()
+    {
         $this->app->singleton('firewall.migrator', function ($app) {
-                $connection = $this->getConfig('connection');
+            $connection = $this->getConfig('connection');
 
-                return new Migrator($app['db'], $connection);
-            }
+            return new Migrator($app['db'], $connection);
+        }
         );
     }
 
-    private function registerGeoIp() {
+    private function registerGeoIp()
+    {
         $this->app->singleton('firewall.geoip', function () {
             return new GeoIp($this->getConfig('geoip_database_path'));
         });
     }
 
     /**
-     * Register the List Artisan command
+     * Register the List Artisan command.
      *
      * @return void
      */
-    private function registerRemoveCommand() {
+    private function registerRemoveCommand()
+    {
         $this->app->singleton('firewall.remove.command', function ($app) {
-            return new RemoveCommand;
+            return new RemoveCommand();
         });
 
         $this->commands('firewall.remove.command');
     }
 
     /**
-     * Register the List Artisan command
+     * Register the List Artisan command.
      *
      * @return void
      */
-    private function registerReportCommand() {
+    private function registerReportCommand()
+    {
         $this->app->singleton('firewall.list.command', function ($app) {
-            return new ReportCommand;
+            return new ReportCommand();
         });
 
         $this->commands('firewall.list.command');
     }
 
-    private function registerTablesCommand() {
+    private function registerTablesCommand()
+    {
         $this->app->singleton('firewall.tables.command', function ($app) {
-            return new TablesCommand;
+            return new TablesCommand();
         });
 
         $this->commands('firewall.tables.command');
@@ -286,20 +306,21 @@ class ServiceProvider extends PragmaRXServiceProvider
     private function registerUpdateGeoIpCommand()
     {
         $this->app->singleton('firewall.updategeoip.command', function ($app) {
-            return new UpdateGeoIpCommand;
+            return new UpdateGeoIpCommand();
         });
 
         $this->commands('firewall.updategeoip.command');
     }
 
     /**
-     * Register the Whitelist Artisan command
+     * Register the Whitelist Artisan command.
      *
      * @return void
      */
-    private function registerWhitelistCommand() {
+    private function registerWhitelistCommand()
+    {
         $this->app->singleton('firewall.whitelist.command', function ($app) {
-            return new WhitelistCommand;
+            return new WhitelistCommand();
         });
 
         $this->commands('firewall.whitelist.command');
