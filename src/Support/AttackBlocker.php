@@ -3,9 +3,8 @@
 namespace PragmaRX\Firewall\Support;
 
 use Carbon\Carbon;
-use PragmaRX\Firewall\Events\AttackDetected;
 use PragmaRX\Firewall\Firewall;
-use PragmaRX\Firewall\Repositories\Cache\Cache;
+use PragmaRX\Firewall\Events\AttackDetected;
 
 class AttackBlocker
 {
@@ -72,14 +71,6 @@ class AttackBlocker
     protected $enabledItems;
 
     /**
-     * AttackBlocker constructor.
-     */
-    public function __construct()
-    {
-        $this->loadConfig();
-    }
-
-    /**
      * Blacklist the IP address.
      *
      * @param $record
@@ -118,7 +109,7 @@ class AttackBlocker
      */
     protected function checkExpiration()
     {
-        $this->enabledItems->each(function ($index, $type) {
+        $this->getEnabledItems()->each(function ($index, $type) {
             if (($this->now()->diffInSeconds($this->record[$type]['lastRequestAt'])) <= ($this->getMaxSecondsForType($type))) {
                 return $this->record;
             }
@@ -135,6 +126,20 @@ class AttackBlocker
     protected function getEmptyRecord($key, $type)
     {
         return $this->makeRecord($key, $type);
+    }
+
+    /**
+     * Get enabled items.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    private function getEnabledItems()
+    {
+        if (is_null($this->enabledItems)) {
+            $this->loadConfig();
+        }
+
+        return $this->enabledItems;
     }
 
     /**
@@ -206,7 +211,7 @@ class AttackBlocker
      */
     protected function increment()
     {
-        $this->enabledItems->each(function ($index, $type) {
+        $this->getEnabledItems()->each(function ($index, $type) {
             $this->save($type, ['requestCount' => $this->record[$type]['requestCount'] + 1]);
         });
     }
@@ -218,7 +223,7 @@ class AttackBlocker
      */
     protected function isAttack()
     {
-        return $this->enabledItems->filter(function ($index, $type) {
+        return $this->getEnabledItems()->filter(function ($index, $type) {
             if (!$this->isWhitelisted($type) && $this->record[$type]['requestCount'] > $this->getMaxRequestCountForType($type)) {
                 $this->takeAction($this->record[$type]);
 
@@ -252,7 +257,7 @@ class AttackBlocker
      */
     protected function isEnabled()
     {
-        return count($this->enabledItems) > 0;
+        return count($this->getEnabledItems()) > 0;
     }
 
     /**
@@ -305,7 +310,7 @@ class AttackBlocker
      */
     protected function loadRecordItems()
     {
-        $this->enabledItems->each(function ($index, $type) {
+        $this->getEnabledItems()->each(function ($index, $type) {
             if (is_null($this->record[$type] = $this->cache()->get($key = $this->makeKeyForType($type, $this->ipAddress)))) {
                 $this->record[$type] = $this->getEmptyRecord($key, $type);
             }
@@ -395,7 +400,7 @@ class AttackBlocker
                 return $this->makeHashedKey($this->country);
             }
 
-            unset($this->enabledItems['country']);
+            unset($this->getEnabledItems()['country']);
 
             return;
         }
