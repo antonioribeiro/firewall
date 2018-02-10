@@ -227,7 +227,6 @@ class FirewallTestCase extends TestCase
     }
 }
 
-
 //3) PragmaRX\Firewall\Tests\FirewallArrayTest::test_log
 //This test did not perform any assertions
 //
