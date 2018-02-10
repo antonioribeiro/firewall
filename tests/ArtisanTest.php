@@ -16,7 +16,7 @@ class ArtisanTest extends TestCase
 
     public function test_updategeoip()
     {
-        Artisan::call('firewall:updategeoip');
+        $this->assertEquals(0, Artisan::call('firewall:updategeoip'));
     }
 
     public function test_blacklist()
@@ -52,6 +52,6 @@ class ArtisanTest extends TestCase
 
     public function test_report()
     {
-        Artisan::call('firewall:list');
+        $this->assertEquals(0, Artisan::call('firewall:list'));
     }
 }

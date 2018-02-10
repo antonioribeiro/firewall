@@ -134,7 +134,7 @@ class FirewallTestCase extends TestCase
 
     public function test_log()
     {
-        Firewall::log('whatever');
+        $this->assertNull(Firewall::log('whatever'));
     }
 
     public function test_ip_validation()
@@ -226,3 +226,10 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isWhitelisted($ip = '172.17.255.255'));
     }
 }
+
+
+//3) PragmaRX\Firewall\Tests\FirewallArrayTest::test_log
+//This test did not perform any assertions
+//
+//4) PragmaRX\Firewall\Tests\FirewallDatabaseTest::test_log
+//This test did not perform any assertions
