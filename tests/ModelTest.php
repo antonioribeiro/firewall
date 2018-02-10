@@ -14,7 +14,7 @@ class ModelTest extends TestCase
         return parent::getPackageProviders($app);
     }
 
-    public function test_model_not_available()
+    public function testModelNotAvailable()
     {
         $this->expectException(ConfigurationOptionNotAvailable::class);
 

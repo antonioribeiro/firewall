@@ -14,26 +14,26 @@ class ArtisanTest extends TestCase
         return parent::getPackageProviders($app);
     }
 
-    public function test_updategeoip()
+    public function testUpdateGeoip()
     {
         $this->assertEquals(0, Artisan::call('firewall:updategeoip'));
     }
 
-    public function test_blacklist()
+    public function testBlacklist()
     {
         Artisan::call('firewall:blacklist', ['ip' => $ip = '127.0.0.1']);
 
         $this->assertTrue(Firewall::isBlacklisted($ip));
     }
 
-    public function test_whitelist()
+    public function testWhitelist()
     {
         Artisan::call('firewall:whitelist', ['ip' => $ip = '127.0.0.1']);
 
         $this->assertTrue(Firewall::isWhitelisted($ip));
     }
 
-    public function test_remove()
+    public function testRemove()
     {
         Artisan::call('firewall:whitelist', ['ip' => $ip1 = '127.0.0.1']);
 
@@ -50,7 +50,7 @@ class ArtisanTest extends TestCase
         $this->assertFalse(Firewall::isWhitelisted($ip2));
     }
 
-    public function test_report()
+    public function testReport()
     {
         $this->assertEquals(0, Artisan::call('firewall:list'));
     }

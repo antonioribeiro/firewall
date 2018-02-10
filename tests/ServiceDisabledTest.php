@@ -17,7 +17,7 @@ class ServiceDisabledTest extends TestCase
         ];
     }
 
-    public function test_firewall_is_disabled()
+    public function testFirewallIsDisabled()
     {
         $this->expectException(ReflectionException::class);
 

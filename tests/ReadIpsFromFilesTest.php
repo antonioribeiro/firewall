@@ -31,7 +31,7 @@ class ReadIpsFromFilesTest extends TestCase
         $this->config('blacklist', $this->getFilename());
     }
 
-    public function test_read_file()
+    public function testReadFile()
     {
         Firewall::blacklist($this->getFilename());
 

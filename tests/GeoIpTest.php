@@ -15,14 +15,14 @@ class GeoIpTest extends TestCase
         Firewall::clear();
     }
 
-    public function test_get_country()
+    public function testGetCountry()
     {
         $this->assertEquals('us', Firewall::getCountryFromIp('8.8.8.8'));
 
         $this->assertEquals('br', Firewall::getCountryFromIp('200.222.0.24'));
     }
 
-    public function test_block_per_country()
+    public function testBlockPerCountry()
     {
         Firewall::blacklist('country:us');
 
@@ -31,7 +31,7 @@ class GeoIpTest extends TestCase
         $this->assertFalse(Firewall::isWhitelisted('8.8.8.8'));
     }
 
-    public function test_make_country()
+    public function testMakeCountry()
     {
         $this->assertEquals('country:br', Firewall::makeCountryFromString('br'));
 
@@ -40,7 +40,7 @@ class GeoIpTest extends TestCase
         $this->assertEquals('country:br', Firewall::makeCountryFromString('200.222.0.21'));
     }
 
-    public function test_country_ip_listing()
+    public function testCountryIpListing()
     {
         Firewall::blacklist('8.8.8.7');
         Firewall::blacklist('8.8.8.8');
@@ -54,7 +54,7 @@ class GeoIpTest extends TestCase
         $this->assertCount(3, Firewall::allByCountry('us'));
     }
 
-    public function test_country_is_valid()
+    public function testCountryIsValid()
     {
         $this->assertTrue(Firewall::validCountry('country:us'));
 
@@ -63,7 +63,7 @@ class GeoIpTest extends TestCase
         $this->assertFalse(Firewall::validCountry('country:xx'));
     }
 
-    public function test_country_cidr()
+    public function testCountryCidr()
     {
         Firewall::blacklist('country:us');
 

@@ -37,7 +37,7 @@ class MiddlewareTest extends TestCase
         $this->config('attack_blocker.allowed_frequency.ip.requests', 2);
     }
 
-    public function test_blacklist()
+    public function testBlacklist()
     {
         $this->blacklist->filter($this->request);
 
@@ -48,7 +48,7 @@ class MiddlewareTest extends TestCase
         $this->assertInstanceOf(Response::class, $this->blacklist->handle($this->request, $this->getNextClosure()));
     }
 
-    public function test_whitelist()
+    public function testWhitelist()
     {
         $this->whitelist->filter($this->request);
 
@@ -59,7 +59,7 @@ class MiddlewareTest extends TestCase
         $this->assertEquals('next', $this->whitelist->handle($this->request, $this->getNextClosure()));
     }
 
-    public function test_block_attack()
+    public function testBlockAttack()
     {
         $this->assertFalse(Firewall::isBeingAttacked('127.0.0.1'));
 
@@ -70,7 +70,7 @@ class MiddlewareTest extends TestCase
         $this->assertInstanceOf(Response::class, $this->blockAttacks->handle($this->request, $this->getNextClosure()));
     }
 
-    public function test_register()
+    public function testRegister()
     {
         $this->assertInstanceOf(FirewallBlacklist::class, app('firewall.middleware.blacklist'));
 

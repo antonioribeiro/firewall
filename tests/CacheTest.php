@@ -11,7 +11,7 @@ class CacheTest extends TestCase
         $this->cache = app('firewall.cache');
     }
 
-    public function test_cache_holds_cached_ip()
+    public function testCacheHoldsCachedIp()
     {
         $this->firewall->blacklist($ip = '172.17.0.1');
 
@@ -20,7 +20,7 @@ class CacheTest extends TestCase
         $this->assertTrue($this->cache->has($ip));
     }
 
-    public function test_cache_put()
+    public function testCachePut()
     {
         foreach (range(1, 100) as $counter) {
             $this->cache->put($key = '1234', $this->cache->get($key, 0) + 1, 10);
@@ -29,7 +29,7 @@ class CacheTest extends TestCase
         $this->assertEquals(100, $this->cache->get($key));
     }
 
-    public function test_disabled_cache()
+    public function testDisabledCache()
     {
         $this->cache->put($key = '1234', $this->cache->get($key, 0) + 1, 10);
         $this->cache->put($key = '1234', $this->cache->get($key, 0) + 1, 10);
@@ -45,7 +45,7 @@ class CacheTest extends TestCase
         $this->assertNull($this->cache->get($key));
     }
 
-    public function test_list_cache()
+    public function testListCache()
     {
         $this->firewall->blacklist($ip = '172.17.0.1');
 

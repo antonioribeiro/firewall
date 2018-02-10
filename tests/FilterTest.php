@@ -19,7 +19,7 @@ class FilterTest extends TestCase
         Firewall::setIp('127.0.0.1');
     }
 
-    public function test_whitelist()
+    public function testWhitelist()
     {
         Firewall::whitelist('127.0.0.1');
 
@@ -28,7 +28,7 @@ class FilterTest extends TestCase
         $this->assertNull($response);
     }
 
-    public function test_redirect_whitelisted()
+    public function testRedirectWhitelisted()
     {
         $this->config('responses.whitelist.redirect_to', 'http://whatever.com');
 
@@ -37,7 +37,7 @@ class FilterTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $response);
     }
 
-    public function test_redirect_whitelisted_to_route_name()
+    public function testRedirectWhitelistedToRouteName()
     {
         Route::get('/redirected', ['as' => 'redirected', function () {
             return 'whatever';
@@ -52,7 +52,7 @@ class FilterTest extends TestCase
         $this->assertTrue(str_contains($response->getContent(), '/redirected'));
     }
 
-    public function test_redirect_whitelisted_to_view()
+    public function testRedirectWhitelistedToView()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -61,7 +61,7 @@ class FilterTest extends TestCase
         $response = (new Whitelist())->filter();
     }
 
-    public function test_whitelist_ignore_listing()
+    public function testWhitelistIgnoreListing()
     {
         $this->config('responses.whitelist.code', 200);
 
@@ -70,7 +70,7 @@ class FilterTest extends TestCase
         $this->assertNull($response);
     }
 
-    public function test_redirect_whitelisted_to_abort()
+    public function testRedirectWhitelistedToAbort()
     {
         $this->expectException(HttpException::class);
 
@@ -79,14 +79,14 @@ class FilterTest extends TestCase
         $response = (new Whitelist())->filter();
     }
 
-    public function test_not_whitelisted()
+    public function testNotWhitelisted()
     {
         $response = (new Whitelist())->filter();
 
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    public function test_blacklist()
+    public function testBlacklist()
     {
         Firewall::blacklist('127.0.0.1');
 
@@ -95,7 +95,7 @@ class FilterTest extends TestCase
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    public function test_not_blacklisted()
+    public function testNotBlacklisted()
     {
         $response = (new Blacklist())->filter();
 

@@ -7,19 +7,19 @@ use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class FirewallTestCase extends TestCase
 {
-    public function test_invalid_ip()
+    public function testInvalidIp()
     {
         $this->assertFalse(Firewall::blacklist('127.0.0.256'));
     }
 
-    public function test_firewall_is_instantiable()
+    public function testFirewallIsInstantiable()
     {
         $false = Firewall::isBlackListed('impossible');
 
         $this->assertFalse($false);
     }
 
-    public function test_disable_firewall()
+    public function testDisableFirewall()
     {
         $this->config('enabled', false);
 
@@ -28,7 +28,7 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isBlackListed($ip));
     }
 
-    public function test_can_blacklist_ips()
+    public function testCanBlacklistIps()
     {
         Firewall::blacklist($ip = '172.17.0.100');
 
@@ -43,7 +43,7 @@ class FirewallTestCase extends TestCase
         $this->assertEquals(Firewall::whichList($ip), 'blacklist');
     }
 
-    public function test_can_whitelist_ips()
+    public function testCanWhitelistIps()
     {
         Firewall::whitelist($ip = '172.17.0.101');
 
@@ -58,7 +58,7 @@ class FirewallTestCase extends TestCase
         $this->assertEquals(Firewall::whichList($ip), 'whitelist');
     }
 
-    public function test_can_list_cidrs()
+    public function testCanListCidrs()
     {
         Firewall::whitelist('172.17.0.0/24');
 
@@ -71,7 +71,7 @@ class FirewallTestCase extends TestCase
         $this->assertFalse(Firewall::isBlacklisted($ip));
     }
 
-    public function test_refuses_wrong_ip_addresses()
+    public function testRefusesWrongIpAddresses()
     {
         $false = Firewall::whitelist('172.17.0.256');
 
@@ -82,7 +82,7 @@ class FirewallTestCase extends TestCase
         $this->assertFalse($false);
     }
 
-    public function test_force_to_a_list()
+    public function testForceToAList()
     {
         Firewall::whitelist($ip = '172.17.0.1');
 
@@ -99,7 +99,7 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isBlacklisted($ip));
     }
 
-    public function test_find_ip()
+    public function testFindIp()
     {
         Firewall::whitelist($ip = '172.17.0.1');
 
@@ -110,7 +110,7 @@ class FirewallTestCase extends TestCase
         $this->assertNull(Firewall::find('impossible'));
     }
 
-    public function test_get_all_ips()
+    public function testGetAllIps()
     {
         Firewall::whitelist('172.17.0.1');
         Firewall::whitelist('172.17.0.2');
@@ -127,24 +127,24 @@ class FirewallTestCase extends TestCase
         $this->assertCount(0, Firewall::all());
     }
 
-    public function test_block_access()
+    public function testBlockAccess()
     {
         $this->assertInstanceOf(Response::class, Firewall::blockAccess());
     }
 
-    public function test_log()
+    public function testLog()
     {
         $this->assertNull(Firewall::log('whatever'));
     }
 
-    public function test_ip_validation()
+    public function testIpValidation()
     {
         $this->assertTrue(Firewall::ipIsValid('172.17.0.100'));
 
         $this->assertFalse(Firewall::ipIsValid('172.17.0.256'));
     }
 
-    public function test_report()
+    public function testReport()
     {
         Firewall::whitelist('172.17.0.1');
         Firewall::blacklist('172.17.0.2');
@@ -167,7 +167,7 @@ class FirewallTestCase extends TestCase
         $this->assertEquals($expected, $report);
     }
 
-    public function test_do_not_reinsert_existent()
+    public function testDoNotReinsertExistent()
     {
         Firewall::blacklist('172.17.0.1');
 
@@ -176,7 +176,7 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isBlacklisted('172.17.0.1'));
     }
 
-    public function test_do_not_remove_non_existent()
+    public function testDoNotRemoveNonExistent()
     {
         Firewall::remove('172.17.0.1');
 
@@ -191,7 +191,7 @@ class FirewallTestCase extends TestCase
         $this->assertFalse(Firewall::isBlacklisted('172.17.0.1'));
     }
 
-    public function test_setip()
+    public function testSetip()
     {
         $this->assertEquals('127.0.0.1', Firewall::getIp());
 
@@ -206,14 +206,14 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isBlacklisted());
     }
 
-    public function test_list_by_host()
+    public function testListByHost()
     {
         Firewall::blacklist('host:corinna.antoniocarlosribeiro.com');
 
         $this->assertTrue(Firewall::isBlacklisted('67.205.143.231'));
     }
 
-    public function test_wildcard()
+    public function testWildcard()
     {
         Firewall::whitelist('172.17.*.*');
 
@@ -226,9 +226,3 @@ class FirewallTestCase extends TestCase
         $this->assertTrue(Firewall::isWhitelisted($ip = '172.17.255.255'));
     }
 }
-
-//3) PragmaRX\Firewall\Tests\FirewallArrayTest::test_log
-//This test did not perform any assertions
-//
-//4) PragmaRX\Firewall\Tests\FirewallDatabaseTest::test_log
-//This test did not perform any assertions
