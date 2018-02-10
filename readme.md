@@ -225,8 +225,8 @@ Click [here](http://pragmarx.com/firewall) to see it working and in case you nee
 ### Compatible with
 
 - Laravel 4+ (version 1.*) 
-- Laravel 5.0 - 5.3 (version 1.*)
-- Laravel 5.4+ (version 2.*)
+- Laravel 5.0, 5.1, 5.2 and 5.3 (version 1.*)
+- Laravel 5.4, 5.5 and 5.6 (version 2.*)
 
 ### Installing
 
