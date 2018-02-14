@@ -73,12 +73,13 @@ class Cache
      *
      * @param $key
      *
+     * @param null $default
      * @return mixed|null
      */
-    public function get($key)
+    public function get($key, $default = null)
     {
         if ($this->enabled()) {
-            return $this->cache->get($this->key($key));
+            return $this->cache->get($this->key($key), $default);
         }
     }
 
