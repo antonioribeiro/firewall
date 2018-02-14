@@ -4,6 +4,11 @@ namespace PragmaRX\Firewall\Filters;
 
 class Blacklist
 {
+    /**
+     * Filter. Change one file in the project.
+     *
+     * @return mixed
+     */
     public function filter()
     {
         $firewall = app()->make('firewall');
