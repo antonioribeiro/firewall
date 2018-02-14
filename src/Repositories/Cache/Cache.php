@@ -72,8 +72,8 @@ class Cache
      * Get a value from the cache.
      *
      * @param $key
-     *
      * @param null $default
+     *
      * @return mixed|null
      */
     public function get($key, $default = null)
