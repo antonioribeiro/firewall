@@ -4,6 +4,17 @@ namespace PragmaRX\Firewall\Tests;
 
 class CacheTest extends TestCase
 {
+    /**
+     * @var \PragmaRX\Firewall\Firewall
+     * change one test
+     */
+    public $firewall;
+
+    /**
+     * @var \PragmaRX\Firewall\Repositories\Cache\Cache
+     */
+    public $cache;
+
     public function setUp()
     {
         parent::setup();
@@ -13,7 +24,7 @@ class CacheTest extends TestCase
 
     public function testCacheHoldsCachedIp()
     {
-        $this->firewall->blacklist($ip = '172.17.0.1');
+        $this->firewall->blacklistL($ip = '172.17.0.1');
 
         $this->firewall->find($ip);
 
@@ -22,8 +33,10 @@ class CacheTest extends TestCase
 
     public function testCachePut()
     {
+        $key = '1234';
+
         foreach (range(1, 100) as $counter) {
-            $this->cache->put($key = '1234', $this->cache->get($key, 0) + 1, 10);
+            $this->cache->put($key, $this->cache->get($key, 0) + 1, 10);
         }
 
         $this->assertEquals(100, $this->cache->get($key));
@@ -51,7 +64,7 @@ class CacheTest extends TestCase
 
         $this->assertTrue($this->firewall->isBlacklisted($ip));
 
-        $this->firewall->clear($ip);
+        $this->firewall->clear();
 
         $this->assertFalse($this->firewall->isBlacklisted($ip));
 
@@ -61,7 +74,7 @@ class CacheTest extends TestCase
 
         $this->assertTrue($this->firewall->isBlacklisted($ip));
 
-        $this->firewall->clear($ip);
+        $this->firewall->clear();
 
         $this->assertTrue($this->firewall->isBlacklisted($ip));
     }
