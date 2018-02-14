@@ -6,7 +6,7 @@ class CacheTest extends TestCase
 {
     /**
      * @var \PragmaRX\Firewall\Firewall
-     * change one test
+     *                                  change one test
      */
     public $firewall;
 
