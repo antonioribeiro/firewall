@@ -24,7 +24,7 @@ class CacheTest extends TestCase
 
     public function testCacheHoldsCachedIp()
     {
-        $this->firewall->blacklistL($ip = '172.17.0.1');
+        $this->firewall->blacklist($ip = '172.17.0.1');
 
         $this->firewall->find($ip);
 
