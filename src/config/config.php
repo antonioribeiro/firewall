@@ -73,7 +73,7 @@ return [
      * How long should we keep IP addresses in cache?
      *
      * This is a general client IP addresses cache. When the user hits your ssytem his/her IP address
-     * is searched and cached for the desiered time. Finding an IP address contained in a CIDR
+     * is searched and cached for the desired time. Finding an IP address contained in a CIDR
      * range (172.17.0.0/24, for instance) can be a "slow", caching it improves performance.
      *
      */

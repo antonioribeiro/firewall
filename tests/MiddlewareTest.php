@@ -24,8 +24,6 @@ class MiddlewareTest extends TestCase
     {
         parent::setUp();
 
-        shouldFail();
-
         $this->request = new Request();
 
         $this->blockAttacks = (new BlockAttacks());
