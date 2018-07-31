@@ -78,7 +78,7 @@ return [
      *
      */
 
-    'cache_expire_time' => 0, // minutes - disabled by default
+    'cache_expire_time' => 60, // minutes
 
     /*
      * How long should we keep lists of IP addresses in cache?
