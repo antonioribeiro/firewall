@@ -270,7 +270,7 @@ class AttackBlocker
     private function isWhitelisted($type)
     {
         return $this->firewall->whichList($this->record[$type]['ipAddress']) == 'whitelist' &&
-                $this->config()->get("attack_blocker.action.{$this->record[$type]['type']}.blacklist_whitelisted");
+                !$this->config()->get("attack_blocker.action.{$this->record[$type]['type']}.blacklist_whitelisted");
     }
 
     /**
