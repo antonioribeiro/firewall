@@ -65,6 +65,10 @@ class IpAddress
      */
     public function ipV4Valid($item)
     {
+        if (realpath($item) !== false) {
+            return false;
+        }
+
         return SupportIpAddress::ipV4Valid($item);
     }
 
