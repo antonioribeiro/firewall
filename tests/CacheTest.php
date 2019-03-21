@@ -15,7 +15,7 @@ class CacheTest extends TestCase
      */
     public $cache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setup();
 

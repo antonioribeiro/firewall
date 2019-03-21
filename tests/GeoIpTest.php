@@ -6,7 +6,7 @@ use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 
 class GeoIpTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

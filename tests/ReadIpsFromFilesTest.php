@@ -15,7 +15,7 @@ class ReadIpsFromFilesTest extends TestCase
         return "{$dir}/iplist.txt";
     }
 
-    public function setup()
+    public function setup(): void
     {
         parent::setUp();
 
