@@ -56,7 +56,7 @@ class TestCase extends OrchestraTestCase
         $this->artisan('migrate:refresh', ['--database' => 'testbench']);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
