@@ -41,7 +41,7 @@ class TestCase extends OrchestraTestCase
         @unlink($this->database);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
