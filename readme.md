@@ -78,7 +78,7 @@ IPs (white and black) lists can be stored in array, files and database. Initiall
 ),
 ```
 
-The file (for instance `/usr/bin/firewall/blacklisted.txt`) must contain one IP, range or file name per line, and, yes, it will search for files recursivelly, so you can have a file of files if you need:
+The file (for instance `/usr/bin/firewall/blacklisted.txt`) must contain one IP, range or file name per line, and, yes, it will search for files recursively, so you can have a file of files if you need:
 
 ```
 127.0.0.2
