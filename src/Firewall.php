@@ -255,7 +255,7 @@ class Firewall
     {
         $this->ip = $ip
             ?: ($this->ip
-                ?: $this->request->getClientIp());
+                ?: $this->request->server->get('HTTP_X_FORWARDED_FOR'));
     }
 
     /**
