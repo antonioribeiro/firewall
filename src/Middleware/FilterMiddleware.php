@@ -3,6 +3,7 @@
 namespace PragmaRX\Firewall\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 abstract class FilterMiddleware extends Middleware
 {
@@ -14,8 +15,8 @@ abstract class FilterMiddleware extends Middleware
     /**
      * Filter Request through whitelist.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param Request $request
+     * @param Closure $next
      *
      * @return mixed
      */
@@ -24,7 +25,7 @@ abstract class FilterMiddleware extends Middleware
         if ($this->enabled()) {
             $filterResponse = $this->filter();
 
-            if ($filterResponse != null) {
+            if ($filterResponse !== null) {
                 return $filterResponse;
             }
         }
