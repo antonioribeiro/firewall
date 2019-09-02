@@ -255,7 +255,7 @@ class Firewall
     {
         $this->ip = $ip
             ?: ($this->ip
-                ?: $this->request->getClientIp());
+                ?: $this->request->server('HTTP_CF_CONNECTING_IP'));
     }
 
     /**
