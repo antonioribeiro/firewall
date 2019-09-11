@@ -2,8 +2,6 @@
 
 namespace PragmaRX\Firewall\Vendor\Laravel\Artisan;
 
-use Symfony\Component\Console\Input\InputOption;
-
 class Flush extends Base
 {
     /**

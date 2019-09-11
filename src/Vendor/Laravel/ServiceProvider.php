@@ -4,7 +4,6 @@ namespace PragmaRX\Firewall\Vendor\Laravel;
 
 use Illuminate\Support\Facades\Event;
 use PragmaRX\Firewall\Events\AttackDetected;
-use PragmaRX\Firewall\Vendor\Laravel\Artisan\Flush;
 use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
 use PragmaRX\Firewall\Filters\Blacklist;
 use PragmaRX\Firewall\Filters\Whitelist;
@@ -21,6 +20,7 @@ use PragmaRX\Firewall\Support\AttackBlocker;
 use PragmaRX\Firewall\Support\IpAddress;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Blacklist as BlacklistCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Clear as ClearCommand;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\Flush;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Remove as RemoveCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\Report as ReportCommand;
 use PragmaRX\Firewall\Vendor\Laravel\Artisan\UpdateGeoIp as UpdateGeoIpCommand;
