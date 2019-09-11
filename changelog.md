@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2019-09-11
+### Added
+- Laravel 6.0 support
+- Support to identify IP behind Cloudflare
+- Artisan command firewall:cache:clear
+- Ability to set the log stack. New key in config: `'log_stack' => ['single']`
+
+### Fixed
+- Response in notification-only mode
+- Migrations being execute when not in database mode
+- Exception when trying to remove from database an ip inside a country
+
 ## [2.2.1] - 2018-07-31
 ### Fixed
 - Fix whitelisted IP being blocked by AttackBlocker
