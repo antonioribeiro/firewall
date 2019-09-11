@@ -253,9 +253,17 @@ class Firewall
      */
     public function setIp($ip)
     {
-        $this->ip = $ip
-            ?: ($this->ip
-                ?: $this->request->getClientIp());
+        if ($ip) {
+            $this->ip = $ip;
+        } elseif (!$this->ip) {
+            if ($ip = $this->request->server('HTTP_CF_CONNECTING_IP')) {
+                $this->ip = $ip;
+            } elseif ($ip = $this->request->server->get('HTTP_X_FORWARDED_FOR')) {
+                $this->ip = $ip;
+            } elseif ($ip = $this->request->getClientIp()) {
+                $this->ip = $ip;
+            }
+        }
     }
 
     /**
