@@ -2,9 +2,8 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use ReflectionException;
-use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 use PragmaRX\Firewall\Vendor\Laravel\ServiceProvider as FirewallServiceProvider;
 
 class ServiceDisabledTest extends TestCase

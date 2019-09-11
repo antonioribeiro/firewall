@@ -95,13 +95,13 @@ class IpList
      */
     private function removeFromDatabaseList($ip)
     {
-        $ip = $this->find($ip);
+        if ($ip = $this->find($ip)) {
+            $ip->delete();
 
-        $ip->delete();
+            $this->cache()->forget($ip->ip_address);
 
-        $this->cache()->forget($ip->ip_address);
-
-        $this->messages()->addMessage(sprintf('%s removed from %s', $ip, $ip->whitelisted ? 'whitelist' : 'blacklist'));
+            $this->messages()->addMessage(sprintf('%s removed from %s', $ip, $ip->whitelisted ? 'whitelist' : 'blacklist'));
+        }
     }
 
     /**
@@ -209,7 +209,7 @@ class IpList
     }
 
     /**
-     * Search for an ip in alist of ips.
+     * Search for an ip in a list of ips.
      *
      * @param $ip
      * @param $ips

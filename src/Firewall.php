@@ -13,7 +13,7 @@ use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
 class Firewall
 {
     /**
-     * The IP adress.
+     * The IP address.
      *
      * @var
      */
@@ -103,7 +103,7 @@ class Firewall
     }
 
     /**
-     * Blacklist an IP adress.
+     * Blacklist an IP address.
      *
      * @param $ip
      * @param bool $force
