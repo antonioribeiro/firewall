@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Repositories\Cache;
 
-use Illuminate\Support\Str;
 use Illuminate\Cache\CacheManager;
 use PragmaRX\Firewall\Support\ServiceInstances;
 
@@ -50,13 +49,7 @@ class Cache
      */
     public function flush()
     {
-        foreach (Cache::getMemory() as $cacheKey => $cacheValue)
-        {
-            if (Str::startsWith($cacheKey, static::CACHE_BASE_NAME))
-            {
-                Cache::forget($cacheKey);
-            }
-        }
+        $this->cache->flush();
     }
 
     /**

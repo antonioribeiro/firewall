@@ -112,7 +112,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerUpdateGeoIpCommand();
 
-        $this->registerFlushCommand();
+        // $this->registerFlushCommand(); // TODO
 
         $this->registerMiddleware();
 
