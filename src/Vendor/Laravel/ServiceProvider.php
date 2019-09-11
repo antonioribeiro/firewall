@@ -4,6 +4,7 @@ namespace PragmaRX\Firewall\Vendor\Laravel;
 
 use Illuminate\Support\Facades\Event;
 use PragmaRX\Firewall\Events\AttackDetected;
+use PragmaRX\Firewall\Vendor\Laravel\Artisan\Flush;
 use PragmaRX\Firewall\Exceptions\ConfigurationOptionNotAvailable;
 use PragmaRX\Firewall\Filters\Blacklist;
 use PragmaRX\Firewall\Filters\Whitelist;
@@ -111,6 +112,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerUpdateGeoIpCommand();
 
+        $this->registerFlushCommand();
+
         $this->registerMiddleware();
 
         $this->registerEventListeners();
@@ -174,6 +177,20 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
 
         $this->commands('firewall.clear.command');
+    }
+
+    /**
+     * Register the cache:clear Artisan command.
+     *
+     * @return void
+     */
+    private function registerFlushCommand()
+    {
+        $this->app->singleton('firewall.flush.command', function () {
+            return new Flush();
+        });
+
+        $this->commands('firewall.flush.command');
     }
 
     /**
