@@ -18,11 +18,7 @@ class ServiceDisabledTest extends TestCase
 
     public function testFirewallIsDisabled()
     {
-        if (class_exists('Illuminate\Contracts\Container\BindingResolutionException')) {
-            $this->expectException(\Illuminate\Contracts\Container\BindingResolutionException::class);
-        } else {
-            $this->expectException(\ReflectionException::class);
-        }
+        $this->expectException(\Exception::class);
 
         Firewall::blacklist($ip = '172.17.0.100');
     }
