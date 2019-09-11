@@ -1,4 +1,4 @@
-script: phpunit
+script: vendor/bin/phpunit
 
 language: php
 
