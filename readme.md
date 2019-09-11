@@ -101,6 +101,7 @@ You have access to the following commands:
 #### Global
 
 ```
+  firewall:cache:clear  Clear the firewall cache.
   firewall:list         List all IP address, white and blacklisted.
   firewall:updategeoip  Update the GeoIP database.
 ```
