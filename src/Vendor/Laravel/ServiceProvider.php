@@ -79,8 +79,6 @@ class ServiceProvider extends PragmaRXServiceProvider
             return;
         }
 
-        $this->registerMigrations();
-
         $this->registerFileSystem();
 
         $this->registerCache();
@@ -104,6 +102,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->registerCountriesRepository();
 
         if ($this->getConfig('use_database')) {
+            $this->registerMigrations();
             $this->registerWhitelistCommand();
             $this->registerBlacklistCommand();
             $this->registerRemoveCommand();
