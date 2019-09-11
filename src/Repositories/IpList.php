@@ -209,7 +209,7 @@ class IpList
     }
 
     /**
-     * Search for an ip in alist of ips.
+     * Search for an ip in a list of ips.
      *
      * @param $ip
      * @param $ips
