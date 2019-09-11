@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Firewall\Tests;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use PragmaRX\Firewall\Vendor\Laravel\Facade as Firewall;
 use PragmaRX\Firewall\Vendor\Laravel\ServiceProvider as FirewallServiceProvider;
 
@@ -19,7 +18,11 @@ class ServiceDisabledTest extends TestCase
 
     public function testFirewallIsDisabled()
     {
-        $this->expectException(BindingResolutionException::class);
+        if (class_exists('Illuminate\Contracts\Container\BindingResolutionException')) {
+            $this->expectException(\Illuminate\Contracts\Container\BindingResolutionException::class);
+        } else {
+            $this->expectException(\ReflectionException::class);
+        }
 
         Firewall::blacklist($ip = '172.17.0.100');
     }
