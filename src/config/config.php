@@ -96,6 +96,8 @@ return [
 
     'enable_log' => true,
 
+    'log_stack' => null,
+
     /*
      * Search by range allow you to store ranges of addresses in
      * your black and whitelist:

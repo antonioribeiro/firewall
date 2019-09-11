@@ -220,8 +220,17 @@ class Firewall
     public function log($message)
     {
         if ($this->config->get('enable_log')) {
-            app()->log->info("FIREWALL: $message");
+            $this->getLogger()->info("FIREWALL: $message");
         }
+    }
+
+    public function getLogger()
+    {
+        if ($stack = $this->config->get('log_stack')) {
+            return app()->log->stack($stack);
+        }
+
+        return app()->log;
     }
 
     /**
