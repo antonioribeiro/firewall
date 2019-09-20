@@ -14,15 +14,21 @@ class Whitelist
         $firewall = app()->make('firewall');
 
         if (!$firewall->isWhitelisted()) {
-            $response = (new Responder())->respond(
-                $this->config()->get('responses.whitelist')
-            );
+            $responses_whitelist = $this->config()->get('responses.whitelist');
 
-            if (!is_null($this->config()->get('responses.whitelist.redirect_to'))) {
+            if (!is_null($this->config()->get('redirect_non_whitelisted_to'))) {
+                $responses_whitelist['redirect_to'] = $this->config()->get('redirect_non_whitelisted_to');
+            }
+
+            if (!is_null($responses_whitelist['redirect_to'])) {
                 $action = 'redirected';
             } else {
                 $action = 'blocked';
             }
+
+            $response = (new Responder())->respond(
+                $responses_whitelist
+            );
 
             $message = sprintf('[%s] IP not whitelisted: %s', $action, $firewall->getIp());
 
