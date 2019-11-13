@@ -269,8 +269,9 @@ class Firewall
                 $this->ip = $ip;
             } elseif ($ip = $this->request->server->get('HTTP_X_FORWARDED_FOR')) {
                 $this->ip = $ip;
-                if ($first_ip_in_list = stristr($ip, ',', true))
+                if ($first_ip_in_list = stristr($ip, ',', true)) {
                     $this->ip = $first_ip_in_list;
+                }
             } elseif ($ip = $this->request->getClientIp()) {
                 $this->ip = $ip;
             }
