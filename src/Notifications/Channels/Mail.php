@@ -36,7 +36,7 @@ class Mail extends BaseChannel implements Contract
 
         if ($item['geoIp']) {
             $geo = $this->makeGeolocation($item);
-            
+
             $message->line(config('firewall.notifications.message.geolocation.title')." - Latitude : {$geo['Latitude']}");
             $message->line(config('firewall.notifications.message.geolocation.title')." - Longitude : {$geo['Longitude']}");
             $message->line(config('firewall.notifications.message.geolocation.title')." - Country code : {$geo['Country code']}");
