@@ -26,7 +26,7 @@ This package can prevent some headaches and help you block some access to your a
 
 ### Blacklist
 
-All IP addresses in those lists will no be able to access routes filtered by the blacklist filter.
+All IP addresses in those lists will not be able to access routes filtered by the blacklist filter.
 
 ### Whitelist
 
