@@ -39,7 +39,6 @@ class IpList
 
                 return $ip;
             }, $this->formatIpArray($this->config()->get('whitelist'))),
-
             array_map(function ($ip) {
                 $ip['whitelisted'] = false;
 
