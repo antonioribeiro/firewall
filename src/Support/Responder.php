@@ -23,7 +23,7 @@ class Responder
         if ($response['abort']) {
             abort(
                 $response['code'],
-                $response['message']
+                $response['message'] ?? ''
             );
         }
 
