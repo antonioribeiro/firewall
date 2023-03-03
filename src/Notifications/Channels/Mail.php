@@ -34,9 +34,9 @@ class Mail extends BaseChannel implements Contract
             ->line(config('firewall.notifications.message.user_agent.title').': '.$item['userAgent'])
             ->line(config('firewall.notifications.message.blacklisted.title').': '.$item['isBlacklisted'] ? 'YES' : 'NO');
 
-        $geo = $this->makeGeolocation($item);
-
         if ($item['geoIp']) {
+            $geo = $this->makeGeolocation($item);
+
             $message->line(config('firewall.notifications.message.geolocation.title')." - Latitude : {$geo['Latitude']}");
             $message->line(config('firewall.notifications.message.geolocation.title')." - Longitude : {$geo['Longitude']}");
             $message->line(config('firewall.notifications.message.geolocation.title')." - Country code : {$geo['Country code']}");
